@@ -4,8 +4,8 @@ class CreatePrintBooks < ActiveRecord::Migration[6.0]
       t.integer :book_id, null: false
       t.integer :owner_id, null: false
       t.integer :holder_id, null: false
-      t.string :property
-      t.string :status
+      t.integer :property, default: 0
+      t.integer :status, default: 0
       t.text :images
       t.text :description
       t.integer :created_by, null: false

@@ -21,10 +21,11 @@ ActiveRecord::Schema.define(version: 2019_10_01_115020) do
     t.string "isbn", null: false
     t.string "cover_url"
     t.string "douban_id"
-    t.integer "created_by"
+    t.integer "created_by", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["created_by"], name: "index_books_on_created_by"
+    t.index ["isbn"], name: "index_books_on_isbn"
   end
 
   create_table "deals", force: :cascade do |t|
@@ -34,7 +35,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_115020) do
     t.integer "sponsor_id", null: false
     t.integer "receiver_id", null: false
     t.string "location"
-    t.string "status"
+    t.integer "status", default: 0
     t.datetime "started_at"
     t.datetime "finished_at"
     t.datetime "created_at", precision: 6, null: false
@@ -49,8 +50,8 @@ ActiveRecord::Schema.define(version: 2019_10_01_115020) do
     t.integer "book_id", null: false
     t.integer "owner_id", null: false
     t.integer "holder_id", null: false
-    t.string "property"
-    t.string "status"
+    t.integer "property", default: 0
+    t.integer "status", default: 0
     t.text "images"
     t.text "description"
     t.integer "created_by", null: false
