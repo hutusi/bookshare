@@ -1,0 +1,2 @@
+class Borrowing < Deal
+end

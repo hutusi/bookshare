@@ -1,0 +1,2 @@
+class Sharing < Deal
+end
