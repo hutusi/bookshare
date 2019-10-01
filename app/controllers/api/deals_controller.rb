@@ -4,7 +4,7 @@ class Api::DealsController < Api::BaseController
   def index
     @deals = Deal.all.order(updated_at: :desc)
 
-    if stale?(last_modified: @deals.first.updated_at)
+    if stale?(last_modified: @deals.first&.updated_at)
       render json: { deals: @deals, total: @deals.size }
     end
   end

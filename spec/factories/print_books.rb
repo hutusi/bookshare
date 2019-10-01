@@ -1,12 +1,12 @@
 FactoryBot.define do
   factory :print_book do
-    book_id { 1 }
-    owner_id { 1 }
-    holder_id { 1 }
-    status { "MyString" }
-    property { "MyString" }
+    book
+    association :owner, factory: :user
+    association :holder, factory: :user
+    status { 0 }
+    property { 0 }
     images { "MyText" }
     description { "MyText" }
-    created_by { 1 }
+    created_by { owner.id }
   end
 end

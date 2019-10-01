@@ -5,7 +5,7 @@ FactoryBot.define do
     sponsor_id { 1 }
     receiver_id { 1 }
     location { "MyString" }
-    status { "MyString" }
+    status { 0 }
     started_at { "2019-10-01 19:50:20" }
     finished_at { "2019-10-01 19:50:20" }
   end

@@ -5,7 +5,7 @@ class Api::PrintBooksController < Api::BaseController
   def index
     @print_books = PrintBook.all.order(updated_at: :desc)
 
-    if stale?(last_modified: @print_books.first.updated_at)
+    if stale?(last_modified: @print_books.first&.updated_at)
       render json: { print_books: @print_books, total: @print_books.size }
     end
   end

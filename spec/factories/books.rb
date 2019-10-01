@@ -8,5 +8,6 @@ FactoryBot.define do
     isbn { "MyString" }
     cover_url { "MyString" }
     douban_id { "MyString" }
+    association :creator, factory: :user
   end
 end
