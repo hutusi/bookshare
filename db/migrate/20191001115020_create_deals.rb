@@ -2,10 +2,10 @@ class CreateDeals < ActiveRecord::Migration[6.0]
   def change
     create_table :deals do |t|
       t.string :type
-      t.integer :print_book_id
-      t.integer :book_id
-      t.integer :sponsor_id
-      t.integer :receiver_id
+      t.integer :print_book_id, null: false
+      t.integer :book_id, null: false
+      t.integer :sponsor_id, null: false
+      t.integer :receiver_id, null: false
       t.string :location
       t.string :status
       t.datetime :started_at
@@ -13,5 +13,10 @@ class CreateDeals < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+
+    add_index :deals, :print_book_id
+    add_index :deals, :book_id
+    add_index :deals, :sponsor_id
+    add_index :deals, :receiver_id
   end
 end
