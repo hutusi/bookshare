@@ -26,10 +26,14 @@ class Api::DealsController < Api::BaseController
   end
 
   def update
-    # deal_params = params.permit(:location, :status)
+    deal_params = params.permit(:location, :status)
+    @deal.update! deal_params
+    render json: @deal, status: :ok
   end
 
   def destroy
+    @deal.destroy!
+    render status: :ok
   end
 
 private
