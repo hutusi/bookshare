@@ -1,5 +1,5 @@
 class Api::PrintBooksController < Api::BaseController
-  before_action :find_print_book, only: [:show, :update, :destroy]
+  before_action :find_print_book, only: [:show, :update, :destroy, :update_property, :update_status]
 
   # todo: paginate
   def index
@@ -25,9 +25,28 @@ class Api::PrintBooksController < Api::BaseController
   end
 
   def update
+    valid_params = params.permit(:description)
+    @print_book.update! valid_params
+    render json: @print_book, status: :ok
+  end
+
+  def update_property
+    valid_params = params.permit(:property)
+    forbidden! if current_user != @print_book.owner
+    @print_book.update! valid_params
+    render json: @print_book, status: :ok
+  end
+
+  def update_status
+    valid_params = params.permit(:status)
+    forbidden! if current_user != @print_book.holder
+    @print_book.update! valid_params
+    render json: @print_book, status: :ok
   end
 
   def destroy
+    @print_book.destroy!
+    render status: :ok
   end
 
 private

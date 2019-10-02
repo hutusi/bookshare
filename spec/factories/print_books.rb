@@ -3,8 +3,8 @@ FactoryBot.define do
     book
     association :owner, factory: :user
     association :holder, factory: :user
-    status { 0 }
     property { 0 }
+    status { 0 }
     images { "MyText" }
     description { "MyText" }
     association :creator, factory: :user

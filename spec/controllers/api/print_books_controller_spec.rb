@@ -48,8 +48,75 @@ RSpec.describe Api::PrintBooksController, type: :controller do
         post :create, params: valid_attributes
         expect(response.status).to eq 201
         print_book = PrintBook.last
-        expect(valid_attributes[:book_id]).to eq print_book.book_id
+        expect(print_book.book_id).to eq valid_attributes[:book_id]
       end
     end
+  end
+
+  describe 'PUT #update' do
+    login_user
+    let(:print_book) { create :print_book }
+    let(:valid_attributes) { { description: "New discription." } }
+    
+    context 'use correct conditions' do
+      it 'should return the print_book json' do
+        put :update, params: valid_attributes.merge(id: print_book.id)
+        expect(response.status).to eq 200
+        print_book.reload
+        expect(print_book.description).to eq valid_attributes[:description]
+      end
+    end
+  end
+
+  describe 'PUT #update_property' do
+    let(:user) { create :user }
+    let(:valid_attributes) { { property: :shared } }
+    before { sign_in user }
+    
+    context 'login_user not same with print_books owner' do
+      let!(:print_book) { create :print_book }
+      it 'should return the print_book json' do
+        put :update_property, params: valid_attributes.merge(id: print_book.id)
+        expect(response.status).to eq 403
+        print_book.reload
+        expect(print_book.shared?).to be false
+      end
+    end
+
+    context 'login_user same with print_books owner' do
+      let!(:print_book) { create :print_book, owner: user }
+      it 'should return the print_book json' do
+        put :update_property, params: valid_attributes.merge(id: print_book.id)
+        expect(response.status).to eq 200
+        print_book.reload
+        expect(print_book.shared?).to be true
+      end
+    end
+  end
+
+  describe 'PUT #update_status' do
+    let(:user) { create :user }
+    let(:valid_attributes) { { status: :reading } }
+    before { sign_in user }
+    
+    context 'login_user not same with print_books holder' do
+      let!(:print_book) { create :print_book }
+      it 'should return the print_book json' do
+        put :update_property, params: valid_attributes.merge(id: print_book.id)
+        expect(response.status).to eq 403
+        print_book.reload
+        expect(print_book.reading?).to be false
+      end
+    end
+
+    # context 'login_user same with print_books holder' do
+    #   let!(:print_book) { create :print_book, holder: user }
+    #   it 'should return the print_book json' do
+    #     put :update_property, params: valid_attributes.merge(id: print_book.id)
+    #     expect(response.status).to eq 200
+    #     print_book.reload
+    #     expect(print_book.reading?).to be true
+    #   end
+    # end
   end
 end
