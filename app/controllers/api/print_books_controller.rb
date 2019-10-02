@@ -32,14 +32,14 @@ class Api::PrintBooksController < Api::BaseController
 
   def update_property
     valid_params = params.permit(:property)
-    forbidden! 'You are not the owener of the book.' unless @print_book.owner == current_user
+    forbidden! I18n.t('api.errors.forbidden.not_the_owner') unless @print_book.owner == current_user
     @print_book.update! valid_params
     render json: @print_book, status: :ok
   end
 
   def update_status
     valid_params = params.permit(:status)
-    forbidden! 'You are not holding the book.' unless @print_book.holder == current_user
+    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
     @print_book.update! valid_params
     render json: @print_book, status: :ok
   end

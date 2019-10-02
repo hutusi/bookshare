@@ -1,0 +1,11 @@
+---
+zh-CN:
+  hello: "你好，世界"
+  api:
+    errors:
+      forbidden:
+        not_available: "当前书非空闲状态"
+        request_self_book: "你不能申请自己拥有的图书"
+        not_the_holder: "你当前不持有该书"
+        not_the_applicant: "你没有申请该书"
+        not_the_owner: "你不是该书的所有者"

@@ -15,8 +15,8 @@ class Api::SharingsController < Api::DealsController
   end
 
   def create_request
-    forbidden! 'Book is not available.' unless @sharing.available?
-    forbidden! 'You can not request a book belongs to yourself.' if @print_book.holder == current_user
+    forbidden! I18n.t('api.errors.forbidden.not_available') unless @sharing.available?
+    forbidden! I18n.t('api.errors.forbidden.request_self_book') if @print_book.holder == current_user
     @sharing.request
     @sharing.applicant = current_user
     @sharing.save
@@ -24,14 +24,14 @@ class Api::SharingsController < Api::DealsController
   end
 
   def create_share
-    forbidden! 'You are not holding the book.' unless @print_book.holder == current_user
+    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
     @sharing.share
     @sharing.save
     render json: @sharing, status: :created
   end
 
   def create_reject
-    forbidden! 'You are not holding the book.' unless @print_book.holder == current_user
+    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
     @sharing.reject
     @sharing.applicant = nil
     @sharing.save
@@ -39,14 +39,14 @@ class Api::SharingsController < Api::DealsController
   end
 
   def destroy_share
-    forbidden! 'You are not holding the book.' unless @print_book.holder == current_user
+    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
     @sharing.revert_share
     @sharing.save
     render json: @sharing, status: :ok
   end
 
   def create_accept
-    forbidden! "You haven't request the book." unless @sharing.applicant == current_user
+    forbidden! I18n.t('api.errors.forbidden.not_the_applicant') unless @sharing.applicant == current_user
     @sharing.accept
     @sharing.save
 

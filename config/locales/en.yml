@@ -31,3 +31,11 @@
 
 en:
   hello: "Hello world"
+  api:
+    errors:
+      forbidden:
+        not_available: 'Book is not available.'
+        request_self_book: 'You can not request a book belongs to yourself.'
+        not_the_holder: 'You are not holding the book.'
+        not_the_applicant: "You haven't request the book."
+        not_the_owner: 'You are not the owener of the book.'
