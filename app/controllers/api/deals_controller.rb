@@ -21,7 +21,8 @@ class Api::DealsController < Api::BaseController
     not_found! if print_book.nil?
 
     deal_params.merge!(sponsor_id: current_user.id, book_id: print_book.book_id)
-    Deal.create! book_params
+    deal = Deal.create! deal_params
+    render json: deal, status: :created
   end
 
   def update

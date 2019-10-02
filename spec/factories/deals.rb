@@ -1,12 +1,13 @@
 FactoryBot.define do
   factory :deal do
     type { "" }
-    print_book_id { 1 }
-    sponsor_id { 1 }
-    receiver_id { 1 }
+    print_book
+    book_id { print_book.book_id }
+    association :sponsor, factory: :user
+    association :receiver, factory: :user
     location { "MyString" }
     status { 0 }
     started_at { "2019-10-01 19:50:20" }
-    finished_at { "2019-10-01 19:50:20" }
+    finished_at { "2019-10-10 19:50:20" }
   end
 end

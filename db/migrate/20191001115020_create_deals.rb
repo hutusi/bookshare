@@ -5,7 +5,7 @@ class CreateDeals < ActiveRecord::Migration[6.0]
       t.integer :print_book_id, null: false
       t.integer :book_id, null: false
       t.integer :sponsor_id, null: false
-      t.integer :receiver_id, null: false
+      t.integer :receiver_id
       t.string :location
       t.integer :status, default: 0
       t.datetime :started_at
