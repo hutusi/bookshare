@@ -7,6 +7,6 @@ FactoryBot.define do
     property { 0 }
     images { "MyText" }
     description { "MyText" }
-    created_by { owner.id }
+    association :creator, factory: :user
   end
 end

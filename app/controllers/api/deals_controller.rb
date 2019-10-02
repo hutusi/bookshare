@@ -17,7 +17,7 @@ class Api::DealsController < Api::BaseController
   
   def create
     deal_params = params.permit(:type, :print_book_id, :location)
-    print_book = PrintBook.find id: params[:print_book_id]
+    print_book = PrintBook.find_by id: params[:print_book_id]
     not_found! if print_book.nil?
 
     deal_params.merge!(sponsor_id: current_user.id, book_id: print_book.book_id)
@@ -33,6 +33,6 @@ class Api::DealsController < Api::BaseController
 
 private
   def find_deal
-    @deal = Deal.find id: params[:id]
+    @deal = Deal.find_by id: params[:id]
   end
 end

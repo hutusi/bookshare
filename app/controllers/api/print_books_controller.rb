@@ -20,7 +20,8 @@ class Api::PrintBooksController < Api::BaseController
     book_params = params.permit(:book_id, :description)
     book_params.merge!(owner_id: current_user.id, holder_id: current_user.id, 
                        created_by: current_user.id)
-    PrintBook.create! book_params
+    print_book = PrintBook.create! book_params
+    render json: print_book, status: :created
   end
 
   def update
@@ -31,6 +32,6 @@ class Api::PrintBooksController < Api::BaseController
 
 private
   def find_print_book
-    @print_book = PrintBook.find id: params[:id]
+    @print_book = PrintBook.find_by id: params[:id]
   end
 end
