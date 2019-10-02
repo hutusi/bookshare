@@ -10,6 +10,7 @@ class CreateDeals < ActiveRecord::Migration[6.0]
       t.integer :status, default: 0
       t.datetime :started_at
       t.datetime :finished_at
+      t.integer :applicant_id
 
       t.timestamps
     end
@@ -18,5 +19,6 @@ class CreateDeals < ActiveRecord::Migration[6.0]
     add_index :deals, :book_id
     add_index :deals, :sponsor_id
     add_index :deals, :receiver_id
+    add_index :deals, :applicant_id
   end
 end

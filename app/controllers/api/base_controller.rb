@@ -22,15 +22,17 @@ class Api::BaseController < ActionController::API
     raise ApiException.new 404, "Not found!"
   end
 
-  def forbidden!
-    raise ApiException.new 403, "Forbidden!"
+  def forbidden!(message)
+    raise ApiException.new 403, "Forbidden! #{message}"
   end
 
   def api_error_handle(exception)
+    p exception
     render status: exception.status, json: { message: exception.message }
   end
 
   def unknown_error_handle(exception)
+    p exception
     render status: 500, json: { message: "Server intrnal error!" }
   end
 end

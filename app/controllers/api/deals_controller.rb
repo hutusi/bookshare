@@ -16,17 +16,12 @@ class Api::DealsController < Api::BaseController
   end
   
   def create
-    deal_params = params.permit(:type, :print_book_id, :location)
-    print_book = PrintBook.find_by id: params[:print_book_id]
-    not_found! if print_book.nil?
-
-    deal_params.merge!(sponsor_id: current_user.id, book_id: print_book.book_id)
-    deal = Deal.create! deal_params
-    render json: deal, status: :created
+    type = params[:type].presence || ""
+    create_by_type type
   end
 
   def update
-    deal_params = params.permit(:location, :status)
+    deal_params = params.permit(:location)
     @deal.update! deal_params
     render json: @deal, status: :ok
   end
@@ -34,6 +29,17 @@ class Api::DealsController < Api::BaseController
   def destroy
     @deal.destroy!
     render status: :ok
+  end
+
+protected
+  def create_by_type(type)
+    deal_params = params.permit(:print_book_id, :location)
+    print_book = PrintBook.find_by id: params[:print_book_id]
+    not_found! if print_book.nil?
+
+    deal_params.merge!(type: type, sponsor_id: current_user.id, book_id: print_book.book_id)
+    deal = Deal.create! deal_params
+    render json: deal, status: :created
   end
 
 private

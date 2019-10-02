@@ -10,4 +10,5 @@ class User < ApplicationRecord
 
   has_many :sponsored_deals, class_name: 'Deal', foreign_key: 'sponsor_id'
   has_many :received_deals, class_name: 'Deal', foreign_key: 'receiver_id'
+  has_many :applied_deals, class_name: 'Deal', foreign_key: 'appicant_id'
 end

@@ -8,4 +8,7 @@ class PrintBook < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :holder, class_name: 'User'
   belongs_to :creator, class_name: 'User', foreign_key: 'created_by'
+
+  belongs_to :deal, optional: true
+  belongs_to :last_deal, class_name: 'Deal', optional: true
 end

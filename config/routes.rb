@@ -9,6 +9,16 @@ Rails.application.routes.draw do
         put :status, to: 'print_books#update_status'
       end
     end
+    
     resources :deals
+    resources :sharings, only: [:index, :show, :create, :update, :destroy] do 
+      member do
+        post :request, to: 'sharings#create_request'
+        post :reject, to: 'sharings#create_reject'
+        post :share, to: 'sharings#create_share'
+        delete :share, to: 'sharings#destroy_share'
+        post :accept, to: 'sharings#create_accept'
+      end
+    end
   end
 end

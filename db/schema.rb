@@ -38,8 +38,10 @@ ActiveRecord::Schema.define(version: 2019_10_01_115020) do
     t.integer "status", default: 0
     t.datetime "started_at"
     t.datetime "finished_at"
+    t.integer "applicant_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["applicant_id"], name: "index_deals_on_applicant_id"
     t.index ["book_id"], name: "index_deals_on_book_id"
     t.index ["print_book_id"], name: "index_deals_on_print_book_id"
     t.index ["receiver_id"], name: "index_deals_on_receiver_id"
@@ -55,6 +57,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_115020) do
     t.text "images"
     t.text "description"
     t.integer "created_by", null: false
+    t.integer "last_deal_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_print_books_on_book_id"

@@ -38,19 +38,19 @@ RSpec.describe Api::DealsController, type: :controller do
     end
   end
 
-  describe 'POST #create' do
-    login_user
-    let(:print_book) { create :print_book }
-    # let(:valid_attributes) { attributes_for :deal, print_book_id: print_book.id, book_id: print_book.book_id }
-    let(:valid_attributes) { { type: 'Borrowing', print_book_id: print_book.id, location: 'Shanghai' } }
+  # describe 'POST #create' do
+  #   login_user
+  #   let(:print_book) { create :print_book }
+  #   # let(:valid_attributes) { attributes_for :deal, print_book_id: print_book.id, book_id: print_book.book_id }
+  #   let(:valid_attributes) { { type: 'Borrowing', print_book_id: print_book.id, location: 'Shanghai' } }
 
-    context 'use correct conditions' do
-      it 'should return the deal json' do
-        post :create, params: valid_attributes
-        expect(response.status).to eq 201
-        deal = Deal.last
-        expect(valid_attributes[:print_book_id]).to eq deal.print_book_id
-      end
-    end
-  end
+  #   context 'use correct conditions' do
+  #     it 'should return the deal json' do
+  #       post :create, params: valid_attributes
+  #       expect(response.status).to eq 201
+  #       deal = Deal.last
+  #       expect(valid_attributes[:print_book_id]).to eq deal.print_book_id
+  #     end
+  #   end
+  # end
 end

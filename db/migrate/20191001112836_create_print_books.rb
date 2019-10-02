@@ -9,6 +9,7 @@ class CreatePrintBooks < ActiveRecord::Migration[6.0]
       t.text :images
       t.text :description
       t.integer :created_by, null: false
+      t.integer :last_deal_id
 
       t.timestamps
     end
