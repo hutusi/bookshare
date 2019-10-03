@@ -1,5 +1,5 @@
 class Api::SessionsController < Api::BaseController
-  skip_before_action :authenticate_user!
+  skip_before_action :authenticate_api!
 
   def create_wechat
     valid_params = params.permit(:openid, :session_key, :unionid)

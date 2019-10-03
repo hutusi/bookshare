@@ -13,10 +13,14 @@ end
 
 class Api::BaseController < ActionController::API
   respond_to :json
-  before_action :authenticate_user!
+  before_action :authenticate_api!
 
   rescue_from Exception, with: :unknown_error_handle
   rescue_from ApiException, with: :api_error_handle
+
+  def authenticate_api!
+    warden.authenticate!(:api)
+  end
 
   def not_found!
     raise ApiException.new 404, "Not found!"

@@ -6,20 +6,11 @@ class Api::UsersController < Api::BaseController
       render json: @user
     end
   end
-  
-  # register / sign up
-  def create
-    valid_params = params.permit(:email)
-    user = PrintBook.create! valid_params
-    render json: user, status: :created
-  end
-
-  # login / sign in
-  def create_sesssion
-  end
 
   def update
-    valid_params = params.permit(:email)
+    forbidden! I18n.t('api.errors.forbidden.not_self_user') unless @user == current_user
+    valid_params = params.permit(:username, :email, :phone, :company, :bio, :contact,
+      :nickname, :avatar, :gender, :country, :province, :city, :language)
     @user.update! valid_params
     render json: @user, status: :ok
   end

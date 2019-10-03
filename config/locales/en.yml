@@ -32,6 +32,8 @@
 en:
   hello: "Hello world"
   api:
+    auth:
+      invalid_provider_or_uid: 'Invalid provider or uid.'
     errors:
       forbidden:
         not_available: 'Book is not available.'
@@ -40,3 +42,5 @@ en:
         not_the_applicant: "You haven't request the book."
         not_the_owner: 'You are not the owener of the book.'
         not_the_creator: 'You are not the creator of the book.'
+        not_self_user: 'You are not the user himself/herself.'
+        

@@ -8,6 +8,6 @@ class CreateIdentities < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    add_index :identities, [:provider, :uid]
+    add_index :identities, [:provider, :uid], unique: true
   end
 end

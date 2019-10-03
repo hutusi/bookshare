@@ -11,6 +11,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :users, only: [:index, :show, :update]
+
       resources :books, only: [:index, :show, :create, :update, :destroy]
 
       resources :print_books, only: [:index, :show, :create, :update, :destroy] do

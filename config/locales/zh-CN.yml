@@ -2,6 +2,8 @@
 zh-CN:
   hello: "你好，世界"
   api:
+    auth:
+      invalid_provider_or_uid: 'Invalid provider or uid.'
     errors:
       forbidden:
         not_available: "当前书非空闲状态"
@@ -10,3 +12,4 @@ zh-CN:
         not_the_applicant: "你没有申请该书"
         not_the_owner: "你不是该书的所有者"
         not_the_creator: "你不是该书的信息登记人"
+        not_self_user: "你不是用户本人"
