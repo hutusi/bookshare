@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_115020) do
+ActiveRecord::Schema.define(version: 2019_10_03_115035) do
 
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
@@ -48,6 +48,16 @@ ActiveRecord::Schema.define(version: 2019_10_01_115020) do
     t.index ["sponsor_id"], name: "index_deals_on_sponsor_id"
   end
 
+  create_table "identities", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "provider"
+    t.string "uid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid"
+    t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
   create_table "print_books", force: :cascade do |t|
     t.integer "book_id", null: false
     t.integer "owner_id", null: false
@@ -78,4 +88,5 @@ ActiveRecord::Schema.define(version: 2019_10_01_115020) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "identities", "users"
 end

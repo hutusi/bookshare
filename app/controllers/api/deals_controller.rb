@@ -33,12 +33,12 @@ class Api::DealsController < Api::BaseController
 
 protected
   def create_by_type(type)
-    deal_params = params.permit(:print_book_id, :location)
+    valid_params = params.permit(:print_book_id, :location)
     print_book = PrintBook.find_by id: params[:print_book_id]
     not_found! if print_book.nil?
 
-    deal_params.merge!(type: type, sponsor_id: current_user.id, book_id: print_book.book_id)
-    deal = Deal.create! deal_params
+    valid_params.merge!(type: type, sponsor_id: current_user.id, book_id: print_book.book_id)
+    deal = Deal.create! valid_params
     render json: deal, status: :created
   end
 

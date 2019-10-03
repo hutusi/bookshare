@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
-  devise_for :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  # only sessions 
+  devise_for :users, only: [:sessions]
 
   namespace 'api', as: 'api' do
     scope 'v1' do
+      resources :sessions, only: [] do
+        collection do
+          post :wechat, to: 'sessions#create_wechat'
+        end
+      end
+
       resources :books, only: [:index, :show, :create, :update, :destroy]
 
       resources :print_books, only: [:index, :show, :create, :update, :destroy] do
