@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   namespace 'api', as: 'api' do
+    resources :books, only: [:index, :show, :create, :update, :destroy]
+    
     resources :print_books, only: [:index, :show, :create, :update, :destroy] do
       member do
         put :property, to: 'print_books#update_property'

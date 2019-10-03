@@ -5,9 +5,9 @@ FactoryBot.define do
     author { "MyString" }
     publisher { "MyString" }
     intro { "MyText" }
-    isbn { "MyString" }
+    sequence(:isbn) { |n| "isbn#{n}" }
     cover_url { "MyString" }
-    douban_id { "MyString" }
+    sequence(:douban_id) { |n| "douban_id#{n}" }
     association :creator, factory: :user
   end
 end

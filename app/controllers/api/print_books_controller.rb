@@ -17,10 +17,10 @@ class Api::PrintBooksController < Api::BaseController
   end
   
   def create
-    book_params = params.permit(:book_id, :description)
-    book_params.merge!(owner_id: current_user.id, holder_id: current_user.id, 
+    valid_params = params.permit(:book_id, :description)
+    valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id, 
                        created_by: current_user.id)
-    print_book = PrintBook.create! book_params
+    print_book = PrintBook.create! valid_params
     render json: print_book, status: :created
   end
 
@@ -46,7 +46,7 @@ class Api::PrintBooksController < Api::BaseController
 
   def destroy
     @print_book.destroy!
-    render status: :ok
+    render json: {}, status: :ok
   end
 
 private

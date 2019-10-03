@@ -28,7 +28,7 @@ class Api::DealsController < Api::BaseController
 
   def destroy
     @deal.destroy!
-    render status: :ok
+    render json: {}, status: :ok
   end
 
 protected

@@ -9,3 +9,4 @@ zh-CN:
         not_the_holder: "你当前不持有该书"
         not_the_applicant: "你没有申请该书"
         not_the_owner: "你不是该书的所有者"
+        not_the_creator: "你不是该书的信息登记人"
