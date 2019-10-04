@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_03_140737) do
+ActiveRecord::Schema.define(version: 2019_10_04_083629) do
 
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
@@ -102,5 +102,15 @@ ActiveRecord::Schema.define(version: 2019_10_03_140737) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "books", "users", column: "created_by"
+  add_foreign_key "deals", "books"
+  add_foreign_key "deals", "print_books"
+  add_foreign_key "deals", "users", column: "applicant_id"
+  add_foreign_key "deals", "users", column: "receiver_id"
+  add_foreign_key "deals", "users", column: "sponsor_id"
   add_foreign_key "identities", "users"
+  add_foreign_key "print_books", "books"
+  add_foreign_key "print_books", "users", column: "created_by"
+  add_foreign_key "print_books", "users", column: "holder_id"
+  add_foreign_key "print_books", "users", column: "owner_id"
 end
