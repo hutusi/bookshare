@@ -19,7 +19,7 @@ class Api::PrintBooksController < Api::BaseController
   def create
     valid_params = params.permit(:book_id, :description)
     valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id, 
-                       created_by: current_user.id)
+                       creator_id: current_user.id)
     print_book = PrintBook.create! valid_params
     render json: print_book, status: :created
   end

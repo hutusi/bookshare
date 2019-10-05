@@ -21,10 +21,10 @@ ActiveRecord::Schema.define(version: 2019_10_04_083629) do
     t.string "isbn", null: false
     t.string "cover_url"
     t.string "douban_id"
-    t.integer "created_by", null: false
+    t.integer "creator_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by"], name: "index_books_on_created_by"
+    t.index ["creator_id"], name: "index_books_on_creator_id"
     t.index ["isbn"], name: "index_books_on_isbn", unique: true
   end
 
@@ -66,12 +66,12 @@ ActiveRecord::Schema.define(version: 2019_10_04_083629) do
     t.integer "status", default: 0
     t.text "images"
     t.text "description"
-    t.integer "created_by", null: false
+    t.integer "creator_id", null: false
     t.integer "last_deal_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_print_books_on_book_id"
-    t.index ["created_by"], name: "index_print_books_on_created_by"
+    t.index ["creator_id"], name: "index_print_books_on_creator_id"
     t.index ["holder_id"], name: "index_print_books_on_holder_id"
     t.index ["owner_id"], name: "index_print_books_on_owner_id"
   end
@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 2019_10_04_083629) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  add_foreign_key "books", "users", column: "created_by"
+  add_foreign_key "books", "users", column: "creator_id"
   add_foreign_key "deals", "books"
   add_foreign_key "deals", "print_books"
   add_foreign_key "deals", "users", column: "applicant_id"
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 2019_10_04_083629) do
   add_foreign_key "deals", "users", column: "sponsor_id"
   add_foreign_key "identities", "users"
   add_foreign_key "print_books", "books"
-  add_foreign_key "print_books", "users", column: "created_by"
+  add_foreign_key "print_books", "users", column: "creator_id"
   add_foreign_key "print_books", "users", column: "holder_id"
   add_foreign_key "print_books", "users", column: "owner_id"
 end

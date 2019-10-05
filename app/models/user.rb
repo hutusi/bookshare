@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :identities
   has_many :owning_books, class_name: 'PrintBook', foreign_key: 'owner_id'
   has_many :holding_books, class_name: 'PrintBook', foreign_key: 'holder_id'
-  has_many :created_books, class_name: 'PrintBook', foreign_key: 'created_by'
+  has_many :created_books, class_name: 'PrintBook', foreign_key: 'creator_id'
 
   has_many :sponsored_deals, class_name: 'Deal', foreign_key: 'sponsor_id'
   has_many :received_deals, class_name: 'Deal', foreign_key: 'receiver_id'

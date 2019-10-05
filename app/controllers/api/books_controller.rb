@@ -18,7 +18,7 @@ class Api::BooksController < Api::BaseController
   def create
     valid_params = params.permit(:title, :subtitle, :author, :publisher,
       :intro, :isbn, :cover_url, :douban_id)
-    valid_params.merge!(created_by: current_user.id)
+    valid_params.merge!(creator_id: current_user.id)
     book = Book.create! valid_params
     render json: book, status: :created
   end

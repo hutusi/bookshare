@@ -9,12 +9,12 @@ class CreateBooks < ActiveRecord::Migration[6.0]
       t.string :isbn, null: false
       t.string :cover_url
       t.string :douban_id
-      t.integer :created_by, null: false
+      t.integer :creator_id, null: false
 
       t.timestamps
     end
 
     add_index :books, :isbn, unique: true
-    add_index :books, :created_by
+    add_index :books, :creator_id
   end
 end
