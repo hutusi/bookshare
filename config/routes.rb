@@ -2,10 +2,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'home#index'
 
-  # only sessions 
-  devise_for :users, only: [:sessions]
+  scope 'api', defaults: { format: :json } do
+    # only sessions 
+    devise_for :users, only: [:sessions]
+  end
 
-  namespace 'api', as: 'api' do
+  namespace 'api', as: 'api', defaults: { format: :json } do
     scope 'v1' do
       resources :sessions, only: [] do
         collection do

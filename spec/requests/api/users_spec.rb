@@ -14,7 +14,7 @@ RSpec.describe "Api::Users", type: :request do
     context 'not login' do
       it "create user and responses no_content" do
         put "/api/v1/users/#{user.id}", params: valid_params
-        expect(response).to have_http_status(302)
+        expect(response).to have_http_status(401)
       end
     end
 
