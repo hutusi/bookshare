@@ -17,6 +17,15 @@ Rails.application.routes.draw do
 
       resources :users, only: [:index, :show, :update]
 
+      namespace :shelfs do
+        get :summary
+        get :shared
+        get :lent
+        get :received
+        get :borrowed
+        get :personal
+      end
+
       resources :books, only: [:index, :show, :create, :update, :destroy]
 
       resources :print_books, only: [:index, :show, :create, :update, :destroy] do
