@@ -1,4 +1,6 @@
 class PrintBook < ApplicationRecord
+  include ActiveModel::Serializers::JSON
+
   # personal book is only seen by self, borrowable book is seen by others and can be borrowed.
   # shared book is shared to others.
   enum property: { personal: 0, borrowable: 50, shared: 100 }
@@ -23,4 +25,8 @@ class PrintBook < ApplicationRecord
   scope :available, -> { where(status: :available) }
   scope :reading, -> { where(status: :reading) }
   scope :losted, -> { where(status: :losted) }
+
+  def attributes
+    { id: nil, book: nil, property: nil, status: nil }
+  end
 end
