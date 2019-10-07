@@ -6,7 +6,7 @@ FactoryBot.define do
     publisher { "MyString" }
     intro { "MyText" }
     sequence(:isbn) { |n| "isbn#{n}" }
-    cover_url { "MyString" }
+    cover { "MyString" }
     sequence(:douban_id) { |n| "douban_id#{n}" }
     association :creator, factory: :user
   end

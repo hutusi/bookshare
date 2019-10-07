@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2019_10_04_083629) do
     t.string "publisher"
     t.text "intro"
     t.string "isbn", null: false
-    t.string "cover_url"
+    t.string "cover"
     t.string "douban_id"
     t.integer "creator_id", null: false
     t.datetime "created_at", precision: 6, null: false

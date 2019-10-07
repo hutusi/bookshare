@@ -7,7 +7,7 @@ class CreateBooks < ActiveRecord::Migration[6.0]
       t.string :publisher
       t.text :intro
       t.string :isbn, null: false
-      t.string :cover_url
+      t.string :cover
       t.string :douban_id
       t.integer :creator_id, null: false
 
