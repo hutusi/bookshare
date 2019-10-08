@@ -29,6 +29,11 @@ Rails.application.routes.draw do
       resources :books, only: [:index, :show, :create, :update, :destroy]
 
       resources :print_books, only: [:index, :show, :create, :update, :destroy] do
+        collection do
+          get :for_share
+          get :for_borrow
+        end
+
         member do
           put :property, to: 'print_books#update_property'
           put :status, to: 'print_books#update_status'

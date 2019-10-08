@@ -10,6 +10,22 @@ class Api::PrintBooksController < Api::BaseController
     end
   end
 
+  def for_share
+    @print_books = PrintBook.for_share.order(updated_at: :desc)
+
+    if stale?(last_modified: @print_books.first&.updated_at)
+      render json: { print_books: @print_books, total: @print_books.size }
+    end
+  end
+
+  def for_borrow
+    @print_books = PrintBook.for_borrow.order(updated_at: :desc)
+
+    if stale?(last_modified: @print_books.first&.updated_at)
+      render json: { print_books: @print_books, total: @print_books.size }
+    end
+  end
+
   def show
     if stale?(last_modified: @print_book.updated_at)
       render json: @print_book
