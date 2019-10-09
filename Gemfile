@@ -59,6 +59,11 @@ group :development do
   gem 'rubocop-performance', require: false
   gem 'rubocop-thread_safety', require: false
   gem 'brakeman', require: false
+
+  gem 'guard', require: false
+  gem 'guard-rspec', require: false
+  gem 'guard-brakeman', require: false
+  gem 'guard-rubocop', require: false
 end
 
 group :test do

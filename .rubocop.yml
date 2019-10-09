@@ -15,6 +15,7 @@ AllCops:
     - Gemfile.lock
     - Rakefile
     - config.ru
+    - Guardfile
 
 Bundler/OrderedGems:
   Enabled: false
