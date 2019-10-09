@@ -6,7 +6,7 @@ RSpec.describe Api::DealsController, type: :controller do
   describe 'GET #index' do
     login_user
     context 'no records' do
-      it 'should return empty list' do
+      it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
         expect(json_response_body['total']).to eq 0
@@ -18,7 +18,7 @@ RSpec.describe Api::DealsController, type: :controller do
         create_list(:deal, 10)
       end
 
-      it 'should return deals list' do
+      it 'returns deals list' do
         get :index
         expect(response.status).to eq 200
         expect(json_response_body['total']).to eq 10
@@ -32,7 +32,8 @@ RSpec.describe Api::DealsController, type: :controller do
 
     context 'use correct conditions' do
       before { deals }
-      it 'should return the deal json' do
+
+      it 'returns the deal json' do
         get :show, params: { id: deals.first.id }
         expect(response.status).to eq 200
         expect(json_response_body['id']).to eq deals.first.id

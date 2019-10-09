@@ -18,8 +18,8 @@ class User < ApplicationRecord
   has_many :received_deals, class_name: 'Deal', foreign_key: 'receiver_id'
   has_many :applied_deals, class_name: 'Deal', foreign_key: 'appicant_id'
 
-  validates_presence_of :username
-  validates_uniqueness_of :username
+  validates :username, presence: true
+  validates :username, uniqueness: true
 
   def self.create_by_wechat(params)
     ActiveRecord::Base.transaction do

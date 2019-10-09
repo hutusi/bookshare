@@ -35,3 +35,6 @@ Style/SymbolArray:
 
 Style/WordArray:
   EnforcedStyle: brackets
+
+Style/ClassAndModuleChildren:
+  Enabled: false

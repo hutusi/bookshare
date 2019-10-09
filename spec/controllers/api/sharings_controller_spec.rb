@@ -4,11 +4,12 @@ require 'rails_helper'
 
 RSpec.describe Api::SharingsController, type: :controller do
   let(:user) { create :user }
+
   before { sign_in user }
 
   describe 'GET #index' do
     context 'no records' do
-      it 'should return empty list' do
+      it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
         expect(json_response_body['total']).to eq 0
@@ -20,7 +21,7 @@ RSpec.describe Api::SharingsController, type: :controller do
         create_list(:sharing, 10)
       end
 
-      it 'should return sharings list' do
+      it 'returns sharings list' do
         get :index
         expect(response.status).to eq 200
         expect(json_response_body['total']).to eq 10
@@ -33,7 +34,8 @@ RSpec.describe Api::SharingsController, type: :controller do
 
     context 'use correct conditions' do
       before { sharings }
-      it 'should return the sharing json' do
+
+      it 'returns the sharing json' do
         get :show, params: { id: sharings.first.id }
         expect(response.status).to eq 200
         expect(json_response_body['id']).to eq sharings.first.id
@@ -47,7 +49,7 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:valid_attributes) { { print_book_id: print_book.id, location: 'Shanghai' } }
 
     context 'use correct conditions' do
-      it 'should return the sharing json' do
+      it 'returns the sharing json' do
         post :create, params: valid_attributes
         expect(response.status).to eq 201
         expect(valid_attributes[:print_book_id]).to eq Sharing.last.print_book_id
@@ -59,7 +61,7 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:sharing) { create :sharing }
 
     context 'with correct status' do
-      it 'should return the sharing json' do
+      it 'returns the sharing json' do
         post :create_request, params: { id: sharing.id }
         expect(response.status).to eq 201
         sharing.reload
@@ -77,7 +79,7 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'with correct status' do
-      it 'should return the sharing json' do
+      it 'returns the sharing json' do
         post :create_share, params: { id: sharing.id }
         expect(response.status).to eq 201
         sharing.reload
@@ -95,7 +97,7 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'with correct status' do
-      it 'should return the sharing json' do
+      it 'returns the sharing json' do
         post :create_reject, params: { id: sharing.id }
         expect(response.status).to eq 201
         sharing.reload
@@ -114,7 +116,7 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'with correct status' do
-      it 'should return the sharing json' do
+      it 'returns the sharing json' do
         delete :destroy_share, params: { id: sharing.id }
         expect(response.status).to eq 200
         sharing.reload
@@ -133,7 +135,7 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'with correct status' do
-      it 'should return the sharing json' do
+      it 'returns the sharing json' do
         post :create_accept, params: { id: sharing.id }
         expect(response.status).to eq 201
         sharing.reload

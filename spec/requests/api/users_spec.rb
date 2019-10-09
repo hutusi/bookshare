@@ -16,21 +16,21 @@ RSpec.describe "Api::Users", type: :request do
     context 'not login' do
       it "create user and responses no_content" do
         put "/api/v1/users/#{user.id}", params: valid_params
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context "modify other's profile" do
       it "create user and responses no_content" do
         put "/api/v1/users/#{other.id}", params: valid_params_with_uid
-        expect(response).to have_http_status(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
     context "modify self's profile" do
       it "create user and responses no_content" do
         put "/api/v1/users/#{user.id}", params: valid_params_with_uid
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         user.reload
         expect(user.nickname).to eq valid_params[:nickname]
       end

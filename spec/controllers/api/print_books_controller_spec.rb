@@ -6,7 +6,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
   describe 'GET #index' do
     login_user
     context 'no records' do
-      it 'should return empty list' do
+      it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
         expect(json_response_body['total']).to eq 0
@@ -18,7 +18,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
         create_list(:print_book, 10)
       end
 
-      it 'should return print_books list' do
+      it 'returns print_books list' do
         get :index
         expect(response.status).to eq 200
         expect(json_response_body['total']).to eq 10
@@ -32,7 +32,8 @@ RSpec.describe Api::PrintBooksController, type: :controller do
 
     context 'use correct conditions' do
       before { print_books }
-      it 'should return the print_book json' do
+
+      it 'returns the print_book json' do
         get :show, params: { id: print_books.first.id }
         expect(response.status).to eq 200
         expect(json_response_body['id']).to eq print_books.first.id
@@ -46,7 +47,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     let(:valid_attributes) { { book_id: book.id, description: "New book" } }
 
     context 'use correct conditions' do
-      it 'should return the print_book json' do
+      it 'returns the print_book json' do
         post :create, params: valid_attributes
         expect(response.status).to eq 201
         print_book = PrintBook.last
@@ -61,7 +62,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     let(:valid_attributes) { { description: "New discription." } }
 
     context 'use correct conditions' do
-      it 'should return the print_book json' do
+      it 'returns the print_book json' do
         put :update, params: valid_attributes.merge(id: print_book.id)
         expect(response.status).to eq 200
         print_book.reload
@@ -73,11 +74,13 @@ RSpec.describe Api::PrintBooksController, type: :controller do
   describe 'PUT #update_property' do
     let(:user) { create :user }
     let(:valid_attributes) { { property: :shared } }
+
     before { sign_in user }
 
     context 'login_user not same with print_books owner' do
       let!(:print_book) { create :print_book }
-      it 'should return the print_book json' do
+
+      it 'returns the print_book json' do
         put :update_property, params: valid_attributes.merge(id: print_book.id)
         expect(response.status).to eq 403
         print_book.reload
@@ -87,7 +90,8 @@ RSpec.describe Api::PrintBooksController, type: :controller do
 
     context 'login_user same with print_books owner' do
       let!(:print_book) { create :print_book, owner: user }
-      it 'should return the print_book json' do
+
+      it 'returns the print_book json' do
         put :update_property, params: valid_attributes.merge(id: print_book.id)
         expect(response.status).to eq 200
         print_book.reload
@@ -99,11 +103,13 @@ RSpec.describe Api::PrintBooksController, type: :controller do
   describe 'PUT #update_status' do
     let(:user) { create :user }
     let(:valid_attributes) { { status: :reading } }
+
     before { sign_in user }
 
     context 'login_user not same with print_books holder' do
       let!(:print_book) { create :print_book }
-      it 'should return the print_book json' do
+
+      it 'returns the print_book json' do
         put :update_property, params: valid_attributes.merge(id: print_book.id)
         expect(response.status).to eq 403
         print_book.reload
