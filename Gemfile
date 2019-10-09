@@ -30,6 +30,9 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'devise'
 gem 'omniauth-wechat-oauth2'
 
+# Authorization
+gem 'cancancan'
+
 # state machines
 gem 'aasm'
 
