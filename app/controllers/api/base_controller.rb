@@ -2,14 +2,14 @@
 
 class ApiException < Exception
   attr_accessor :status, :message
-  
+
   def initialize(status, message)
     self.status = status
     self.message = message
   end
 
   def to_s
-    "ApiException==> status:#{self.status},message:#{self.message}."
+    "ApiException==> status:#{status},message:#{message}."
   end
 end
 

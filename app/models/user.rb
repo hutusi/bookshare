@@ -5,9 +5,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  
-  enum gender: {unknown: 0, male: 1, female: 2}
-  enum language: {en: 0, zh_CN: 1, zh_TW: 2}
+
+  enum gender: { unknown: 0, male: 1, female: 2 }
+  enum language: { en: 0, zh_CN: 1, zh_TW: 2 }
 
   has_many :identities
   has_many :owning_books, class_name: 'PrintBook', foreign_key: 'owner_id'
@@ -23,9 +23,9 @@ class User < ApplicationRecord
 
   def self.create_by_wechat(params)
     ActiveRecord::Base.transaction do
-      fake_username = "johndoe-#{(User.last&.id.presence || 0 ) + 1}"
+      fake_username = "johndoe-#{(User.last&.id.presence || 0) + 1}"
       fake_email = "#{fake_username}@fake-for-bookshare.com"
-      
+
       user = User.new(
         username: params[:username].presence || fake_username,
         email: params[:email].presence || fake_email,

@@ -16,7 +16,7 @@ class Api::DealsController < Api::BaseController
       render json: @deal
     end
   end
-  
+
   def create
     type = params[:type].presence || ""
     create_by_type type
@@ -33,7 +33,8 @@ class Api::DealsController < Api::BaseController
     render json: {}, status: :ok
   end
 
-protected
+  protected
+
   def create_by_type(type)
     valid_params = params.permit(:print_book_id, :location)
     print_book = PrintBook.find_by id: params[:print_book_id]
@@ -44,7 +45,8 @@ protected
     render json: deal, status: :created
   end
 
-private
+  private
+
   def find_deal
     @deal = Deal.find_by id: params[:id]
   end

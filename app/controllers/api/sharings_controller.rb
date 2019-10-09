@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Api::SharingsController < Api::DealsController
-  before_action :find_sharing, only: [:create_request, :create_share, 
-    :create_reject, :destroy_share, :create_accept]
+  before_action :find_sharing, only: [:create_request, :create_share,
+                                      :create_reject, :destroy_share, :create_accept]
 
   def index
     @sharings = Sharing.all.order(updated_at: :desc)
@@ -60,7 +60,8 @@ class Api::SharingsController < Api::DealsController
     render json: @sharing, status: :created
   end
 
-private
+  private
+
   def find_sharing
     @sharing = Sharing.find_by id: params[:id]
     @print_book = @sharing.print_book

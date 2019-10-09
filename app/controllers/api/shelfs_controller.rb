@@ -13,7 +13,7 @@ class Api::ShelfsController < Api::BaseController
     personal = current_user.owning_books.personal.order(update_at: :desc).limit(limits)
 
     render json: { shared: shared, lent: lent, received: received,
-      borrowed: borrowed, personal: personal }, status: :ok
+                   borrowed: borrowed, personal: personal }, status: :ok
   end
 
   def shared
@@ -46,5 +46,5 @@ class Api::ShelfsController < Api::BaseController
     render json: { print_books: personal }, status: :ok
   end
 
-private
+  private
 end

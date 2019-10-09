@@ -14,9 +14,9 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     end
 
     context 'with records' do
-      before {
+      before do
         create_list(:print_book, 10)
-      }
+      end
 
       it 'should return print_books list' do
         get :index
@@ -28,8 +28,8 @@ RSpec.describe Api::PrintBooksController, type: :controller do
 
   describe 'GET #show' do
     login_user
-    let(:print_books) { create_list(:print_book, 5) } 
-    
+    let(:print_books) { create_list(:print_book, 5) }
+
     context 'use correct conditions' do
       before { print_books }
       it 'should return the print_book json' do
@@ -44,7 +44,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     login_user
     let(:book) { create :book }
     let(:valid_attributes) { { book_id: book.id, description: "New book" } }
-    
+
     context 'use correct conditions' do
       it 'should return the print_book json' do
         post :create, params: valid_attributes
@@ -59,7 +59,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     login_user
     let(:print_book) { create :print_book }
     let(:valid_attributes) { { description: "New discription." } }
-    
+
     context 'use correct conditions' do
       it 'should return the print_book json' do
         put :update, params: valid_attributes.merge(id: print_book.id)
@@ -74,7 +74,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     let(:user) { create :user }
     let(:valid_attributes) { { property: :shared } }
     before { sign_in user }
-    
+
     context 'login_user not same with print_books owner' do
       let!(:print_book) { create :print_book }
       it 'should return the print_book json' do
@@ -100,7 +100,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     let(:user) { create :user }
     let(:valid_attributes) { { status: :reading } }
     before { sign_in user }
-    
+
     context 'login_user not same with print_books holder' do
       let!(:print_book) { create :print_book }
       it 'should return the print_book json' do

@@ -16,9 +16,9 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'with records' do
-      before {
+      before do
         create_list(:sharing, 10)
-      }
+      end
 
       it 'should return sharings list' do
         get :index
@@ -29,8 +29,8 @@ RSpec.describe Api::SharingsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:sharings) { create_list(:sharing, 5) } 
-    
+    let(:sharings) { create_list(:sharing, 5) }
+
     context 'use correct conditions' do
       before { sharings }
       it 'should return the sharing json' do
@@ -71,8 +71,10 @@ RSpec.describe Api::SharingsController, type: :controller do
   describe 'POST #create_share' do
     let(:applicant) { create :user }
     let(:print_book) { create :print_book, holder: user }
-    let(:sharing) { create :sharing, print_book: print_book,
-      applicant: applicant, status: :requesting }
+    let(:sharing) do
+      create :sharing, print_book: print_book,
+                       applicant: applicant, status: :requesting
+    end
 
     context 'with correct status' do
       it 'should return the sharing json' do
@@ -87,8 +89,10 @@ RSpec.describe Api::SharingsController, type: :controller do
   describe 'POST #create_reject' do
     let(:applicant) { create :user }
     let(:print_book) { create :print_book, holder: user }
-    let(:sharing) { create :sharing, print_book: print_book,
-      applicant: applicant, status: :requesting }
+    let(:sharing) do
+      create :sharing, print_book: print_book,
+                       applicant: applicant, status: :requesting
+    end
 
     context 'with correct status' do
       it 'should return the sharing json' do
@@ -104,8 +108,10 @@ RSpec.describe Api::SharingsController, type: :controller do
   describe 'DELETE #destroy_share' do
     let(:applicant) { create :user }
     let(:print_book) { create :print_book, holder: user }
-    let(:sharing) { create :sharing, print_book: print_book,
-      applicant: applicant, status: :lending }
+    let(:sharing) do
+      create :sharing, print_book: print_book,
+                       applicant: applicant, status: :lending
+    end
 
     context 'with correct status' do
       it 'should return the sharing json' do
@@ -121,8 +127,10 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:applicant) { user }
     let(:holder) { create :user }
     let(:print_book) { create :print_book, holder: holder }
-    let(:sharing) { create :sharing, print_book: print_book,
-      applicant: applicant, status: :lending }
+    let(:sharing) do
+      create :sharing, print_book: print_book,
+                       applicant: applicant, status: :lending
+    end
 
     context 'with correct status' do
       it 'should return the sharing json' do
@@ -136,5 +144,4 @@ RSpec.describe Api::SharingsController, type: :controller do
     context 'second sharing' do
     end
   end
-
 end

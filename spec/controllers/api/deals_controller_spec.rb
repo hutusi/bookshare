@@ -14,9 +14,9 @@ RSpec.describe Api::DealsController, type: :controller do
     end
 
     context 'with records' do
-      before {
+      before do
         create_list(:deal, 10)
-      }
+      end
 
       it 'should return deals list' do
         get :index
@@ -28,8 +28,8 @@ RSpec.describe Api::DealsController, type: :controller do
 
   describe 'GET #show' do
     login_user
-    let(:deals) { create_list(:deal, 5) } 
-    
+    let(:deals) { create_list(:deal, 5) }
+
     context 'use correct conditions' do
       before { deals }
       it 'should return the deal json' do

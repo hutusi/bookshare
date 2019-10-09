@@ -2,7 +2,7 @@
 
 class Api::BooksController < Api::BaseController
   before_action :find_book, only: [:show, :update, :destroy]
-  
+
   def index
     @books = Book.all.order(updated_at: :desc)
 
@@ -16,10 +16,10 @@ class Api::BooksController < Api::BaseController
       render json: @book
     end
   end
-  
+
   def create
     valid_params = params.permit(:title, :subtitle, :author, :publisher,
-      :intro, :isbn, :cover, :douban_id)
+                                 :intro, :isbn, :cover, :douban_id)
     valid_params.merge!(creator_id: current_user.id)
     book = Book.create! valid_params
     render json: book, status: :created
@@ -28,7 +28,7 @@ class Api::BooksController < Api::BaseController
   def update
     forbidden! I18n.t('api.errors.forbidden.not_the_creator') unless @book.creator == current_user
     valid_params = params.permit(:title, :subtitle, :author, :publisher,
-      :intro, :isbn, :cover, :douban_id)
+                                 :intro, :isbn, :cover, :douban_id)
     @book.update! valid_params
     render json: @book, status: :ok
   end
@@ -39,7 +39,8 @@ class Api::BooksController < Api::BaseController
     render json: {}, status: :ok
   end
 
-private
+  private
+
   def find_book
     @book = Book.find_by id: params[:id]
   end

@@ -7,7 +7,7 @@ class ApiAuthenticationStrategy < Warden::Strategies::Base
 
   def authenticate!
     identity = Identity.find_by(provider: provider, uid: uid)
- 
+
     if identity && identity.user
       success!(identity.user)
     else
@@ -15,7 +15,7 @@ class ApiAuthenticationStrategy < Warden::Strategies::Base
     end
   end
 
-private
+  private
 
   def provider
     params[:provider]

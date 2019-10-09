@@ -16,9 +16,9 @@ RSpec.describe Api::BooksController, type: :controller do
     end
 
     context 'with records' do
-      before {
+      before do
         create_list(:book, 10)
-      }
+      end
 
       it 'should return books list' do
         get :index
@@ -29,8 +29,8 @@ RSpec.describe Api::BooksController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:books) { create_list(:book, 5) } 
-    
+    let(:books) { create_list(:book, 5) }
+
     context 'use correct conditions' do
       before { books }
       it 'should return the book json' do
@@ -44,7 +44,7 @@ RSpec.describe Api::BooksController, type: :controller do
   describe 'POST #create' do
     let(:book) { create :book }
     let(:valid_attributes) { attributes_for :book }
-    
+
     context 'use correct conditions' do
       it 'should return the book json' do
         post :create, params: valid_attributes
@@ -58,7 +58,7 @@ RSpec.describe Api::BooksController, type: :controller do
   describe 'PUT #update' do
     let(:book) { create :book, creator: user }
     let(:valid_attributes) { { title: 'new titile' } }
-    
+
     context 'use correct conditions' do
       it 'should return the book json' do
         put :update, params: valid_attributes.merge(id: book.id)
@@ -71,7 +71,7 @@ RSpec.describe Api::BooksController, type: :controller do
 
   describe 'DELETE #destroy' do
     let(:book) { create :book, creator: user }
-    
+
     context 'use correct conditions' do
       it 'should return the book json' do
         delete :destroy, params: { id: book.id }

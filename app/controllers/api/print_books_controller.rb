@@ -3,7 +3,7 @@
 class Api::PrintBooksController < Api::BaseController
   before_action :find_print_book, only: [:show, :update, :destroy, :update_property, :update_status]
 
-  # todo: paginate
+  # TODO: paginate
   def index
     @print_books = PrintBook.all.order(updated_at: :desc)
 
@@ -33,11 +33,11 @@ class Api::PrintBooksController < Api::BaseController
       render json: @print_book
     end
   end
-  
+
   def create
     valid_params = params.permit(:book_id, :description)
-    valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id, 
-                       creator_id: current_user.id)
+    valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id,
+                        creator_id: current_user.id)
     print_book = PrintBook.create! valid_params
     render json: print_book, status: :created
   end
@@ -67,7 +67,8 @@ class Api::PrintBooksController < Api::BaseController
     render json: {}, status: :ok
   end
 
-private
+  private
+
   def find_print_book
     @print_book = PrintBook.find_by id: params[:id]
   end

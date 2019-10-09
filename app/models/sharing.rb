@@ -2,9 +2,9 @@
 
 class Sharing < Deal
   include AASM
-  
+
   #             (request)     (accept request)  (confirm get book)   (next sharing' borrow)
-  # available -> requesting ->   lending ->     borrowing         -> finish 
+  # available -> requesting ->   lending ->     borrowing         -> finish
 
   aasm column: :status, enum: true do
     state :available, initial: true

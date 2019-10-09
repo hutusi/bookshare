@@ -7,10 +7,10 @@ class Api::SessionsController < Api::BaseController
     valid_params = params.permit(:openid, :session_key, :unionid)
     identity = Identity.find_by(provider: :wechat, uid: params[:openid])
     if identity.present?
-      render json: {user_id: identity.user_id}, status: :created
+      render json: { user_id: identity.user_id }, status: :created
     else
       user = User.create_by_wechat valid_params
-      render json: {user_id: user.id}, status: :no_content # 204
+      render json: { user_id: user.id }, status: :no_content # 204
     end
   end
 end
