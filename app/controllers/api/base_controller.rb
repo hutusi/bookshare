@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApiException < Exception
   attr_accessor :status, :message
   

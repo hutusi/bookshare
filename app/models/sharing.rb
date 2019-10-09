@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Sharing < Deal
   include AASM
   

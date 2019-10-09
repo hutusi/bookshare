@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Deal < ApplicationRecord
   # borrow status: available, requesting, lending, borrowing, returning, finished
   # share status: available, requesting, lending, borrowing

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::SharingsController < Api::DealsController
   before_action :find_sharing, only: [:create_request, :create_share, 
     :create_reject, :destroy_share, :create_accept]

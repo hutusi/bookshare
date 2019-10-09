@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::PrintBooksController < Api::BaseController
   before_action :find_print_book, only: [:show, :update, :destroy, :update_property, :update_status]
 

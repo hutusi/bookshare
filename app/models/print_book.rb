@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PrintBook < ApplicationRecord
   include ActiveModel::Serializers::JSON
 

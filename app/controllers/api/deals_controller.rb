@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::DealsController < Api::BaseController
   before_action :find_deal, only: [:show, :update, :destroy]
 

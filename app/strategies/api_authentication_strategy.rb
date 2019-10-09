@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApiAuthenticationStrategy < Warden::Strategies::Base
   def valid?
     provider.present? && uid.present?

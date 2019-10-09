@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -27,7 +29,7 @@ class User < ApplicationRecord
       user = User.new(
         username: params[:username].presence || fake_username,
         email: params[:email].presence || fake_email,
-        password: Devise.friendly_token[0,20]
+        password: Devise.friendly_token[0, 20]
       )
       # user.skip_confirmation!
       user.save!

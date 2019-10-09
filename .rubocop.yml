@@ -5,9 +5,11 @@ AllCops:
     - node_modules/**/*
     - bin/**/*
     - config/**/*
+    - db/**/*
     - Gemfile
     - Gemfile.lock
-    - db/**/*
+    - Rakefile
+    - config.ru
 
 Bundler/OrderedGems:
   Enabled: false
