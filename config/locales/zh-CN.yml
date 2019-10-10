@@ -1,6 +1,9 @@
 ---
 zh-CN:
   hello: "你好，世界"
+  auth:
+    wechat:
+      login_failed: "微信登录失败. 错误码: %{errcode}, 信息: %{errmsg}"
   api:
     auth:
       invalid_provider_or_uid: 'Invalid provider or uid.'

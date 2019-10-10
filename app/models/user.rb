@@ -37,6 +37,7 @@ class User < ApplicationRecord
       identity = Identity.new(
         provider: :wechat,
         uid: params[:openid],
+        secret_key: params[:session_key],
         user: user
       )
       identity.save!
@@ -44,4 +45,6 @@ class User < ApplicationRecord
       user
     end
   end
+
+  private
 end

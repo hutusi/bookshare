@@ -272,7 +272,8 @@ Devise.setup do |config|
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
   config.warden do |manager|
-    manager.strategies.add(:api, ApiAuthenticationStrategy) 
+    manager.strategies.add(:api, ApiAuthenticationStrategy)
+    manager.strategies.add(:wechat, WechatAuthenticationStrategy)
   end
 
   # ==> Mountable engine configurations

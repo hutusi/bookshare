@@ -31,6 +31,10 @@
 
 en:
   hello: "Hello world"
+  auth:
+    wechat:
+      login_failed: "Wechat login failed. error code: %{errcode}, msg: %{errmsg}"
+      create_user_failure: "Create user by wechat failed."
   api:
     auth:
       invalid_provider_or_uid: 'Invalid provider or uid.'
