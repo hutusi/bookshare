@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_04_083629) do
+ActiveRecord::Schema.define(version: 2019_10_10_031157) do
 
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2019_10_04_083629) do
     t.string "uid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "secret_key"
     t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
@@ -97,6 +98,8 @@ ActiveRecord::Schema.define(version: 2019_10_04_083629) do
     t.text "bio"
     t.string "contact"
     t.datetime "birthdate"
+    t.string "api_token"
+    t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
