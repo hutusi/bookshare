@@ -6,10 +6,9 @@ RSpec.describe "Api::Users", type: :request do
   describe "PUT /api/v1/users" do
     let(:user) { create :user }
     let(:identity) { create :identity, user: user }
-    let(:session_params) { { openid: identity.uid } }
-    let(:uid_params) { { provider: :wechat, uid: identity.uid } }
+    let(:api_token_params) { { api_token: user.api_token } }
     let(:valid_params) { { nickname: 'lisa', 'gender': 'female', country: 'China', language: 'en' } }
-    let(:valid_params_with_uid) { valid_params.merge(uid_params) }
+    let(:valid_params_with_uid) { valid_params.merge(api_token_params) }
 
     let(:other) { create :user }
 

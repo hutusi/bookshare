@@ -21,30 +21,38 @@ class User < ApplicationRecord
   validates :username, presence: true
   validates :username, uniqueness: true
 
-  def self.create_by_wechat(params)
-    ActiveRecord::Base.transaction do
-      fake_username = "johndoe-#{(User.last&.id.presence || 0) + 1}"
-      fake_email = "#{fake_username}@fake-for-bookshare.com"
+  class << self
+    def create_by_wechat(params)
+      ActiveRecord::Base.transaction do
+        fake_username = "johndoe-#{(User.last&.id.presence || 0) + 1}"
+        fake_email = "#{fake_username}@fake-for-bookshare.com"
 
-      user = User.new(
-        username: params[:username].presence || fake_username,
-        email: params[:email].presence || fake_email,
-        password: Devise.friendly_token[0, 20]
-      )
-      # user.skip_confirmation!
-      user.save!
+        user = User.new(
+          username: params[:username].presence || fake_username,
+          email: params[:email].presence || fake_email,
+          password: Devise.friendly_token[0, 20],
+          api_token: User.generate_api_token
+        )
+        # user.skip_confirmation!
+        user.save!
 
-      identity = Identity.new(
-        provider: :wechat,
-        uid: params[:openid],
-        secret_key: params[:session_key],
-        user: user
-      )
-      identity.save!
+        identity = Identity.new(
+          provider: :wechat,
+          uid: params[:openid],
+          secret_key: params[:session_key],
+          user: user
+        )
+        identity.save!
 
-      user
+        user
+      end
+    end
+
+    def generate_api_token
+      loop do
+        token = SecureRandom.hex
+        break token unless User.exists?(api_token: token)
+      end
     end
   end
-
-  private
 end

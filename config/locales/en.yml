@@ -34,10 +34,10 @@ en:
   auth:
     wechat:
       login_failed: "Wechat login failed. error code: %{errcode}, msg: %{errmsg}"
-      create_user_failure: "Create user by wechat failed."
+      create_user_failure: 'Create user by wechat failed.'
+    api:
+      invalid_api_token: 'Invalid API token.'
   api:
-    auth:
-      invalid_provider_or_uid: 'Invalid provider or uid.'
     errors:
       forbidden:
         not_available: 'Book is not available.'

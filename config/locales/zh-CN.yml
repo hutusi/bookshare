@@ -4,9 +4,9 @@ zh-CN:
   auth:
     wechat:
       login_failed: "微信登录失败. 错误码: %{errcode}, 信息: %{errmsg}"
+    api:
+      invalid_api_token: "非法的 API token."
   api:
-    auth:
-      invalid_provider_or_uid: 'Invalid provider or uid.'
     errors:
       forbidden:
         not_available: "当前书非空闲状态"

@@ -2,30 +2,22 @@
 
 class ApiAuthenticationStrategy < Warden::Strategies::Base
   def valid?
-    provider.present? && uid.present?
+    api_token.present?
   end
 
   def authenticate!
-    identity = Identity.find_by(provider: provider, uid: uid)
+    user = User.find_by(api_token: api_token)
 
-    if identity && identity.user
-      success!(identity.user)
+    if user
+      success!(user)
     else
-      fail!(I18n.t('api.auth.invalid_provider_or_uid'))
+      fail!(I18n.t('auth.api.invalid_api_token'))
     end
   end
 
   private
 
-  def provider
-    params[:provider]
+  def api_token
+    params[:api_token]
   end
-
-  def uid
-    params[:uid]
-  end
-
-  # def uid
-  #   env['HTTP_AUTHORIZATION'].to_s.remove('Bearer ')
-  # end
 end

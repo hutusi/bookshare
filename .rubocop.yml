@@ -39,3 +39,9 @@ Style/WordArray:
 
 Style/ClassAndModuleChildren:
   Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
