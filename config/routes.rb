@@ -26,7 +26,11 @@ Rails.application.routes.draw do
         get :personal
       end
 
-      resources :books, only: [:index, :show, :create, :update, :destroy]
+      resources :books, only: [:index, :show, :create, :update, :destroy] do
+        collection do
+          get 'isbn/:isbn', to: 'books#isbn'
+        end
+      end
 
       resources :print_books, only: [:index, :show, :create, :update, :destroy] do
         collection do

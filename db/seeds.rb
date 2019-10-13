@@ -18,7 +18,8 @@ ActiveRecord::Base.transaction do
       username: Faker::Internet.unique.username,
       email: Faker::Internet.unique.email,
       password: Faker::Internet.password,
-      nickname: Faker::Name.name
+      nickname: Faker::Name.name,
+      api_token: "#{i}"
     )
   end
 

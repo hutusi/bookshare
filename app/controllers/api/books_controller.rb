@@ -39,6 +39,16 @@ class Api::BooksController < Api::BaseController
     render json: {}, status: :ok
   end
 
+  def isbn
+    isbn = params[:isbn]
+    book = Book.find_by(isbn: isbn)
+    if book.present?
+      render json: book, status: :ok
+    else
+      render json: {}, status: :not_found
+    end
+  end
+
   private
 
   def find_book

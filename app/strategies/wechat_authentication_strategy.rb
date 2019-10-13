@@ -11,7 +11,8 @@ class WechatAuthenticationStrategy < Warden::Strategies::Base
   def authenticate!
     wechat_login
 
-    unless @wechat_params[:errcode] == 0
+    unless @wechat_params[:errcode].blank? || @wechat_params[:errcode] == 0
+      Rails.logger.warn("Wechat login failed, #{@wechat_params}, errcode: #{@wechat_params[:errcode]}, errmsg: #{@wechat_params[:errmsg]}")
       fail!(I18n.t('auth.wechat.login_failed', errcode: @wechat_params[:errcode], errmsg: @wechat_params[:errmsg]))
       return
     end
@@ -43,6 +44,7 @@ class WechatAuthenticationStrategy < Warden::Strategies::Base
     params[:grant_type] = 'authorization_code'
 
     response = Faraday.get url, params
+    # @wechat_status = response.status
     @wechat_params = JSON.parse(response.body).symbolize_keys
   end
 
