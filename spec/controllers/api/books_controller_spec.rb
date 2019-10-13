@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 RSpec.describe Api::BooksController, type: :controller do
   let(:user) { create :user }
@@ -79,6 +80,36 @@ RSpec.describe Api::BooksController, type: :controller do
         delete :destroy, params: { id: book.id }
         expect(response.status).to eq 200
         expect(Book.all.size).to eq 0
+      end
+    end
+  end
+
+  describe 'GET #isbn' do
+    let(:isbn) { '9787505715660' }
+
+    context 'book exists' do
+      let(:book) { create :book, isbn: isbn }
+
+      it 'returns the book json' do
+        book
+        get :isbn, params: { isbn: book.isbn }
+        expect(response.status).to eq 200
+        expect(json_response_body['id']).to eq book.id
+        expect(json_response_body['isbn']).to eq isbn
+      end
+    end
+
+    context 'book not exists' do
+      before do
+        book_json = file_fixture("little_prince.json").read
+        stub_request(:get, /douban.uieee.com/)
+          .to_return(body: book_json, status: 200)
+      end
+
+      it 'returns the book json' do
+        get :isbn, params: { isbn: isbn }
+        expect(response.status).to eq 200
+        expect(json_response_body['isbn']).to eq isbn
       end
     end
   end

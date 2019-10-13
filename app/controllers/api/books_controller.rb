@@ -41,7 +41,7 @@ class Api::BooksController < Api::BaseController
 
   def isbn
     isbn = params[:isbn]
-    book = Book.find_by(isbn: isbn)
+    book = Book.find_by(isbn: isbn) || Book.create_by_isbn(isbn, current_user)
     if book.present?
       render json: book, status: :ok
     else

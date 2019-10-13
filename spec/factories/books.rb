@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :book do
     title { "MyString" }
     subtitle { "MyString" }
-    author { "MyString" }
-    publisher { "MyString" }
+    author_name { "MyString" }
+    publisher_name { "MyString" }
     intro { "MyText" }
     sequence(:isbn) { |n| "isbn#{n}" }
     cover { "MyString" }

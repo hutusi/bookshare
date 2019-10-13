@@ -10,13 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_10_031157) do
+ActiveRecord::Schema.define(version: 2019_10_13_035306) do
 
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
     t.string "subtitle"
-    t.string "author"
-    t.string "publisher"
     t.text "intro"
     t.string "isbn", null: false
     t.string "cover"
@@ -24,6 +22,28 @@ ActiveRecord::Schema.define(version: 2019_10_10_031157) do
     t.integer "creator_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "data_source"
+    t.string "isbn10"
+    t.string "isbn13"
+    t.string "origin_title"
+    t.string "alt_title"
+    t.string "image"
+    t.json "images"
+    t.integer "author_id"
+    t.string "author_name"
+    t.integer "translator_id"
+    t.string "translator_name"
+    t.integer "publisher_id"
+    t.string "publisher_name"
+    t.datetime "pubdate"
+    t.json "rating"
+    t.string "binding"
+    t.string "price"
+    t.integer "series_id"
+    t.string "series_name"
+    t.string "pages"
+    t.string "summary"
+    t.string "catalog"
     t.index ["creator_id"], name: "index_books_on_creator_id"
     t.index ["isbn"], name: "index_books_on_isbn", unique: true
   end
@@ -59,6 +79,22 @@ ActiveRecord::Schema.define(version: 2019_10_10_031157) do
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
+  create_table "litterateurs", force: :cascade do |t|
+    t.string "name"
+    t.string "country"
+    t.integer "gender"
+    t.string "image"
+    t.datetime "birthdate"
+    t.datetime "deathdate"
+    t.text "bio"
+    t.text "intro"
+    t.string "origin_name"
+    t.string "pen_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_litterateurs_on_name"
+  end
+
   create_table "print_books", force: :cascade do |t|
     t.integer "book_id", null: false
     t.integer "owner_id", null: false
@@ -75,6 +111,26 @@ ActiveRecord::Schema.define(version: 2019_10_10_031157) do
     t.index ["creator_id"], name: "index_print_books_on_creator_id"
     t.index ["holder_id"], name: "index_print_books_on_holder_id"
     t.index ["owner_id"], name: "index_print_books_on_owner_id"
+  end
+
+  create_table "publishers", force: :cascade do |t|
+    t.string "name"
+    t.string "country"
+    t.datetime "establish_date"
+    t.datetime "close_date"
+    t.text "intro"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_publishers_on_name"
+  end
+
+  create_table "series", force: :cascade do |t|
+    t.string "name"
+    t.string "douban_id"
+    t.text "intro"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["douban_id"], name: "index_series_on_douban_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -105,6 +161,10 @@ ActiveRecord::Schema.define(version: 2019_10_10_031157) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "books", "litterateurs", column: "author_id"
+  add_foreign_key "books", "litterateurs", column: "translator_id"
+  add_foreign_key "books", "publishers"
+  add_foreign_key "books", "series"
   add_foreign_key "books", "users", column: "creator_id"
   add_foreign_key "deals", "books"
   add_foreign_key "deals", "print_books"
