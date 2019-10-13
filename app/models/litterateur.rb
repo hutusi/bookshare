@@ -1,0 +1,2 @@
+class Litterateur < ApplicationRecord
+end
