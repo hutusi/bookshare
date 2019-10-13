@@ -14,5 +14,7 @@ class CreateLitterateurs < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+
+    add_index :litterateurs, :name
   end
 end

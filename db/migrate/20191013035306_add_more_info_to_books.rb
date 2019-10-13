@@ -26,5 +26,10 @@ class AddMoreInfoToBooks < ActiveRecord::Migration[6.0]
     add_column :books, :pages, :string
     add_column :books, :summary, :string
     add_column :books, :catalog, :string
+
+    add_foreign_key :books, :litterateurs, column: :author_id
+    add_foreign_key :books, :litterateurs, column: :translator_id
+    add_foreign_key :books, :publishers, column: :publisher_id
+    add_foreign_key :books, :series, column: :series_id
   end
 end

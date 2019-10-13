@@ -9,5 +9,7 @@ class CreatePublishers < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+
+    add_index :publishers, :name
   end
 end
