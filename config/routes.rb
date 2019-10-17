@@ -26,6 +26,10 @@ Rails.application.routes.draw do
         get :personal
       end
 
+      namespace :dashboard do
+        get :index
+      end
+
       resources :books, only: [:index, :show, :create, :update, :destroy] do
         collection do
           get 'isbn/:isbn', to: 'books#isbn'

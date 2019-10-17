@@ -22,8 +22,12 @@ class Book < ApplicationRecord
           msg:#{json['msg']}"
       end
 
+      SaveDoubanBookJob.perform_later isbn, response.body
+
       author = Author.find_by(name: json['author'])
-      author = Author.create(name: json['author'], intro: json['author_intro']) if author.blank?
+      if author.blank?
+        author = Author.create(name: json['author'], intro: json['author_intro'])
+      end
       translator = Translator.find_or_create_by(name: json['translator'])
       publisher = Publisher.find_or_create_by(name: json['publisher'])
       series = Series.find_by(douban_id: json.dig('series', 'id'))
@@ -36,16 +40,16 @@ class Book < ApplicationRecord
                   isbn10: json['isbn10'], isbn13: json['isbn13'],
                   origin_title: json['origin_title'], alt_title: json['alt_title'],
                   image: json['image'], images: json['images'], #JSON.parse(json['images']),
-                  author_name: author.name, author_id: author.id,
-                  translator_name: translator.name, translator_id: translator.id,
-                  publisher_name: publisher.name, publisher_id: publisher.id,
-                  pubdate: json['pubdate'].to_datetime,
+                  author_name: author&.name, author_id: author&.id,
+                  translator_name: translator&.name, translator_id: translator&.id,
+                  publisher_name: publisher&.name, publisher_id: publisher&.id,
+                  pubdate: json['pubdate']&.to_datetime,
                   rating: json['rating'], #JSON.parse(json['rating']),
                   binding: json['binding'], price: json['price'], pages: json['pages'],
-                  series_id: series.id, series_name: series.name,
+                  series_id: series&.id, series_name: series&.name,
                   summary: json['summary'], catalog: json['catalog'],
                   cover: json[:image], douban_id: json[:id],
-                  isbn: isbn, data_source: :douban, creator_id: creator
+                  isbn: isbn, data_source: :douban, creator_id: creator&.id
     end
   end
 end

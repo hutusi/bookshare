@@ -112,5 +112,19 @@ RSpec.describe Api::BooksController, type: :controller do
         expect(json_response_body['isbn']).to eq isbn
       end
     end
+
+    context 'book not exists & only book title info' do
+      before do
+        book_json = file_fixture("book_title.json").read
+        stub_request(:get, /douban.uieee.com/)
+          .to_return(body: book_json, status: 200)
+      end
+
+      it 'returns the book json' do
+        get :isbn, params: { isbn: isbn }
+        expect(response.status).to eq 200
+        expect(json_response_body['isbn']).to eq isbn
+      end
+    end
   end
 end
