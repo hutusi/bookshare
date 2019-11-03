@@ -42,11 +42,16 @@ ActiveRecord::Base.transaction do
   (1..100).each do |i|
     books << Book.create!(
       title: Faker::Book.title,
-      author: Faker::Book.author,
-      publisher: Faker::Book.publisher,
+      author_name: Faker::Book.author,
+      publisher_name: Faker::Book.publisher,
+      pubdate: Faker::Date.between(from: 100.days.ago, to: Date.today),
       isbn: Faker::Code.unique.isbn,
       creator_id: rand(1..10),
-      cover: "https://img1.doubanio.com/view/subject/l/public/#{book_covers[rand(0..4)]}.jpg"
+      cover: "https://img1.doubanio.com/view/subject/l/public/#{book_covers[rand(0..4)]}.jpg",
+      series_name: Faker::Books::CultureSeries.culture_ship,
+      pages: Faker::Number.number(digits: 3),
+      summary: Faker::Lorem.paragraph,
+      catalog: Faker::Lorem.paragraph
     )
   end
 

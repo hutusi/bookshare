@@ -15,7 +15,7 @@ end
 
 class Api::BaseController < ActionController::API
   respond_to :json
-  before_action :authenticate_api!
+  before_action :authenticate_api!, except: [:test]
 
   rescue_from Exception, with: :unknown_error_handle
   rescue_from ApiException, with: :api_error_handle
@@ -40,5 +40,14 @@ class Api::BaseController < ActionController::API
   def unknown_error_handle(exception)
     p exception
     render status: 500, json: { message: "Server intrnal error!" }
+  end
+
+  def test
+    p params
+    # https://douban.uieee.com/v2/book/isbn/9787505715660
+    url = "https://douban.uieee.com/v2/book/isbn/#{params[:isbn]}"
+    response = Faraday.get url
+    json = JSON.parse(response.body)
+    p json
   end
 end

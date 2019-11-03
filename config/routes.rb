@@ -9,6 +9,11 @@ Rails.application.routes.draw do
 
   namespace 'api', as: 'api', defaults: { format: :json } do
     scope 'v1' do
+
+      namespace :base do
+        get :test
+      end
+
       resources :sessions, only: [] do
         collection do
           post :wechat, to: 'sessions#create_wechat'

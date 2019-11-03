@@ -18,8 +18,7 @@ class Api::BooksController < Api::BaseController
   end
 
   def create
-    valid_params = params.permit(:title, :subtitle, :author, :publisher,
-                                 :intro, :isbn, :cover, :douban_id)
+    valid_params = permitted_params
     valid_params[:creator_id] = current_user.id
     book = Book.create! valid_params
     render json: book, status: :created
@@ -27,8 +26,7 @@ class Api::BooksController < Api::BaseController
 
   def update
     forbidden! I18n.t('api.errors.forbidden.not_the_creator') unless @book.creator == current_user
-    valid_params = params.permit(:title, :subtitle, :author, :publisher,
-                                 :intro, :isbn, :cover, :douban_id)
+    valid_params = permitted_params
     @book.update! valid_params
     render json: @book, status: :ok
   end
@@ -53,5 +51,10 @@ class Api::BooksController < Api::BaseController
 
   def find_book
     @book = Book.find_by id: params[:id]
+  end
+
+  def permitted_params
+    params.permit(:title, :subtitle, :author_id, :publisher_id,
+      :intro, :isbn, :cover, :douban_id)
   end
 end
