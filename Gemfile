@@ -76,6 +76,11 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'guard-brakeman', require: false
   gem 'guard-rubocop', require: false
+
+  # deployment
+  gem 'capistrano', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
 end
 
 group :test do
