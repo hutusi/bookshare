@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2019_10_13_035306) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
     t.string "subtitle"
@@ -69,7 +72,7 @@ ActiveRecord::Schema.define(version: 2019_10_13_035306) do
   end
 
   create_table "identities", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "provider"
     t.string "uid"
     t.datetime "created_at", precision: 6, null: false

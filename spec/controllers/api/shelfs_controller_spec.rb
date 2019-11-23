@@ -21,11 +21,11 @@ RSpec.describe Api::ShelfsController, type: :controller do
       expect(json_response_body['borrowed'].size).to eq 5
       expect(json_response_body['received'].size).to eq 3
 
-      expect(json_response_body['personal'][0]['id']).to eq personal_books[0].id
-      expect(json_response_body['lent'][0]['id']).to eq lent_books[0].id
-      expect(json_response_body['shared'][0]['id']).to eq shared_books[0].id
-      expect(json_response_body['borrowed'][0]['id']).to eq borrowed_books[0].id
-      expect(json_response_body['received'][0]['id']).to eq received_books[0].id
+      expect(json_response_body['personal'].first['id']).to eq personal_books.last.id
+      expect(json_response_body['lent'].first['id']).to eq lent_books.last.id
+      expect(json_response_body['shared'].first['id']).to eq shared_books.last.id
+      expect(json_response_body['borrowed'].first['id']).to eq borrowed_books.last.id
+      expect(json_response_body['received'].first['id']).to eq received_books.last.id
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.describe Api::ShelfsController, type: :controller do
     it 'returns print_books list' do
       get :shared
       expect(response.status).to eq 200
-      expect(json_response_body['print_books'][0]['id']).to eq shared_books[0].id
+      expect(json_response_body['print_books'].first['id']).to eq shared_books.last.id
     end
   end
 
@@ -45,7 +45,7 @@ RSpec.describe Api::ShelfsController, type: :controller do
     it 'returns print_books list' do
       get :lent
       expect(response.status).to eq 200
-      expect(json_response_body['print_books'][0]['id']).to eq lent_books[0].id
+      expect(json_response_body['print_books'].first['id']).to eq lent_books.last.id
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Api::ShelfsController, type: :controller do
     it 'returns print_books list' do
       get :received
       expect(response.status).to eq 200
-      expect(json_response_body['print_books'][0]['id']).to eq received_books[0].id
+      expect(json_response_body['print_books'].first['id']).to eq received_books.last.id
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe Api::ShelfsController, type: :controller do
     it 'returns print_books list' do
       get :borrowed
       expect(response.status).to eq 200
-      expect(json_response_body['print_books'][0]['id']).to eq borrowed_books[0].id
+      expect(json_response_body['print_books'].first['id']).to eq borrowed_books.last.id
     end
   end
 
@@ -75,7 +75,7 @@ RSpec.describe Api::ShelfsController, type: :controller do
     it 'returns print_books list' do
       get :personal
       expect(response.status).to eq 200
-      expect(json_response_body['print_books'][0]['id']).to eq personal_books[0].id
+      expect(json_response_body['print_books'].first['id']).to eq personal_books.last.id
     end
   end
 end
