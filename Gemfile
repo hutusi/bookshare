@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.3'
+ruby '~> 2.6.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'
@@ -80,6 +80,7 @@ group :development do
   # deployment
   gem 'capistrano', require: false
   gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm', require: false
 end
 

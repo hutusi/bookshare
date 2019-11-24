@@ -63,7 +63,7 @@ gem install bundler
 ```sh
 # install node v12.x
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-sudo apt-get install -y nodejs
+sudo apt-get install nodejs
 
 curl --silent --show-error https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -71,18 +71,54 @@ sudo apt-get update
 sudo apt-get install yarn
 ```
 
-### 4. Database.
+
+### 4. System users
+
+```sh
+sudo adduser --disabled-login --gecos 'BookShare' bookshare
+```
+
+### 5. Database.
 
 install:
+
+add sources:
+
+```sh
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+sudo apt-get update
+```
 
 ```sh
 sudo apt-get install -y postgresql postgresql-client libpq-dev postgresql-contrib
 ```
 
-create user:
+start server:
+```sh
+/usr/lib/postgresql/12/bin/pg_ctl -D /var/lib/postgresql/12/main -l logfile start
+```
+
+create user && database:
 
 ```sh
 sudo -u postgres createuser --createdb bookshare
+
+sudo -u postgres psql
+
+CREATE DATABASE pg_bookshare_production OWNER bookshare;
+
+postgres=# \q
+```
+
+Try to connect:
+
+```sh
+sudo -u bookshare -H psql -d pg_bookshare_production
+
+postgres=# \q
 ```
 
 On Mac: 
@@ -111,6 +147,12 @@ On Mac:
 ```sh
 brew install redis
 brew services start redis
+```
+
+ping 
+
+```sh
+redis-cli ping
 ```
 
 ### 6. Nginx.

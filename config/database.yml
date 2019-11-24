@@ -36,6 +36,6 @@ test:
 
 production:
   <<: *pg
-  database: <%= ENV['PG_BOOKSHARE_DATABASE'] %>
+  database: pg_bookshare_production
   username: <%= ENV['PG_BOOKSHARE_USERNAME'] %>
   password: <%= ENV['PG_BOOKSHARE_PASSWORD'] %>
