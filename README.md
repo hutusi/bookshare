@@ -168,3 +168,10 @@ sudo apt-get install nginx
 rails db:create
 rails db:migrate
 ```
+
+
+deploy to: 
+
+```
+/var/www/bookshare
+```

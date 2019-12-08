@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'home#index'
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/admin/sidekiq'
+
   scope 'api', defaults: { format: :json } do
     # only sessions 
     devise_for :users, only: [:sessions]
