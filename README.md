@@ -105,11 +105,11 @@ start server:
 create user && database:
 
 ```sh
-sudo -u postgres createuser --createdb bookshare
+sudo -u postgres createuser --createdb deploy
 
 sudo -u postgres psql
 
-CREATE DATABASE pg_bookshare_production OWNER bookshare;
+CREATE DATABASE pg_bookshare_production OWNER deploy;
 
 postgres=# \q
 ```
