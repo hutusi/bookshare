@@ -130,6 +130,9 @@ brew services start postgresql
 createuser --createdb bookshare
 ```
 
+```sh
+```
+
 ### 5. Redis.
 
 * redis >= 4.0
@@ -170,7 +173,8 @@ rails db:create
 rails db:migrate
 ```
 
-### 1. Clone the code repository
+
+<!-- ### 1. Clone the code repository
 
 set deploy key (ssh key), follow: https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys
 
@@ -180,6 +184,33 @@ deploy to: ~~/var/www/bookshare~~
 sudo su bookshare
 cd /home/bookshare
 git clone https://github.com/hutusi/bookshare.git
+``` -->
+
+
+on local machine:
+
+### 1. cap deploy
+
+```shell
+cap production deploy
 ```
 
-### 2. 
+on remote server:
+
+### 1. Set Environment Variables
+
+```shell
+vim /etc/environment
+
+RAILS_ENV=production
+RACK_ENV=production
+```
+
+### 2. Nginx
+
+```shell
+cp lib/support/nginx.conf /etc/nginx/sites-available/bookshare
+ln -sf /etc/nginx/sites-available/bookshare /etc/nginx/sites-enabled/default
+
+systemctl restart nginx
+```

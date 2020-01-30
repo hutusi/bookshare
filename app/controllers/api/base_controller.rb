@@ -44,10 +44,11 @@ class Api::BaseController < ActionController::API
 
   def test
     p params
-    # https://douban.uieee.com/v2/book/isbn/9787505715660
-    url = "https://douban.uieee.com/v2/book/isbn/#{params[:isbn]}"
+    # http://douban.uieee.com/v2/book/isbn/9787505715660
+    url = "http://douban.uieee.com/v2/book/isbn/#{params[:isbn]}"
     response = Faraday.get url
     json = JSON.parse(response.body)
     p json
+    render status: 200, json: json
   end
 end

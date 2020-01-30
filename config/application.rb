@@ -16,6 +16,8 @@ module Bookshare
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    require_relative Rails.root.join('lib/core_ext/string_ext')
+
     # Use sidekiq as job handler
     config.active_job.queue_adapter = :sidekiq
   end

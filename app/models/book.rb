@@ -14,7 +14,7 @@ class Book < ApplicationRecord
 
   class << self
     def create_by_isbn(isbn, creator)
-      url = "https://douban.uieee.com/v2/book/isbn/#{isbn}"
+      url = "http://douban.uieee.com/v2/book/isbn/#{isbn}"
       response = Faraday.get url
       json = JSON.parse(response.body)
       unless response.status == 200
@@ -24,12 +24,16 @@ class Book < ApplicationRecord
 
       SaveDoubanBookJob.perform_later isbn, response.body
 
-      author = Author.find_by(name: json['author'])
+      author_name = json['author']&.first
+      author = Author.find_by(name: author_name)
       if author.blank?
-        author = Author.create(name: json['author'], intro: json['author_intro'])
+        author = Author.create(name: author_name, intro: json['author_intro'])
       end
-      translator = Translator.find_or_create_by(name: json['translator'])
+
+      translator_name = json['translator']&.first
+      translator = Translator.find_or_create_by(name: translator_name)
       publisher = Publisher.find_or_create_by(name: json['publisher'])
+      
       series = Series.find_by(douban_id: json.dig('series', 'id'))
       if series.blank?
         series = Series.create(name: json.dig('series', 'title'),
@@ -43,12 +47,12 @@ class Book < ApplicationRecord
                   author_name: author&.name, author_id: author&.id,
                   translator_name: translator&.name, translator_id: translator&.id,
                   publisher_name: publisher&.name, publisher_id: publisher&.id,
-                  pubdate: json['pubdate']&.to_datetime,
+                  pubdate: json['pubdate']&.try_to_datetime,
                   rating: json['rating'], #JSON.parse(json['rating']),
                   binding: json['binding'], price: json['price'], pages: json['pages'],
                   series_id: series&.id, series_name: series&.name,
                   summary: json['summary'], catalog: json['catalog'],
-                  cover: json[:image], douban_id: json[:id],
+                  cover: json['image'], douban_id: json['id'],
                   isbn: isbn, data_source: :douban, creator_id: creator&.id
     end
   end

@@ -12,6 +12,7 @@
 /db/*.sqlite3-journal
 /db/raw/
 !/db/raw/.keep
+!db/raw/douban/books/.keep
 
 # Ignore all logfiles and tempfiles.
 /log/*
