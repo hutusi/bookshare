@@ -214,3 +214,11 @@ ln -sf /etc/nginx/sites-available/bookshare /etc/nginx/sites-enabled/default
 
 systemctl restart nginx
 ```
+
+## HTTPS
+
+More in lib/support/nginx/bookshare-ssl configure file. 
+
+## References
+
+[1]: https://gorails.com/deploy/ubuntu/18.04
