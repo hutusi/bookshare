@@ -28,6 +28,13 @@ class Api::PrintBooksController < Api::BaseController
     end
   end
 
+  def search_by
+    @print_books = PrintBook.where(book_id: params[:book_id],
+      owner_id: params[:owner_id]).order(updated_at: :desc)
+
+      render json: { print_books: @print_books, total: @print_books.size }
+  end
+
   def show
     if stale?(last_modified: @print_book.updated_at)
       render json: @print_book

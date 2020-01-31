@@ -48,6 +48,8 @@ Rails.application.routes.draw do
         collection do
           get :for_share
           get :for_borrow
+
+          get :search_by
         end
 
         member do

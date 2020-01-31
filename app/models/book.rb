@@ -3,6 +3,8 @@
 class Book < ApplicationRecord
   enum data_source: { seed: 0, admin: 20, douban: 60, ugc: 90 }
 
+  has_many :print_books
+  
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   belongs_to :author, class_name: 'Author', foreign_key: 'author_id', optional: true
   belongs_to :translator, class_name: 'Translator', foreign_key: 'translator_id', optional: true
