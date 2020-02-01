@@ -10,7 +10,7 @@ After=network.target
 Type=simple
 
 # Preferably configure a non-privileged user
-# User=
+User=deploy
 
 # The path to the your application code root directory.
 # Also replace the "<YOUR_APP_PATH>" place holders below with this path.
@@ -23,17 +23,28 @@ WorkingDirectory=/var/www/bookshare
 # SystemD will not run puma even if it is in your path. You must specify
 # an absolute URL to puma. For example /usr/local/bin/puma
 # Alternatively, create a binstub with `bundle binstubs puma --path ./sbin` in the WorkingDirectory
-ExecStart=/usr/local/bin/puma -C /var/www/bookshare/config/puma.rb
+ExecStart=bundle exec puma -C /var/www/bookshare/config/puma.rb
 
-# Variant: Rails start.
-# ExecStart=/<FULLPATH>/bin/puma -C <YOUR_APP_PATH>/config/puma.rb ../config.ru
+# The command to stop Puma
+# (replace "<WD>" below)
+ExecStop=bundle exec pumactl -S /var/www/bookshare/shared/tmp/pids/puma.state stop
 
-# Variant: Use `bundle exec --keep-file-descriptors puma` instead of binstub
-# Variant: Specify directives inline.
-# ExecStart=/<FULLPATH>/puma -b tcp://0.0.0.0:9292 -b ssl://0.0.0.0:9293?key=key.pem&cert=cert.pem
+# Path to PID file so that systemd knows which is the master process
+PIDFile=/var/www/bookshare/shared/tmp/pids/puma.pid
 
+# Should systemd restart puma?
+# Use "no" (the default) to ensure no interference when using
+# stop/start/restart via `pumactl`.  The "on-failure" setting might
+# work better for this purpose, but you must test it.
+# Use "always" if only `systemctl` is used for start/stop/restart, and
+# reconsider if you actually need the forking config.
+Restart=no
 
-Restart=always
+# `puma_ctl restart` wouldn't work without this. It's because `pumactl`
+# changes PID on restart and systemd stops the service afterwards
+# because of the PID change. This option prevents stopping after PID
+# change.
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target

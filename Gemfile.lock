@@ -84,6 +84,9 @@ GEM
     capistrano-rbenv (2.1.4)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
+    capistrano-sidekiq (1.0.2)
+      capistrano (>= 3.9.0)
+      sidekiq (>= 3.4)
     capistrano3-puma (3.1.1)
       capistrano (~> 3.7)
       capistrano-bundler
@@ -380,6 +383,7 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-rails
   capistrano-rbenv
+  capistrano-sidekiq
   capistrano3-puma
   capybara (>= 2.15)
   devise
