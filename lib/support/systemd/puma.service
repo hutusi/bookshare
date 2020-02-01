@@ -19,18 +19,22 @@ WorkingDirectory=/var/www/bookshare
 
 # Helpful for debugging socket activation, etc.
 # Environment=PUMA_DEBUG=1
+Environment=RAILS_ENV=production
+Environment=RACK_ENV=production
+Environment=WECHAT_APP_ID=xxx
+Environment=WECHAT_APP_SECRET=xxx
 
 # SystemD will not run puma even if it is in your path. You must specify
 # an absolute URL to puma. For example /usr/local/bin/puma
 # Alternatively, create a binstub with `bundle binstubs puma --path ./sbin` in the WorkingDirectory
-ExecStart=bundle exec puma -C /var/www/bookshare/config/puma.rb
+ExecStart=/home/deploy/.rbenv/shims/bundle exec puma -C /var/www/bookshare/config/puma_prod.rb
 
 # The command to stop Puma
 # (replace "<WD>" below)
-ExecStop=bundle exec pumactl -S /var/www/bookshare/shared/tmp/pids/puma.state stop
+ExecStop=/home/deploy/.rbenv/shims/bundle exec pumactl -S /var/www/bookshare/tmp/pids/puma.state stop
 
 # Path to PID file so that systemd knows which is the master process
-PIDFile=/var/www/bookshare/shared/tmp/pids/puma.pid
+PIDFile=/var/www/bookshare/tmp/pids/puma.pid
 
 # Should systemd restart puma?
 # Use "no" (the default) to ensure no interference when using

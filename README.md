@@ -219,6 +219,24 @@ systemctl restart nginx
 
 More in lib/support/nginx/bookshare-ssl configure file. 
 
+## Systemd service
+
+```sh
+$ sudo cp lib/support/systemd/puma.service /etc/systemd/system/puma.service
+$ sudo cp lib/support/systemd/sidekiq.service /etc/systemd/system/sidekiq.service
+
+$ sudo systemctl daemon-reload
+
+$ sudo systemctl enable puma
+$ sudo systemctl start puma
+
+$ sudo systemctl enable sidekiq
+$ sudo systemctl start sidekiq
+
+$ sudo systemctl status puma.service
+$ sudo systemctl status sidekiq.service
+```
+
 ## References
 
 [1]: https://gorails.com/deploy/ubuntu/18.04
