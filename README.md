@@ -237,6 +237,19 @@ $ sudo systemctl status puma.service
 $ sudo systemctl status sidekiq.service
 ```
 
+## Database
+
+Reset DB (Caution!!!):
+
+```sh
+bundle exec rails db:drop
+bundle exec rails db:setup
+```
+
 ## References
 
 [1]: https://gorails.com/deploy/ubuntu/18.04
+[2]: https://github.com/mperham/sidekiq
+[3]: https://github.com/mperham/sidekiq/blob/master/6.0-Upgrade.md
+[4]: https://github.com/ddollar/foreman
+[5]: 
