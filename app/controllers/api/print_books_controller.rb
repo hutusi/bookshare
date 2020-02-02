@@ -30,9 +30,9 @@ class Api::PrintBooksController < Api::BaseController
 
   def search_by
     @print_books = PrintBook.where(book_id: params[:book_id],
-      owner_id: params[:owner_id]).order(updated_at: :desc)
+                                   owner_id: params[:owner_id]).order(updated_at: :desc)
 
-      render json: { print_books: @print_books, total: @print_books.size }
+    render json: { print_books: @print_books, total: @print_books.size }
   end
 
   def show
@@ -45,6 +45,7 @@ class Api::PrintBooksController < Api::BaseController
     valid_params = params.permit(:book_id, :description)
     valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id,
                         creator_id: current_user.id)
+    forbidden! I18n.t('api.errors.print_book_duplicates') if PrintBook.exists? owner_id: current_user.id, book_id: valid_params[:book_id], description: valid_params[:description]
     print_book = PrintBook.create! valid_params
     render json: print_book, status: :created
   end

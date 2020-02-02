@@ -47,4 +47,5 @@ en:
         not_the_owner: 'You are not the owener of the book.'
         not_the_creator: 'You are not the creator of the book.'
         not_self_user: 'You are not the user himself/herself.'
+        print_book_duplicates: 'Print book already exists!'
         
