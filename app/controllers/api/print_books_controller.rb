@@ -45,7 +45,9 @@ class Api::PrintBooksController < Api::BaseController
     valid_params = params.permit(:book_id, :description)
     valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id,
                         creator_id: current_user.id)
-    forbidden! I18n.t('api.errors.print_book_duplicates') if PrintBook.exists? owner_id: current_user.id, book_id: valid_params[:book_id], description: valid_params[:description]
+    forbidden! I18n.t('api.errors.print_book_duplicates') if PrintBook.exists? owner_id: current_user.id,
+                                                                               book_id: valid_params[:book_id],
+                                                                               description: valid_params[:description]
     print_book = PrintBook.create! valid_params
     render json: print_book, status: :created
   end

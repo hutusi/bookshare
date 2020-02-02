@@ -3,8 +3,8 @@
 class Book < ApplicationRecord
   enum data_source: { seed: 0, admin: 20, douban: 60, ugc: 90 }
 
-  has_many :print_books
-  
+  has_many :print_books, dependent: :restrict_with_exception
+
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   belongs_to :author, class_name: 'Author', foreign_key: 'author_id', optional: true
   belongs_to :translator, class_name: 'Translator', foreign_key: 'translator_id', optional: true
@@ -28,14 +28,12 @@ class Book < ApplicationRecord
 
       author_name = json['author']&.first
       author = Author.find_by(name: author_name)
-      if author.blank?
-        author = Author.create(name: author_name, intro: json['author_intro'])
-      end
+      author = Author.create(name: author_name, intro: json['author_intro']) if author.blank?
 
       translator_name = json['translator']&.first
       translator = Translator.find_or_create_by(name: translator_name)
       publisher = Publisher.find_or_create_by(name: json['publisher'])
-      
+
       series = Series.find_by(douban_id: json.dig('series', 'id'))
       if series.blank?
         series = Series.create(name: json.dig('series', 'title'),
@@ -45,12 +43,12 @@ class Book < ApplicationRecord
       Book.create title: json['title'], subtitle: json['subtitle'],
                   isbn10: json['isbn10'], isbn13: json['isbn13'],
                   origin_title: json['origin_title'], alt_title: json['alt_title'],
-                  image: json['image'], images: json['images'], #JSON.parse(json['images']),
+                  image: json['image'], images: json['images'], # JSON.parse(json['images']),
                   author_name: author&.name, author_id: author&.id,
                   translator_name: translator&.name, translator_id: translator&.id,
                   publisher_name: publisher&.name, publisher_id: publisher&.id,
                   pubdate: json['pubdate']&.try_to_datetime,
-                  rating: json['rating'], #JSON.parse(json['rating']),
+                  rating: json['rating'], # JSON.parse(json['rating']),
                   binding: json['binding'], price: json['price'], pages: json['pages'],
                   series_id: series&.id, series_name: series&.name,
                   summary: json['summary'], catalog: json['catalog'],

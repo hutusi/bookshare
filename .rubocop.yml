@@ -45,3 +45,6 @@ Style/NumericPredicate:
 
 Style/NumericLiterals:
   Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded

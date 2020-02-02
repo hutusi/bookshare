@@ -55,6 +55,6 @@ class Api::BooksController < Api::BaseController
 
   def permitted_params
     params.permit(:title, :subtitle, :author_id, :publisher_id,
-      :intro, :isbn, :cover, :douban_id)
+                  :intro, :isbn, :cover, :douban_id)
   end
 end
