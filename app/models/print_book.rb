@@ -29,6 +29,7 @@ class PrintBook < ApplicationRecord
   scope :losted, -> { where(status: :losted) }
 
   def attributes
-    { id: nil, book: nil, property: nil, status: nil, description: nil }
+    { id: nil, book: nil, property: nil, status: nil, description: nil,
+      owner_id: nil, holder_id: nil, creator_id: nil }
   end
 end
