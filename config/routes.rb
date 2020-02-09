@@ -59,13 +59,12 @@ Rails.application.routes.draw do
       end
       
       resources :deals
-      resources :sharings, only: [:index, :show, :create, :update, :destroy] do 
+      resources :sharings, only: [:index, :show, :create] do 
         member do
-          post :request, to: 'sharings#create_request'
-          post :reject, to: 'sharings#create_reject'
-          post :share, to: 'sharings#create_share'
-          delete :share, to: 'sharings#destroy_share'
-          post :accept, to: 'sharings#create_accept'
+          post :accept, to: 'sharings#accept'
+          post :reject, to: 'sharings#reject'
+          post :lend, to: 'sharings#lend'
+          post :borrow, to: 'sharings#borrow'
         end
       end
     end

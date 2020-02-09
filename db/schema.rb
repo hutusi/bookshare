@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_13_035306) do
+ActiveRecord::Schema.define(version: 2020_02_09_080846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,25 @@ ActiveRecord::Schema.define(version: 2019_10_13_035306) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["douban_id"], name: "index_series_on_douban_id"
+  end
+
+  create_table "sharings", force: :cascade do |t|
+    t.integer "print_book_id", null: false
+    t.integer "book_id", null: false
+    t.integer "holder_id", null: false
+    t.integer "receiver_id", null: false
+    t.integer "form", default: 0
+    t.integer "status", default: 0
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.text "application_reason"
+    t.text "application_reply"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_sharings_on_book_id"
+    t.index ["holder_id"], name: "index_sharings_on_holder_id"
+    t.index ["print_book_id"], name: "index_sharings_on_print_book_id"
+    t.index ["receiver_id"], name: "index_sharings_on_receiver_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -17,3 +17,4 @@ zh-CN:
         not_the_creator: "你不是该书的信息登记人"
         not_self_user: "你不是用户本人"
         print_book_duplicates: "藏书已存在"
+        print_book_not_for_share: '藏书非共享图书'

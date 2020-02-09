@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class Api::SharingsController < Api::DealsController
-  before_action :find_sharing, only: [:create_request, :create_share,
-                                      :create_reject, :destroy_share, :create_accept]
+class Api::SharingsController < Api::BaseController
+  before_action :find_sharing, only: [:show, :accept, :reject, 
+                                      :lend, :borrow]
 
   def index
     @sharings = Sharing.all.order(updated_at: :desc)
@@ -12,51 +12,49 @@ class Api::SharingsController < Api::DealsController
     end
   end
 
+  def show
+    if stale?(last_modified: @sharing.updated_at)
+      render json: @sharing
+    end
+  end
+
   def create
-    create_by_type 'Sharing'
+    valid_params = params.permit(:print_book_id)
+    print_book = PrintBook.find_by id: params[:print_book_id]
+    not_found! if print_book.nil?
+    forbidden! I18n.t('api.errors.forbidden.print_book_not_for_share') unless print_book.shared?
+
+    valid_params.merge!(receiver_id: current_user.id, holder_id: print_book.holder_id, book_id: print_book.book_id)
+    sharing = Sharing.create! valid_params
+    render json: sharing, status: :created
   end
 
-  def create_request
-    forbidden! I18n.t('api.errors.forbidden.not_available') unless @sharing.available?
-    forbidden! I18n.t('api.errors.forbidden.request_self_book') if @print_book.holder == current_user
-    @sharing.request
-    @sharing.applicant = current_user
-    @sharing.save
-    render json: @sharing, status: :created
-  end
-
-  def create_share
-    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
-    @sharing.share
-    @sharing.save
-    render json: @sharing, status: :created
-  end
-
-  def create_reject
-    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
-    @sharing.reject
-    @sharing.applicant = nil
-    @sharing.save
-    render json: @sharing, status: :created
-  end
-
-  def destroy_share
-    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
-    @sharing.revert_share
-    @sharing.save
-    render json: @sharing, status: :ok
-  end
-
-  def create_accept
-    forbidden! I18n.t('api.errors.forbidden.not_the_applicant') unless @sharing.applicant == current_user
+  def accept
+    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @sharing.holder_id == current_user.id
     @sharing.accept
     @sharing.save
+    render json: @sharing, status: :created
+  end
 
-    @print_book.holder = current_user
-    @print_book.last_deal&.finish
-    @print_book.last_deal = @sharing
-    @print_book.save
+  def reject
+    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @sharing.holder_id == current_user.id
+    @sharing.reject
+    @sharing.save
+    render json: @sharing, status: :created
+  end
 
+  def lend
+    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @sharing.holder_id == current_user.id
+    @sharing.lend
+    @sharing.save
+    render json: @sharing, status: :created
+  end
+
+  def borrow
+    forbidden! I18n.t('api.errors.forbidden.not_the_applicant') unless @sharing.receiver_id == current_user.id
+    @sharing.borrow
+    @sharing.save
+    @print_book.share_to current_user, @sharing
     render json: @sharing, status: :created
   end
 
@@ -64,6 +62,6 @@ class Api::SharingsController < Api::DealsController
 
   def find_sharing
     @sharing = Sharing.find_by id: params[:id]
-    @print_book = @sharing.print_book
+    @print_book = @sharing&.print_book
   end
 end

@@ -1,35 +1,44 @@
 # frozen_string_literal: true
 
-class Sharing < Deal
+class Sharing < ApplicationRecord
   include AASM
 
-  #             (request)     (accept request)  (confirm get book)   (next sharing' borrow)
-  # available -> requesting ->   lending ->     borrowing         -> finish
+  # share status: requesting, lending, borrowing, finished
+  enum status: { requesting: 0, accepted: 30, rejected: 40, lending: 60, borrowing: 80, finished: 100 }
+
+  # 1. (request)  (reject request)
+  # requesting ->   rejected
+  
+  # 2. (request) (accept request) (lending book) (confirm get book)   (next sharing' borrow)
+  # requesting ->  accepted  ->    lending ->     borrowing         -> finish
 
   aasm column: :status, enum: true do
-    state :available, initial: true
-    state :requesting
+    # state :initial, initial: true
+    state :requesting, initial: true
+    state :accepted
+    state :rejected
     state :lending
     state :borrowing
     state :finished
 
-    event :request do
-      transitions from: :available, to: :requesting
-    end
+    # event :request do
+    #   transitions from: :initial, to: :requesting
+    # end
 
-    event :share do
-      transitions from: :requesting, to: :lending
+    event :accept do
+      transitions from: :requesting, to: :accepted
     end
 
     event :reject do
-      transitions from: :requesting, to: :available
+      # transitions from: [:requesting, :accepted], to: :rejected
+      transitions from: :requesting, to: :rejected
     end
 
-    event :revert_share do
-      transitions from: :lending, to: :requesting
+    event :lend do
+      transitions from: :accepted, to: :lending
     end
 
-    event :accept do
+    event :borrow do
       transitions from: :lending, to: :borrowing
     end
 
@@ -37,4 +46,10 @@ class Sharing < Deal
       transitions from: :borrowing, to: :finished
     end
   end
+
+  belongs_to :print_book
+  belongs_to :book
+  belongs_to :holder, class_name: 'User'
+  belongs_to :receiver, class_name: 'User'
+
 end

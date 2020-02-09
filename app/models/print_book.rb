@@ -13,8 +13,8 @@ class PrintBook < ApplicationRecord
   belongs_to :holder, class_name: 'User'
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
 
-  belongs_to :deal, optional: true
-  belongs_to :last_deal, class_name: 'Deal', optional: true
+  # belongs_to :deal, optional: true
+  # belongs_to :last_deal, class_name: 'Deal', optional: true
 
   scope :personal, -> { where(property: :personal) }
   scope :for_borrow, -> { where(property: :borrowable) }
@@ -31,5 +31,13 @@ class PrintBook < ApplicationRecord
   def attributes
     { id: nil, book: nil, property: nil, status: nil, description: nil,
       owner_id: nil, holder_id: nil, creator_id: nil }
+  end
+
+  def share_to(receiver, sharing)
+    holder = receiver
+    last_sharing = Sharing.find_by id: last_deal_id
+    last_sharing.finish if last_sharing
+    last_deal_id = sharing.id
+    save
   end
 end

@@ -44,43 +44,68 @@ RSpec.describe Api::SharingsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:print_book) { create :print_book }
+    let(:print_book) { create :print_book, property: :shared }
     # let(:valid_attributes) { attributes_for :sharing, print_book_id: print_book.id, book_id: print_book.book_id }
-    let(:valid_attributes) { { print_book_id: print_book.id, location: 'Shanghai' } }
+    let(:valid_attributes) { { print_book_id: print_book.id } }
 
     context 'use correct conditions' do
       it 'returns the sharing json' do
         post :create, params: valid_attributes
         expect(response.status).to eq 201
-        expect(valid_attributes[:print_book_id]).to eq Sharing.last.print_book_id
-      end
-    end
-  end
-
-  describe 'POST #create_request' do
-    let(:sharing) { create :sharing }
-
-    context 'with correct status' do
-      it 'returns the sharing json' do
-        post :create_request, params: { id: sharing.id }
-        expect(response.status).to eq 201
-        sharing.reload
+        sharing = Sharing.last
+        expect(valid_attributes[:print_book_id]).to eq sharing.print_book_id
         expect(sharing.requesting?).to be true
       end
     end
   end
 
-  describe 'POST #create_share' do
-    let(:applicant) { create :user }
-    let(:print_book) { create :print_book, holder: user }
+  describe 'POST #accept' do
+    let(:receiver) { create :user }
+    let(:holder) { user }
+    let(:print_book) { create :print_book, holder: holder }
     let(:sharing) do
-      create :sharing, print_book: print_book,
-                       applicant: applicant, status: :requesting
+      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :requesting
     end
 
     context 'with correct status' do
       it 'returns the sharing json' do
-        post :create_share, params: { id: sharing.id }
+        post :accept, params: { id: sharing.id }
+        expect(response.status).to eq 201
+        sharing.reload
+        expect(sharing.accepted?).to be true
+      end
+    end
+  end
+
+  describe 'POST #reject' do
+    let(:receiver) { create :user }
+    let(:holder) { user }
+    let(:print_book) { create :print_book, holder: holder }
+    let(:sharing) do
+      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :requesting
+    end
+
+    context 'with correct status' do
+      it 'returns the sharing json' do
+        post :reject, params: { id: sharing.id }
+        expect(response.status).to eq 201
+        sharing.reload
+        expect(sharing.rejected?).to be true
+      end
+    end
+  end
+
+  describe 'POST #lend' do
+    let(:receiver) { create :user }
+    let(:holder) { user }
+    let(:print_book) { create :print_book, holder: holder }
+    let(:sharing) do
+      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :accepted
+    end
+
+    context 'with correct status' do
+      it 'returns the sharing json' do
+        post :lend, params: { id: sharing.id }
         expect(response.status).to eq 201
         sharing.reload
         expect(sharing.lending?).to be true
@@ -88,55 +113,17 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
   end
 
-  describe 'POST #create_reject' do
-    let(:applicant) { create :user }
-    let(:print_book) { create :print_book, holder: user }
-    let(:sharing) do
-      create :sharing, print_book: print_book,
-                       applicant: applicant, status: :requesting
-    end
-
-    context 'with correct status' do
-      it 'returns the sharing json' do
-        post :create_reject, params: { id: sharing.id }
-        expect(response.status).to eq 201
-        sharing.reload
-        expect(sharing.applicant).to be nil
-        expect(sharing.available?).to be true
-      end
-    end
-  end
-
-  describe 'DELETE #destroy_share' do
-    let(:applicant) { create :user }
-    let(:print_book) { create :print_book, holder: user }
-    let(:sharing) do
-      create :sharing, print_book: print_book,
-                       applicant: applicant, status: :lending
-    end
-
-    context 'with correct status' do
-      it 'returns the sharing json' do
-        delete :destroy_share, params: { id: sharing.id }
-        expect(response.status).to eq 200
-        sharing.reload
-        expect(sharing.requesting?).to be true
-      end
-    end
-  end
-
-  describe 'POST #create_accept' do
-    let(:applicant) { user }
+  describe 'POST #borrow' do
+    let(:receiver) { user }
     let(:holder) { create :user }
     let(:print_book) { create :print_book, holder: holder }
     let(:sharing) do
-      create :sharing, print_book: print_book,
-                       applicant: applicant, status: :lending
+      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :lending
     end
 
     context 'with correct status' do
       it 'returns the sharing json' do
-        post :create_accept, params: { id: sharing.id }
+        post :borrow, params: { id: sharing.id }
         expect(response.status).to eq 201
         sharing.reload
         expect(sharing.borrowing?).to be true
