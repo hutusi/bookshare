@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::SharingsController < Api::BaseController
-  before_action :find_sharing, only: [:show, :accept, :reject, 
+  before_action :find_sharing, only: [:show, :accept, :reject,
                                       :lend, :borrow]
 
   def index
@@ -19,10 +19,13 @@ class Api::SharingsController < Api::BaseController
   end
 
   def create
-    valid_params = params.permit(:print_book_id)
+    valid_params = params.permit(:print_book_id, :application_reason)
     print_book = PrintBook.find_by id: params[:print_book_id]
     not_found! if print_book.nil?
     forbidden! I18n.t('api.errors.forbidden.print_book_not_for_share') unless print_book.shared?
+    forbidden! I18n.t('api.errors.forbidden.request_self_book') if print_book.holder_id == current_user.id
+    forbidden! I18n.t('api.errors.forbidden.request_duplicates') if Sharing.where(receiver_id: current_user.id)
+                                                                           .where.not(status: :finished)
 
     valid_params.merge!(receiver_id: current_user.id, holder_id: print_book.holder_id, book_id: print_book.book_id)
     sharing = Sharing.create! valid_params

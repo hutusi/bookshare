@@ -34,10 +34,10 @@ class PrintBook < ApplicationRecord
   end
 
   def share_to(receiver, sharing)
-    holder = receiver
+    self.holder = receiver
     last_sharing = Sharing.find_by id: last_deal_id
-    last_sharing.finish if last_sharing
-    last_deal_id = sharing.id
+    last_sharing&.finish
+    self.last_deal_id = sharing.id
     save
   end
 end

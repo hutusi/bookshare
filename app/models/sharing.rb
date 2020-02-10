@@ -8,7 +8,7 @@ class Sharing < ApplicationRecord
 
   # 1. (request)  (reject request)
   # requesting ->   rejected
-  
+
   # 2. (request) (accept request) (lending book) (confirm get book)   (next sharing' borrow)
   # requesting ->  accepted  ->    lending ->     borrowing         -> finish
 
@@ -51,5 +51,4 @@ class Sharing < ApplicationRecord
   belongs_to :book
   belongs_to :holder, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
-
 end

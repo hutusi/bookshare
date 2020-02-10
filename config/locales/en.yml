@@ -49,4 +49,5 @@ en:
         not_self_user: 'You are not the user himself/herself.'
         print_book_duplicates: 'Print book already exists!'
         print_book_not_for_share: 'Print book is not for share.'
+        request_duplicates: 'You have request yet.'
         

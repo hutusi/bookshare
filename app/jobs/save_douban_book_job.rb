@@ -16,7 +16,7 @@ class SaveDoubanBookJob < ApplicationJob
     File.open(File.join(save_path, isbn), 'w') do |file|
       file.write data
     end
-  rescue Exception => error
-    Rails.logger.warn "Save douban book exception: #{error}"
+  rescue StandardError => e
+    Rails.logger.warn "Save douban book exception: #{e}"
   end
 end
