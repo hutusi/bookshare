@@ -24,8 +24,9 @@ class Api::SharingsController < Api::BaseController
     not_found! if print_book.nil?
     forbidden! I18n.t('api.errors.forbidden.print_book_not_for_share') unless print_book.shared?
     forbidden! I18n.t('api.errors.forbidden.request_self_book') if print_book.holder_id == current_user.id
-    forbidden! I18n.t('api.errors.forbidden.request_duplicates') if Sharing.where(receiver_id: current_user.id)
-                                                                           .where.not(status: :finished)
+    forbidden! I18n.t('api.errors.forbidden.request_duplicates') unless Sharing.current_applied_by(current_user.id)
+                                                                               .where(print_book_id: params[:print_book_id])
+                                                                               .empty?
 
     valid_params.merge!(receiver_id: current_user.id, holder_id: print_book.holder_id, book_id: print_book.book_id)
     sharing = Sharing.create! valid_params

@@ -47,8 +47,21 @@ class Sharing < ApplicationRecord
     end
   end
 
+  # == Relationships ========================================================
   belongs_to :print_book
   belongs_to :book
   belongs_to :holder, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
+
+  # == Validations ==========================================================
+
+  # == Scopes ===============================================================
+  scope :holder_todo, ->(holder_id) { where(status: [:requesting, :accepted], holder_id: holder_id) }
+  scope :receiver_todo, ->(receiver_id) { where(status: [:rejected, :lending], receiver_id: receiver_id) }
+  scope :current_applied_by, ->(receiver_id) { where(receiver_id: receiver_id).where.not(status: :finished) }
+
+  def attributes
+    { id: nil, print_book_id: nil, book_id: nil, holder_id: nil, receiver_id: nil,
+      status: nil }
+  end
 end

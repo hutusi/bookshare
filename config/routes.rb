@@ -34,9 +34,7 @@ Rails.application.routes.draw do
         get :personal
       end
 
-      namespace :dashboard do
-        get :index
-      end
+      get 'dashboard', to: 'dashboard#index'
 
       resources :books, only: [:index, :show, :create, :update, :destroy] do
         collection do

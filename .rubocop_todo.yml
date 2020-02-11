@@ -100,6 +100,7 @@ Style/GuardClause:
     - 'app/controllers/api/print_books_controller.rb'
     - 'app/controllers/api/sharings_controller.rb'
     - 'app/controllers/api/users_controller.rb'
+    - 'app/controllers/api/dashboard_controller.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.
