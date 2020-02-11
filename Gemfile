@@ -36,11 +36,14 @@ gem 'cancancan'
 # state machines
 gem 'aasm'
 
+# Active Model Serializer
+gem 'active_model_serializers'
+
 # Background job
 gem 'sidekiq'
 
 # Use postgresql as the database for Active Record in production
-  gem 'pg'
+gem 'pg'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
