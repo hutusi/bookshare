@@ -33,16 +33,18 @@ class Api::SharingsController < Api::BaseController
   end
 
   def accept
+    valid_params = params.permit(:print_book_id, :application_reply)
     forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @sharing.holder_id == current_user.id
     @sharing.accept
-    @sharing.save
+    @sharing.update!(application_reply: valid_params[:application_reply])
     render json: @sharing, status: :created
   end
 
   def reject
+    valid_params = params.permit(:print_book_id, :application_reply)
     forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @sharing.holder_id == current_user.id
     @sharing.reject
-    @sharing.save
+    @sharing.update!(application_reply: valid_params[:application_reply])
     render json: @sharing, status: :created
   end
 
@@ -55,9 +57,7 @@ class Api::SharingsController < Api::BaseController
 
   def borrow
     forbidden! I18n.t('api.errors.forbidden.not_the_applicant') unless @sharing.receiver_id == current_user.id
-    @sharing.borrow
-    @sharing.save
-    @print_book.share_to current_user, @sharing
+    @sharing.borrow_to current_user
     render json: @sharing, status: :created
   end
 
@@ -65,6 +65,5 @@ class Api::SharingsController < Api::BaseController
 
   def find_sharing
     @sharing = Sharing.find_by id: params[:id]
-    @print_book = @sharing&.print_book
   end
 end

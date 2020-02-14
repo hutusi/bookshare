@@ -4,7 +4,8 @@ class Sharing < ApplicationRecord
   include AASM
 
   # share status: requesting, lending, borrowing, finished
-  enum status: { requesting: 0, accepted: 30, rejected: 40, lending: 60, borrowing: 80, finished: 100 }
+  enum status: { requesting: 0, accepted: 30, rejected: 40, lending: 60,
+                 borrowing: 80, finished: 100, canceled: 999 }
 
   # 1. (request)  (reject request)
   # requesting ->   rejected
@@ -20,6 +21,7 @@ class Sharing < ApplicationRecord
     state :lending
     state :borrowing
     state :finished
+    state :canceled
 
     # event :request do
     #   transitions from: :initial, to: :requesting
@@ -45,6 +47,10 @@ class Sharing < ApplicationRecord
     event :finish do
       transitions from: :borrowing, to: :finished
     end
+
+    event :cancel do
+      transitions from: [:requesting, :accepted, :rejected, :lending], to: :canceled
+    end
   end
 
   # == Attributes ===========================================================
@@ -61,5 +67,21 @@ class Sharing < ApplicationRecord
   # == Scopes ===============================================================
   scope :holder_todo, ->(user_id) { where(status: [:requesting, :accepted], holder_id: user_id) }
   scope :receiver_todo, ->(user_id) { where(status: [:rejected, :lending], receiver_id: user_id) }
-  scope :current_applied_by, ->(user_id) { where(receiver_id: user_id).where.not(status: :finished) }
+  scope :current_actives, -> { where('status < ?', Sharing.statuses[:borrowing]) }
+  scope :current_applied_by, ->(user_id) { current_actives.where(receiver_id: user_id) }
+  scope :current_applied_for, ->(print_book_id) { current_actives.where(print_book_id: print_book_id) }
+
+  def borrow_to(user)
+    ActiveRecord::Base.transaction do
+      borrow
+      rivals = Sharing.current_applied_for(print_book_id).where(receiver_id: user.id)
+      rivals.each(&:cancel)
+
+      last_sharing = Sharing.find_by id: print_book.last_deal_id
+      last_sharing&.finish
+      print_book.update holder_id: receiver.id, last_deal_id: id
+
+      save!
+    end
+  end
 end

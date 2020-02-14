@@ -14,9 +14,9 @@ class User < ApplicationRecord
   has_many :holding_books, class_name: 'PrintBook', foreign_key: 'holder_id'
   has_many :created_books, class_name: 'PrintBook', foreign_key: 'creator_id'
 
-  has_many :sponsored_deals, class_name: 'Deal', foreign_key: 'sponsor_id'
-  has_many :received_deals, class_name: 'Deal', foreign_key: 'receiver_id'
-  has_many :applied_deals, class_name: 'Deal', foreign_key: 'appicant_id'
+  # has_many :sponsored_deals, class_name: 'Deal', foreign_key: 'sponsor_id'
+  # has_many :received_deals, class_name: 'Deal', foreign_key: 'receiver_id'
+  # has_many :applied_deals, class_name: 'Deal', foreign_key: 'appicant_id'
 
   validates :username, presence: true
   validates :username, uniqueness: true

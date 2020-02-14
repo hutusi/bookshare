@@ -16,28 +16,20 @@ class PrintBook < ApplicationRecord
   # belongs_to :deal, optional: true
   # belongs_to :last_deal, class_name: 'Deal', optional: true
 
-  scope :personal, -> { where(property: :personal) }
-  scope :for_borrow, -> { where(property: :borrowable) }
-  scope :borrowable, -> { where(property: :borrowable, status: :available) }
-  scope :borrowing, -> { where(property: :borrowable, status: :reading) }
-  scope :for_share, -> { where(property: :shared) }
-  scope :shareable, -> { where(property: :shared, status: :available) }
-  scope :sharing, -> { where(property: :shared, status: :reading) }
+  scope :all_personal, -> { where(property: :personal) }
+  scope :all_borrowable, -> { where(property: :borrowable) }
+  scope :all_shared, -> { where(property: :shared) }
+  scope :available_borrowable, -> { where(property: :borrowable, status: :available) }
+  scope :reading_borrowable, -> { where(property: :borrowable, status: :reading) }
+  scope :available_shared, -> { where(property: :shared, status: :available) }
+  scope :reading_shared, -> { where(property: :shared, status: :reading) }
 
-  scope :available, -> { where(status: :available) }
-  scope :reading, -> { where(status: :reading) }
-  scope :losted, -> { where(status: :losted) }
+  scope :all_available, -> { where(status: :available) }
+  scope :all_reading, -> { where(status: :reading) }
+  scope :all_losted, -> { where(status: :losted) }
 
   def attributes
     { id: nil, book: nil, property: nil, status: nil, description: nil,
       owner_id: nil, holder_id: nil, creator_id: nil }
-  end
-
-  def share_to(receiver, sharing)
-    self.holder = receiver
-    last_sharing = Sharing.find_by id: last_deal_id
-    last_sharing&.finish
-    self.last_deal_id = sharing.id
-    save
   end
 end

@@ -13,7 +13,7 @@ class Api::PrintBooksController < Api::BaseController
   end
 
   def for_share
-    @print_books = PrintBook.for_share.order(updated_at: :desc)
+    @print_books = PrintBook.all_shared.order(updated_at: :desc)
 
     if stale?(last_modified: @print_books.first&.updated_at)
       render json: { print_books: @print_books, total: @print_books.size }
@@ -21,7 +21,7 @@ class Api::PrintBooksController < Api::BaseController
   end
 
   def for_borrow
-    @print_books = PrintBook.for_borrow.order(updated_at: :desc)
+    @print_books = PrintBook.all_borrowable.order(updated_at: :desc)
 
     if stale?(last_modified: @print_books.first&.updated_at)
       render json: { print_books: @print_books, total: @print_books.size }
