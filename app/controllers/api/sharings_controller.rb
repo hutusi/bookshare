@@ -5,15 +5,15 @@ class Api::SharingsController < Api::BaseController
                                       :lend, :borrow]
 
   def index
-    if stale?(last_modified: Sharing.last&.updated_at)
-      @sharings = Sharing.all.order(updated_at: :desc)
-      render json: @sharings
+    @sharings = Sharing.all.order(updated_at: :desc)
+    if stale?(last_modified: @sharings.maximum(:updated_at))
+      render json: @sharings, status: :ok, each_serializer: SharingSerializer
     end
   end
 
   def show
     if stale?(last_modified: @sharing.updated_at)
-      render json: @sharing, serializer: SharingExtSerializer
+      render json: @sharing, serializer: SharingPreviewSerializer
     end
   end
 

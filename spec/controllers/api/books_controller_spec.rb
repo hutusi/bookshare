@@ -13,7 +13,7 @@ RSpec.describe Api::BooksController, type: :controller do
       it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
-        expect(json_response_body['total']).to eq 0
+        expect(json_data.size).to eq 0
       end
     end
 
@@ -25,7 +25,7 @@ RSpec.describe Api::BooksController, type: :controller do
       it 'returns books list' do
         get :index
         expect(response.status).to eq 200
-        expect(json_response_body['total']).to eq 10
+        expect(json_data.size).to eq 10
       end
     end
   end
@@ -39,7 +39,7 @@ RSpec.describe Api::BooksController, type: :controller do
       it 'returns the book json' do
         get :show, params: { id: books.first.id }
         expect(response.status).to eq 200
-        expect(json_response_body['id']).to eq books.first.id
+        expect(json_datum['id']).to eq books.first.id
       end
     end
   end
@@ -94,8 +94,8 @@ RSpec.describe Api::BooksController, type: :controller do
         book
         get :isbn, params: { isbn: book.isbn }
         expect(response.status).to eq 200
-        expect(json_response_body['id']).to eq book.id
-        expect(json_response_body['isbn']).to eq isbn
+        expect(json_datum['id']).to eq book.id
+        expect(json_datum['isbn']).to eq isbn
       end
     end
 
@@ -109,7 +109,7 @@ RSpec.describe Api::BooksController, type: :controller do
       it 'returns the book json' do
         get :isbn, params: { isbn: isbn }
         expect(response.status).to eq 200
-        expect(json_response_body['isbn']).to eq isbn
+        expect(json_datum['isbn']).to eq isbn
       end
     end
 
@@ -123,8 +123,16 @@ RSpec.describe Api::BooksController, type: :controller do
       it 'returns the book json' do
         get :isbn, params: { isbn: isbn }
         expect(response.status).to eq 200
-        expect(json_response_body['isbn']).to eq isbn
+        expect(json_datum['isbn']).to eq isbn
       end
     end
+  end
+
+  def json_data
+    json_response_body['books']
+  end
+
+  def json_datum
+    json_response_body['book']
   end
 end

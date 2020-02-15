@@ -13,7 +13,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
       it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
-        expect(json_response_body['total']).to eq 0
+        expect(json_data.size).to eq 0
       end
     end
 
@@ -25,7 +25,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
       it 'returns print_books list' do
         get :index
         expect(response.status).to eq 200
-        expect(json_response_body['total']).to eq 10
+        expect(json_data.size).to eq 10
       end
     end
   end
@@ -39,7 +39,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
       it 'returns the print_book json' do
         get :show, params: { id: print_books.first.id }
         expect(response.status).to eq 200
-        expect(json_response_body['id']).to eq print_books.first.id
+        expect(json_datum['id']).to eq print_books.first.id
       end
     end
   end
@@ -121,5 +121,13 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     #     expect(print_book.reading?).to be true
     #   end
     # end
+  end
+
+  def json_data
+    json_response_body['print_books']
+  end
+
+  def json_datum
+    json_response_body['print_book']
   end
 end

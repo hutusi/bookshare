@@ -12,7 +12,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
-        expect(json_response_body['total']).to eq 0
+        expect(json_data.size).to eq 0
       end
     end
 
@@ -24,7 +24,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       it 'returns sharings list' do
         get :index
         expect(response.status).to eq 200
-        expect(json_response_body['total']).to eq 10
+        expect(json_data.size).to eq 10
       end
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       it 'returns the sharing json' do
         get :show, params: { id: sharings.first.id }
         expect(response.status).to eq 200
-        expect(json_response_body['id']).to eq sharings.first.id
+        expect(json_datum['id']).to eq sharings.first.id
       end
     end
   end
@@ -132,5 +132,13 @@ RSpec.describe Api::SharingsController, type: :controller do
 
     context 'second sharing' do
     end
+  end
+
+  def json_data
+    json_response_body['sharings']
+  end
+
+  def json_datum
+    json_response_body['sharing']
   end
 end

@@ -27,9 +27,4 @@ class PrintBook < ApplicationRecord
   scope :all_available, -> { where(status: :available) }
   scope :all_reading, -> { where(status: :reading) }
   scope :all_losted, -> { where(status: :losted) }
-
-  def attributes
-    { id: nil, book: nil, property: nil, status: nil, description: nil,
-      owner_id: nil, holder_id: nil, creator_id: nil }
-  end
 end

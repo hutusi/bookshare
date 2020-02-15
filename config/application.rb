@@ -20,5 +20,8 @@ module Bookshare
 
     # Use sidekiq as job handler
     config.active_job.queue_adapter = :sidekiq
+
+    # AMS config
+    ActiveModelSerializers.config.adapter = :json
   end
 end

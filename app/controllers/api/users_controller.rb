@@ -5,7 +5,7 @@ class Api::UsersController < Api::BaseController
 
   def show
     if stale?(last_modified: @user.updated_at)
-      render json: @user
+      render json: @user, status: :ok, serializer: UserSerializer
     end
   end
 
@@ -14,7 +14,7 @@ class Api::UsersController < Api::BaseController
     valid_params = params.permit(:username, :email, :phone, :company, :bio, :contact,
                                  :nickname, :avatar, :gender, :country, :province, :city, :language)
     @user.update! valid_params
-    render json: @user, status: :ok
+    render json: @user, status: :ok, serializer: UserSerializer
   end
 
   private
