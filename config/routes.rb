@@ -65,6 +65,18 @@ Rails.application.routes.draw do
           post :borrow, to: 'sharings#borrow'
         end
       end
+
+      resources :borrowings, only: [:index, :show, :create] do 
+        member do
+          post :accept, to: 'borrowings#accept'
+          post :reject, to: 'borrowings#reject'
+          post :lend, to: 'borrowings#lend'
+          post :borrow, to: 'borrowings#borrow'
+          post :return, to: 'borrowings#return'
+          post :finish, to: 'borrowings#finish'
+        end
+      end
+
     end
   end
 end

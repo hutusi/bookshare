@@ -48,3 +48,8 @@ Style/NumericLiterals:
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - 'spec/**/*.rb'

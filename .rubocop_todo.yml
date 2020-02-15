@@ -24,12 +24,6 @@ Lint/UselessAccessModifier:
 Metrics/AbcSize:
   Max: 56
 
-# Offense count: 12
-# Configuration parameters: CountComments, ExcludedMethods.
-# ExcludedMethods: refine
-Metrics/BlockLength:
-  Max: 122
-
 # Offense count: 4
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:
