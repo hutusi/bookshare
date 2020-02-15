@@ -5,4 +5,5 @@ class SharingSerializer < ActiveModel::Serializer
              :receiver_id, :status
   belongs_to :receiver, serializer: UserSerializer
   belongs_to :holder, serializer: UserSerializer
+  belongs_to :book, serializer: BookSerializer
 end

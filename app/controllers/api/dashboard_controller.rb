@@ -3,36 +3,26 @@
 class Api::DashboardController < Api::BaseController
   def index
     # if stale?(last_modified: Sharing.last.updated_at)
-    todos = []
-    applies = []
+    approving_sharings = Sharing.holder_todo(current_user.id)
+    requesting_sharings = Sharing.current_applied_by(current_user.id)
 
-    holder_sharings = Sharing.holder_todo(current_user.id)
-    # receiver_sharings = Sharing.receiver_todo(current_user.id)
+    approving_borrowings = Borrowing.holder_todo(current_user.id)
+    requesting_borrowings = Borrowing.current_applied_by(current_user.id)
 
-    holder_sharings.each do |sharing|
-      todo = { id: sharing.id }
-      todo[:title] = sharing.book.title
-      todo[:note] = sharing.status
-      todos << todo
-    end
-
-    # receiver_sharings.each do |sharing|
-    #   todo = { id: sharing.id }
-    #   todo[:title] = "#{sharing.book.title} - #{sharing.book.author_name}"
-    #   todo[:note] = "book holder: #{sharing.holder.nickname} status: #{sharing.status}"
-    #   todos << todo
+    render json: { approving_sharings: sharings_to_json(approving_sharings),
+                   requesting_sharings: sharings_to_json(requesting_sharings),
+                   approving_borrowings: borrowings_to_json(approving_borrowings),
+                   requesting_borrowings: borrowings_to_json(requesting_borrowings) }
     # end
+  end
 
-    apply_sharings = Sharing.current_applied_by(current_user.id)
+  private
 
-    apply_sharings.each do |sharing|
-      apply = { id: sharing.id }
-      apply[:title] = sharing.book.title
-      apply[:note] = sharing.status
-      applies << apply
-    end
+  def sharings_to_json(sharings)
+    sharings.map { |x| SharingSerializer.new(x).as_json }
+  end
 
-    render json: { todo: todos, apply: applies }
-    # end
+  def borrowings_to_json(borrowings)
+    borrowings.map { |x| BorrowingSerializer.new(x).as_json }
   end
 end

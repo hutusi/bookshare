@@ -49,6 +49,6 @@ class Api::ShelfsController < Api::BaseController
   private
 
   def print_books_to_json(print_books)
-    print_books.map { |b| PrintBookSerializer.new(b).as_json }
+    print_books.map { |x| PrintBookSerializer.new(x).as_json }
   end
 end
