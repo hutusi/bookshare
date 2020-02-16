@@ -24,14 +24,14 @@ class Api::BooksController < Api::BaseController
   end
 
   def update
-    forbidden! I18n.t('api.errors.forbidden.not_the_creator') unless @book.creator == current_user
+    forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
     valid_params = permitted_params
     @book.update! valid_params
     render json: {}, status: :ok
   end
 
   def destroy
-    forbidden! I18n.t('api.errors.forbidden.not_the_creator') unless @book.creator == current_user
+    forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
     @book.destroy!
     render json: {}, status: :ok
   end

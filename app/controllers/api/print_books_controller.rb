@@ -5,7 +5,13 @@ class Api::PrintBooksController < Api::BaseController
 
   # TODO: paginate
   def index
-    @print_books = PrintBook.all.order(updated_at: :desc)
+    property = params[:property]
+    if property != 'borrowable' || property != 'shared'
+      forbidden! I18n.t('api.params.value_invalid', param: 'property',
+                                                    value: property)
+    end
+
+    @print_books = PrintBook.where(property: property).order(updated_at: :desc)
     if stale?(last_modified: @print_books.maximum(:updated_at))
       render json: @print_books, each_serializer: PrintBookSerializer
     end
@@ -44,30 +50,30 @@ class Api::PrintBooksController < Api::BaseController
     valid_params = params.permit(:book_id, :description)
     valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id,
                         creator_id: current_user.id)
-    forbidden! I18n.t('api.errors.print_book_duplicates') if PrintBook.exists? owner_id: current_user.id,
-                                                                               book_id: valid_params[:book_id],
-                                                                               description: valid_params[:description]
+    forbidden! I18n.t('api.forbidden.print_book_duplicates') if PrintBook.exists? owner_id: current_user.id,
+                                                                                  book_id: valid_params[:book_id],
+                                                                                  description: valid_params[:description]
     print_book = PrintBook.create! valid_params
     render json: print_book, status: :created
   end
 
   def update
     valid_params = params.permit(:description, :property)
-    forbidden! I18n.t('api.errors.forbidden.not_the_owner') unless @print_book.owner == current_user
+    forbidden! I18n.t('api.forbidden.not_the_owner') unless @print_book.owner == current_user
     @print_book.update! valid_params
     render json: {}, status: :ok
   end
 
   def update_property
     valid_params = params.permit(:property)
-    forbidden! I18n.t('api.errors.forbidden.not_the_owner') unless @print_book.owner == current_user
+    forbidden! I18n.t('api.forbidden.not_the_owner') unless @print_book.owner == current_user
     @print_book.update! valid_params
     render json: {}, status: :ok
   end
 
   def update_status
     valid_params = params.permit(:status)
-    forbidden! I18n.t('api.errors.forbidden.not_the_holder') unless @print_book.holder == current_user
+    forbidden! I18n.t('api.forbidden.not_the_holder') unless @print_book.holder == current_user
     @print_book.update! valid_params
     render json: {}, status: :ok
   end

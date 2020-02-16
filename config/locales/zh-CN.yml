@@ -7,16 +7,17 @@ zh-CN:
     api:
       invalid_api_token: "非法的 API token."
   api:
-    errors:
-      forbidden:
-        not_available: "当前书非空闲状态"
-        request_self_book: "你不能申请自己拥有的图书"
-        not_the_holder: "你当前不持有该书"
-        not_the_applicant: "你没有申请该书"
-        not_the_owner: "你不是该书的所有者"
-        not_the_creator: "你不是该书的信息登记人"
-        not_self_user: "你不是用户本人"
-        print_book_duplicates: "藏书已存在"
-        print_book_not_for_share: '藏书非共享图书'
-        request_duplicates: '不能重复申请该书'
-        print_book_not_for_borrow: '藏书非借阅图书'
+    params:
+      value_invalid: '参数 %{param}: %{value} 值非法.'
+    forbidden:
+      not_available: "当前书非空闲状态"
+      request_self_book: "你不能申请自己拥有的图书"
+      not_the_holder: "你当前不持有该书"
+      not_the_applicant: "你没有申请该书"
+      not_the_owner: "你不是该书的所有者"
+      not_the_creator: "你不是该书的信息登记人"
+      not_self_user: "你不是用户本人"
+      print_book_duplicates: "藏书已存在"
+      print_book_not_for_share: '藏书非共享图书'
+      request_duplicates: '不能重复申请该书'
+      print_book_not_for_borrow: '藏书非借阅图书'
