@@ -11,7 +11,7 @@ RSpec.describe Api::PrintBooksController, type: :controller do
     login_user
     context 'no records' do
       it 'returns empty list' do
-        get :index
+        get :index, params: { property: :shared }
         expect(response.status).to eq 200
         expect(json_data.size).to eq 0
       end
@@ -19,11 +19,11 @@ RSpec.describe Api::PrintBooksController, type: :controller do
 
     context 'with records' do
       before do
-        create_list(:print_book, 10)
+        create_list(:print_book, 10, property: :borrowable)
       end
 
       it 'returns print_books list' do
-        get :index
+        get :index, params: { property: :borrowable }
         expect(response.status).to eq 200
         expect(json_data.size).to eq 10
       end

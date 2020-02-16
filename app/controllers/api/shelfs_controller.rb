@@ -18,32 +18,42 @@ class Api::ShelfsController < Api::BaseController
 
   def shared
     shared = current_user.owning_books.all_shared.order(updated_at: :desc)
+    .page(page).per(per_page)
 
-    render json: shared, status: :ok, each_serializer: PrintBookSerializer
+    render json: shared, status: :ok, each_serializer: PrintBookSerializer, 
+    meta: pagination_dict(shared)
   end
 
   def lent
     lent = current_user.owning_books.all_borrowable.order(updated_at: :desc)
+    .page(page).per(per_page)
 
-    render json: lent, status: :ok, each_serializer: PrintBookSerializer
+    render json: lent, status: :ok, each_serializer: PrintBookSerializer, 
+    meta: pagination_dict(lent)
   end
 
   def received
     received = current_user.holding_books.where.not(owner_id: current_user.id).all_shared.order(updated_at: :desc)
+    .page(page).per(per_page)
 
-    render json: received, status: :ok, each_serializer: PrintBookSerializer
+    render json: received, status: :ok, each_serializer: PrintBookSerializer, 
+    meta: pagination_dict(received)
   end
 
   def borrowed
     borrowed = current_user.holding_books.where.not(owner_id: current_user.id).all_borrowable.order(updated_at: :desc)
+    .page(page).per(per_page)
 
-    render json: borrowed, status: :ok, each_serializer: PrintBookSerializer
+    render json: borrowed, status: :ok, each_serializer: PrintBookSerializer, 
+    meta: pagination_dict(borrowed)
   end
 
   def personal
     personal = current_user.owning_books.all_personal.order(updated_at: :desc)
+    .page(page).per(per_page)
 
-    render json: personal, status: :ok, each_serializer: PrintBookSerializer
+    render json: personal, status: :ok, each_serializer: PrintBookSerializer, 
+    meta: pagination_dict(personal)
   end
 
   private

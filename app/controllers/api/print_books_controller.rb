@@ -6,30 +6,33 @@ class Api::PrintBooksController < Api::BaseController
   # TODO: paginate
   def index
     property = params[:property]
-    if property != 'borrowable' || property != 'shared'
+    if property != 'borrowable' && property != 'shared'
       forbidden! I18n.t('api.params.value_invalid', param: 'property',
                                                     value: property)
     end
 
     @print_books = PrintBook.where(property: property).order(updated_at: :desc)
+                            .page(page).per(per_page)
     if stale?(last_modified: @print_books.maximum(:updated_at))
-      render json: @print_books, each_serializer: PrintBookSerializer
+      render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
     end
   end
 
   def for_share
     @print_books = PrintBook.all_shared.order(updated_at: :desc)
+                            .page(page).per(per_page)
 
     if stale?(last_modified: @print_books.maximum(:updated_at))
-      render json: @print_books, each_serializer: PrintBookSerializer
+      render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
     end
   end
 
   def for_borrow
     @print_books = PrintBook.all_borrowable.order(updated_at: :desc)
+                            .page(page).per(per_page)
 
     if stale?(last_modified: @print_books.maximum(:updated_at))
-      render json: @print_books, each_serializer: PrintBookSerializer
+      render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
     end
   end
 
