@@ -16,15 +16,7 @@ class Book < ApplicationRecord
 
   class << self
     def create_by_isbn(isbn, creator)
-      url = "http://douban.uieee.com/v2/book/isbn/#{isbn}"
-      response = Faraday.get url
-      json = JSON.parse(response.body)
-      unless response.status == 200
-        raise Exception, "Cannot find douban book. code:#{json['code']}, \
-          msg:#{json['msg']}"
-      end
-
-      SaveDoubanBookJob.perform_later isbn, response.body
+      json = FetchDoubanBookService.new(isbn).execute
 
       author_name = json['author']&.first
       author = Author.find_by(name: author_name)
@@ -39,6 +31,8 @@ class Book < ApplicationRecord
         series = Series.create(name: json.dig('series', 'title'),
                                douban_id: json.dig('series', 'id'))
       end
+
+      puts json['pubdate']
 
       Book.create title: json['title'], subtitle: json['subtitle'],
                   isbn10: json['isbn10'], isbn13: json['isbn13'],
