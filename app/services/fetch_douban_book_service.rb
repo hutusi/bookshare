@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FetchDoubanBookService
   def initialize(isbn)
     @isbn = isbn
@@ -12,7 +14,8 @@ class FetchDoubanBookService
         msg:#{json['msg']}"
     end
 
-    SaveDoubanBookJob.perform_later @isbn, response.body
+    isbn = json['isbn13'] || json['isbn10'] || @isbn
+    SaveDoubanBookJob.perform_later isbn, response.body
     json
   end
 end

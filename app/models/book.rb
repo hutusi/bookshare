@@ -32,8 +32,8 @@ class Book < ApplicationRecord
                                douban_id: json.dig('series', 'id'))
       end
 
-      puts json['pubdate']
-
+      # puts json['pubdate']
+      isbn = json['isbn13'] || json['isbn10'] || isbn
       Book.create title: json['title'], subtitle: json['subtitle'],
                   isbn10: json['isbn10'], isbn13: json['isbn13'],
                   origin_title: json['origin_title'], alt_title: json['alt_title'],

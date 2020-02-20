@@ -37,8 +37,16 @@ class Api::BooksController < Api::BaseController
   end
 
   def isbn
-    isbn = params[:isbn]
-    book = Book.find_by(isbn: isbn) || Book.create_by_isbn(isbn, current_user)
+    isbn = params[:isbn].strip
+    if isbn.size == 10
+      book = Book.find_by(isbn10: isbn)
+    elsif isbn.size == 13
+      book = Book.find_by(isbn13: isbn)
+    else
+      forbidden! I18n.t('api.params.invalid_isbn', isbn: isbn)
+    end
+
+    book ||= Book.create_by_isbn(isbn, current_user)
     if book.present?
       render json: book, status: :ok, serializer: BookSerializer
     else

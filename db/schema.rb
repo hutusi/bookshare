@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_15_120607) do
+ActiveRecord::Schema.define(version: 2020_02_20_133455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(version: 2020_02_15_120607) do
     t.string "catalog"
     t.index ["creator_id"], name: "index_books_on_creator_id"
     t.index ["isbn"], name: "index_books_on_isbn", unique: true
+    t.index ["isbn10"], name: "index_books_on_isbn10", unique: true
+    t.index ["isbn13"], name: "index_books_on_isbn13", unique: true
   end
 
   create_table "borrowings", force: :cascade do |t|

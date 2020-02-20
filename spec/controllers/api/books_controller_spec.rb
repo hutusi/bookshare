@@ -88,7 +88,7 @@ RSpec.describe Api::BooksController, type: :controller do
     let(:isbn) { '9787505715660' }
 
     context 'book exists' do
-      let(:book) { create :book, isbn: isbn }
+      let(:book) { create :book, isbn: isbn, isbn13: isbn }
 
       it 'returns the book json' do
         book
