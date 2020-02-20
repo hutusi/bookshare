@@ -14,7 +14,7 @@ namespace :sidekiq do
   # end
 
   desc "Status of the sidekiq"
-  task :status do
+  task status: :environment do
     on roles(:app) do
       execute 'systemctl status sidekiq.service'
     end

@@ -14,7 +14,7 @@ namespace :puma do
   # end
 
   desc "Status of the application"
-  task :status do
+  task status: :environment do
     on roles(:app) do
       execute 'systemctl status puma.service'
     end

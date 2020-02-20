@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :db do
   desc "Fetch books info from douban. "
   task fetch_books_info: :environment do
@@ -5,11 +7,11 @@ namespace :db do
 
     Book.where(data_source: :douban).each do |book|
       isbn = book.isbn
-      unless File.exists? File.join(save_path, isbn)
-        puts "Fetch book #{isbn} ......"
-        FetchDoubanBookService.new(isbn).execute
-        sleep 1
-      end
+      next if File.exist? File.join(save_path, isbn)
+
+      puts "Fetch book #{isbn} ......"
+      FetchDoubanBookService.new(isbn).execute
+      sleep 1
     end
 
     puts "Fetch books info done."
@@ -22,16 +24,15 @@ namespace :db do
     Book.where(data_source: :douban, pubdate: nil).each do |book|
       isbn = book.isbn
       book_path = File.join(save_path, isbn)
-      if File.exists? book_path
-        puts "Update book #{isbn} ..."
-        content = File.read book_path
-        json = JSON.parse content
-        puts "Update book #{isbn} pubdate #{json['pubdate']}......"
-        book.update pubdate: json['pubdate']&.try_to_datetime
-      end
+      next unless File.exist? book_path
+
+      puts "Update book #{isbn} ..."
+      content = File.read book_path
+      json = JSON.parse content
+      puts "Update book #{isbn} pubdate #{json['pubdate']}......"
+      book.update pubdate: json['pubdate']&.try_to_datetime
     end
 
     puts "Renew books info done."
   end
-
 end

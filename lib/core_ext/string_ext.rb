@@ -5,7 +5,7 @@ class String
     to_datetime
   rescue ArgumentError
     begin
-      data = self.match(/(\d+)\-(\d+)/)
+      data = match(/(\d+)\-(\d+)/)
       if data
         DateTime.new(data[1].to_i, data[2].to_i)
       else
