@@ -115,3 +115,11 @@ Style/IfUnlessModifier:
 # URISchemes: http, https
 Layout/LineLength:
   Max: 139
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'lib/core_ext/string_ext.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/core_ext/string_ext.rb'

@@ -53,6 +53,15 @@ Metrics/BlockLength:
   Max: 30
   Exclude:
     - 'spec/**/*.rb'
+    - 'lib/tasks/**/*.rake'
 
 Rails/FilePath:
   EnforcedStyle: arguments
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'lib/core_ext/string_ext.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/core_ext/string_ext.rb'
