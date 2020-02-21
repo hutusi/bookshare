@@ -1,3 +1,6 @@
+## 1.2.2
+- Bugfix: Fix parse date like '1984.1', etc.
+
 ## 1.2.1
 - Bugfix: Fix to parse date like '1984-1'
 - Bugfix: Fix duplicated importing books for isbn13/isbn10
