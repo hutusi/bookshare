@@ -18,7 +18,7 @@ namespace :db do
   end
 
   desc "Renew books info: pubdate. "
-  task renew_books_info: :environment do
+  task renew_books_pubdate: :environment do
     save_path = Rails.root.join 'db', 'raw', 'douban', 'books'
 
     Book.where(data_source: :douban, pubdate: nil).each do |book|
@@ -36,22 +36,26 @@ namespace :db do
     puts "Renew books info done."
   end
 
-  desc "Renew books info: pubdate. "
-  task renew_old_books_info: :environment do
+  desc "Tagging books. "
+  task tagging_books: :environment do
     save_path = Rails.root.join 'db', 'raw', 'douban', 'books'
 
-    Book.where(data_source: :douban).where("pubdate < '1901-1-1' or pubdate > '2020-1-1'").each do |book|
+    Book.where(data_source: :douban).each do |book|
       isbn = book.isbn
       book_path = File.join(save_path, isbn)
       next unless File.exist? book_path
 
-      puts "Update book #{isbn} ..."
+      puts "tagging book #{isbn} ..."
       content = File.read book_path
       json = JSON.parse content
-      puts "Update book #{isbn} pubdate #{json['pubdate']}......"
-      book.update pubdate: json['pubdate']&.try_to_datetime
+      douban_tags = json['tags']
+      puts "Tagging book #{isbn} tags: #{douban_tags}......"
+      douban_tags&.each do |tag|
+        book.tag_list.add(tag['name']) if tag['name'].present?
+        book.save
+      end
     end
 
-    puts "Renew books info done."
+    puts "Tagging books done."
   end
 end

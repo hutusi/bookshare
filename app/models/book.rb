@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Book < ApplicationRecord
+  acts_as_taggable
+
   enum data_source: { seed: 0, admin: 20, douban: 60, ugc: 90 }
 
   has_many :print_books, dependent: :restrict_with_exception
@@ -34,7 +36,7 @@ class Book < ApplicationRecord
 
       # puts json['pubdate']
       isbn = json['isbn13'] || json['isbn10'] || isbn
-      Book.create title: json['title'], subtitle: json['subtitle'],
+      book = Book.create title: json['title'], subtitle: json['subtitle'],
                   isbn10: json['isbn10'], isbn13: json['isbn13'],
                   origin_title: json['origin_title'], alt_title: json['alt_title'],
                   image: json['image'], images: json['images'], # JSON.parse(json['images']),
@@ -48,6 +50,14 @@ class Book < ApplicationRecord
                   summary: json['summary'], catalog: json['catalog'],
                   cover: json['image'], douban_id: json['id'],
                   isbn: isbn, data_source: :douban, creator_id: creator&.id
+
+      douban_tags = json['tags']
+      douban_tags&.each do |tag|
+        book.tag_list.add(tag['name']) if tag['name'].present?
+        book.save
+      end
+
+      book
     end
   end
 end
