@@ -61,8 +61,10 @@ class Api::PrintBooksController < Api::BaseController
   end
 
   def update
-    valid_params = params.permit(:description, :property)
+    valid_params = params.permit(:description, :property, :region_code)
     forbidden! I18n.t('api.forbidden.not_the_owner') unless @print_book.owner == current_user
+
+    SaveRegionJob.perform_later params[:region] if params[:region].present?
     @print_book.update! valid_params
     render json: {}, status: :ok
   end

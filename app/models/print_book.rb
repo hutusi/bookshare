@@ -8,6 +8,9 @@ class PrintBook < ApplicationRecord
   enum property: { personal: 0, borrowable: 50, shared: 100 }
   enum status: { available: 0, reading: 55, losted: 99 }
 
+  # == Attributes ===========================================================
+
+  # == Relationships ========================================================
   belongs_to :book
   belongs_to :owner, class_name: 'User'
   belongs_to :holder, class_name: 'User'
@@ -16,6 +19,9 @@ class PrintBook < ApplicationRecord
   # belongs_to :deal, optional: true
   # belongs_to :last_deal, class_name: 'Deal', optional: true
 
+  # == Validations ==========================================================
+
+  # == Scopes ===============================================================
   scope :all_personal, -> { where(property: :personal) }
   scope :all_borrowable, -> { where(property: :borrowable) }
   scope :all_shared, -> { where(property: :shared) }
@@ -27,4 +33,20 @@ class PrintBook < ApplicationRecord
   scope :all_available, -> { where(status: :available) }
   scope :all_reading, -> { where(status: :reading) }
   scope :all_losted, -> { where(status: :losted) }
+
+  def region
+    if region_code
+      province_code = region_code.floor(-4)
+      city_code = region_code.floor(-2)
+      district_code = region_code
+
+      {
+        province: { code: province_code, name: REGION_REDIS_STORE.get(province_code.to_s) },
+        city: { code: city_code, name: REGION_REDIS_STORE.get(city_code.to_s) },
+        district: { code: district_code, name: REGION_REDIS_STORE.get(district_code.to_s) }
+      }
+    else
+      {}
+    end
+  end
 end
