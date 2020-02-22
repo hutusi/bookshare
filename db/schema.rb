@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_22_003235) do
+ActiveRecord::Schema.define(version: 2020_02_22_095218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 2020_02_22_003235) do
     t.text "application_reply"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "region_code"
     t.index ["book_id"], name: "index_borrowings_on_book_id"
     t.index ["holder_id"], name: "index_borrowings_on_holder_id"
     t.index ["print_book_id"], name: "index_borrowings_on_print_book_id"
@@ -131,10 +132,12 @@ ActiveRecord::Schema.define(version: 2020_02_22_003235) do
     t.integer "last_deal_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "region_code"
     t.index ["book_id"], name: "index_print_books_on_book_id"
     t.index ["creator_id"], name: "index_print_books_on_creator_id"
     t.index ["holder_id"], name: "index_print_books_on_holder_id"
     t.index ["owner_id"], name: "index_print_books_on_owner_id"
+    t.index ["region_code"], name: "index_print_books_on_region_code"
   end
 
   create_table "publishers", force: :cascade do |t|
@@ -170,6 +173,7 @@ ActiveRecord::Schema.define(version: 2020_02_22_003235) do
     t.text "application_reply"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "region_code"
     t.index ["book_id"], name: "index_sharings_on_book_id"
     t.index ["holder_id"], name: "index_sharings_on_holder_id"
     t.index ["print_book_id"], name: "index_sharings_on_print_book_id"
@@ -225,6 +229,7 @@ ActiveRecord::Schema.define(version: 2020_02_22_003235) do
     t.string "contact"
     t.datetime "birthdate"
     t.string "api_token"
+    t.integer "region_code"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
