@@ -2,5 +2,5 @@
 
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :nickname, :avatar, :gender, :country,
-             :province, :city, :language
+             :province, :city, :language, :region_code, :region
 end

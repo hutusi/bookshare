@@ -66,6 +66,8 @@ class Api::PrintBooksController < Api::BaseController
 
     SaveRegionJob.perform_later params[:region] if params[:region].present?
     @print_book.update! valid_params
+
+    current_user.update!(region_code: params[:region_code]) if params[:region_code].present?
     render json: {}, status: :ok
   end
 
