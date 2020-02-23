@@ -1,3 +1,8 @@
+## 1.3.0
+- Tagging books (using gem acts-as-taggable-on): via douban info.
+- Add region_code to print_books, users, sharings & borrowings.
+- API: Save/return region and reion_code. (redis support)
+
 ## 1.2.2
 - Bugfix: Fix parse date like '1984.1', etc.
 
