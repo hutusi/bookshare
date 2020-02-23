@@ -21,6 +21,8 @@ class PrintBook < ApplicationRecord
   # belongs_to :last_deal, class_name: 'Deal', optional: true
 
   # == Validations ==========================================================
+  validates :region_code, numericality: { only_integer: true, greater_than: 100000, less_than: 900000 },
+                          allow_nil: true
 
   # == Scopes ===============================================================
   scope :all_personal, -> { where(property: :personal) }

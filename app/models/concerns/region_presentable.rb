@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module RegionPresentable
   include ActiveSupport::Concern
-  
+
   def region
     if region_code
       province_code = region_code.floor(-4)

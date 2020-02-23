@@ -2,7 +2,9 @@
 
 class Sharing < ApplicationRecord
   include AASM
+  include RegionPresentable
 
+  # == Constants ============================================================
   # share status: requesting, lending, borrowing, finished
   enum status: { requesting: 0, accepted: 30, rejected: 40, lending: 60,
                  borrowing: 80, finished: 100, canceled: 999 }
@@ -58,7 +60,7 @@ class Sharing < ApplicationRecord
 
   # == Relationships ========================================================
   belongs_to :print_book
-  belongs_to :book
+  belongs_to :book, optional: true
   belongs_to :holder, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
 
@@ -71,6 +73,15 @@ class Sharing < ApplicationRecord
   scope :current_applied_by, ->(user_id) { current_actives.where(receiver_id: user_id) }
   scope :current_applied_for, ->(print_book_id) { current_actives.where(print_book_id: print_book_id) }
 
+  # == Callbacks ============================================================
+  before_create do
+    self.book_id = print_book.book_id
+    self.region_code = print_book.region_code
+  end
+
+  # == Class Methods ========================================================
+
+  # == Instance Methods =====================================================
   def borrow_to(user)
     ActiveRecord::Base.transaction do
       borrow

@@ -27,7 +27,8 @@ class Api::SharingsController < Api::BaseController
                                                                         .where(print_book_id: params[:print_book_id])
                                                                         .empty?
 
-    valid_params.merge!(receiver_id: current_user.id, holder_id: print_book.holder_id, book_id: print_book.book_id)
+    valid_params[:receiver_id] = current_user.id
+    valid_params[:holder_id] = print_book.holder_id
     sharing = Sharing.create! valid_params
     render json: sharing, status: :created
   end
