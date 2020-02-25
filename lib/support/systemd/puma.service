@@ -21,13 +21,14 @@ WorkingDirectory=/var/www/bookshare
 # Environment=PUMA_DEBUG=1
 Environment=RAILS_ENV=production
 Environment=RACK_ENV=production
+Environment=PORT=3000
 Environment=WECHAT_APP_ID=xxx
 Environment=WECHAT_APP_SECRET=xxx
 
 # SystemD will not run puma even if it is in your path. You must specify
 # an absolute URL to puma. For example /usr/local/bin/puma
 # Alternatively, create a binstub with `bundle binstubs puma --path ./sbin` in the WorkingDirectory
-ExecStart=/home/deploy/.rbenv/shims/bundle exec puma -C /var/www/bookshare/config/puma_prod.rb
+ExecStart=/home/deploy/.rbenv/shims/bundle exec puma -C /var/www/bookshare/shared/puma.rb
 
 # The command to stop Puma
 # (replace "<WD>" below)
