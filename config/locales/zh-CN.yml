@@ -10,6 +10,7 @@ zh-CN:
     params:
       value_invalid: '参数 %{param}: %{value} 值非法.'
     forbidden:
+      method_not_allowed: '操作不允许'
       not_available: "当前书非空闲状态"
       request_self_book: "你不能申请自己拥有的图书"
       not_the_holder: "你当前不持有该书"
@@ -21,4 +22,4 @@ zh-CN:
       print_book_not_for_share: '藏书非共享图书'
       request_duplicates: '不能重复申请该书'
       print_book_not_for_borrow: '藏书非借阅图书'
-      print_book_not_personal: '藏书非私有图书.'
+      print_book_not_personal: '藏书非私有图书'

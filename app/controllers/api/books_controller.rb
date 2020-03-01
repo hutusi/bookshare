@@ -17,23 +17,26 @@ class Api::BooksController < Api::BaseController
   end
 
   def create
-    valid_params = permitted_params
-    valid_params[:creator_id] = current_user.id
-    book = Book.create! valid_params
-    render json: book, status: :created, serializer: BookPreviewSerializer
+    forbidden! I18n.t('api.forbidden.method_not_allowed')
+    # valid_params = permitted_params
+    # valid_params[:creator_id] = current_user.id
+    # book = Book.create! valid_params
+    # render json: book, status: :created, serializer: BookPreviewSerializer
   end
 
   def update
-    forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
-    valid_params = permitted_params
-    @book.update! valid_params
-    render json: {}, status: :ok
+    forbidden! I18n.t('api.forbidden.method_not_allowed')
+    # forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
+    # valid_params = permitted_params
+    # @book.update! valid_params
+    # render json: {}, status: :ok
   end
 
   def destroy
-    forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
-    @book.destroy!
-    render json: {}, status: :ok
+    forbidden! I18n.t('api.forbidden.method_not_allowed')
+    # forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
+    # @book.destroy!
+    # render json: {}, status: :ok
   end
 
   def isbn

@@ -42,6 +42,7 @@ en:
       value_invalid: 'Parameter %{param}: %{value} is invalid.'
       invalid_isbn: 'ISBN %{isbn} is invalid.'
     forbidden:
+      method_not_allowed: 'Method not allowd.'
       not_available: 'Book is not available.'
       request_self_book: 'You can not request a book belongs to yourself.'
       not_the_holder: 'You are not holding the book.'

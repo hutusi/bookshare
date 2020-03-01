@@ -44,45 +44,45 @@ RSpec.describe Api::BooksController, type: :controller do
     end
   end
 
-  describe 'POST #create' do
-    let(:book) { create :book }
-    let(:valid_attributes) { attributes_for :book }
+  # describe 'POST #create' do
+  #   let(:book) { create :book }
+  #   let(:valid_attributes) { attributes_for :book }
 
-    context 'use correct conditions' do
-      it 'returns the book json' do
-        post :create, params: valid_attributes
-        expect(response.status).to eq 201
-        book = Book.last
-        expect(book.title).to eq valid_attributes[:title]
-      end
-    end
-  end
+  #   context 'use correct conditions' do
+  #     it 'returns the book json' do
+  #       post :create, params: valid_attributes
+  #       expect(response.status).to eq 201
+  #       book = Book.last
+  #       expect(book.title).to eq valid_attributes[:title]
+  #     end
+  #   end
+  # end
 
-  describe 'PUT #update' do
-    let(:book) { create :book, creator: user }
-    let(:valid_attributes) { { title: 'new titile' } }
+  # describe 'PUT #update' do
+  #   let(:book) { create :book, creator: user }
+  #   let(:valid_attributes) { { title: 'new titile' } }
 
-    context 'use correct conditions' do
-      it 'returns the book json' do
-        put :update, params: valid_attributes.merge(id: book.id)
-        expect(response.status).to eq 200
-        book.reload
-        expect(book.title).to eq valid_attributes[:title]
-      end
-    end
-  end
+  #   context 'use correct conditions' do
+  #     it 'returns the book json' do
+  #       put :update, params: valid_attributes.merge(id: book.id)
+  #       expect(response.status).to eq 200
+  #       book.reload
+  #       expect(book.title).to eq valid_attributes[:title]
+  #     end
+  #   end
+  # end
 
-  describe 'DELETE #destroy' do
-    let(:book) { create :book, creator: user }
+  # describe 'DELETE #destroy' do
+  #   let(:book) { create :book, creator: user }
 
-    context 'use correct conditions' do
-      it 'returns the book json' do
-        delete :destroy, params: { id: book.id }
-        expect(response.status).to eq 200
-        expect(Book.all.size).to eq 0
-      end
-    end
-  end
+  #   context 'use correct conditions' do
+  #     it 'returns the book json' do
+  #       delete :destroy, params: { id: book.id }
+  #       expect(response.status).to eq 200
+  #       expect(Book.all.size).to eq 0
+  #     end
+  #   end
+  # end
 
   describe 'GET #isbn' do
     let(:isbn) { '9787505715660' }
