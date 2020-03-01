@@ -53,3 +53,4 @@ en:
       print_book_not_for_share: 'Print book is not for share.'
       request_duplicates: 'You have request yet.'
       print_book_not_for_borrow: 'Print book is not for borrow.'
+      print_book_not_personal: 'Print book is not personal.'

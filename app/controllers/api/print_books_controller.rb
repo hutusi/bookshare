@@ -96,6 +96,8 @@ class Api::PrintBooksController < Api::BaseController
   end
 
   def destroy
+    forbidden! I18n.t('api.forbidden.not_the_owner') unless @print_book.owner == current_user
+    forbidden! I18n.t('api.forbidden.print_book_not_personal') unless @print_book.personal?
     @print_book.destroy!
     render json: {}, status: :ok
   end
