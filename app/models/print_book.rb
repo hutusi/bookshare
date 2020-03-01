@@ -36,4 +36,13 @@ class PrintBook < ApplicationRecord
   scope :all_available, -> { where(status: :available) }
   scope :all_reading, -> { where(status: :reading) }
   scope :all_losted, -> { where(status: :losted) }
+
+  scope :by_keyword, lambda { |keyword|
+                       joins(:book).where('books.title like :keyword or books.author_name like :keyword or description like :keyword',
+                                          keyword: "%#{keyword}%")
+                     }
+
+  # == Class Methods ========================================================
+
+  # == Instance Methods =====================================================
 end

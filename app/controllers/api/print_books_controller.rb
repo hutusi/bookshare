@@ -11,7 +11,11 @@ class Api::PrintBooksController < Api::BaseController
                                                     value: property)
     end
 
-    @print_books = PrintBook.where(property: property).order(updated_at: :desc)
+    index_params = { property: property }
+    index_params[:book_id] = params[:book_id] if params[:book_id].present?
+    index_params[:owner_id] = params[:owner_id] if params[:owner_id].present?
+
+    @print_books = PrintBook.where(index_params).order(updated_at: :desc)
                             .page(page).per(per_page)
     if stale?(last_modified: @print_books.maximum(:updated_at))
       render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
@@ -36,11 +40,17 @@ class Api::PrintBooksController < Api::BaseController
     end
   end
 
-  def search_by
-    @print_books = PrintBook.where(book_id: params[:book_id],
-                                   owner_id: params[:owner_id]).order(updated_at: :desc)
+  def search
+    property = params[:property]
+    index_params = { property: property }
+    if property == 'personal'
+      index_params[:owner_id] = current_user.id
+    end
 
-    render json: @print_books, each_serializer: PrintBookSerializer
+    keyword = params[:keyword]
+    @print_books = PrintBook.where(index_params).by_keyword(keyword).page(page).per(per_page)
+
+    render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
   end
 
   def show
