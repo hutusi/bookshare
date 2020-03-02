@@ -62,29 +62,5 @@ RSpec.describe Ability, type: :model do
 
       it { is_expected.to be_able_to(:read, print_book) }
     end
-
-    context "when reads a deal" do
-      let(:deal) { create :deal }
-
-      it { is_expected.to be_able_to(:read, deal) }
-    end
-
-    context "when sponsored a deal" do
-      let(:deal) { create :deal, sponsor: user }
-
-      it { is_expected.to be_able_to(:update, deal) }
-    end
-
-    context "when received a deal" do
-      let(:deal) { create :deal, receiver: user }
-
-      it { is_expected.to be_able_to(:update, deal) }
-    end
-
-    context "when applied a deal" do
-      let(:deal) { create :deal, applicant: user }
-
-      it { is_expected.to be_able_to(:update, deal) }
-    end
   end
 end

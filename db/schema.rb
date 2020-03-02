@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_02_131119) do
+ActiveRecord::Schema.define(version: 2020_03_02_132429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,26 +71,6 @@ ActiveRecord::Schema.define(version: 2020_03_02_131119) do
     t.index ["holder_id"], name: "index_borrowings_on_holder_id"
     t.index ["print_book_id"], name: "index_borrowings_on_print_book_id"
     t.index ["receiver_id"], name: "index_borrowings_on_receiver_id"
-  end
-
-  create_table "deals", force: :cascade do |t|
-    t.string "type"
-    t.integer "print_book_id", null: false
-    t.integer "book_id", null: false
-    t.integer "sponsor_id", null: false
-    t.integer "receiver_id"
-    t.string "location"
-    t.integer "status", default: 0
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.integer "applicant_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["applicant_id"], name: "index_deals_on_applicant_id"
-    t.index ["book_id"], name: "index_deals_on_book_id"
-    t.index ["print_book_id"], name: "index_deals_on_print_book_id"
-    t.index ["receiver_id"], name: "index_deals_on_receiver_id"
-    t.index ["sponsor_id"], name: "index_deals_on_sponsor_id"
   end
 
   create_table "identities", force: :cascade do |t|
@@ -240,11 +220,6 @@ ActiveRecord::Schema.define(version: 2020_03_02_131119) do
   add_foreign_key "books", "publishers"
   add_foreign_key "books", "series"
   add_foreign_key "books", "users", column: "creator_id"
-  add_foreign_key "deals", "books"
-  add_foreign_key "deals", "print_books"
-  add_foreign_key "deals", "users", column: "applicant_id"
-  add_foreign_key "deals", "users", column: "receiver_id"
-  add_foreign_key "deals", "users", column: "sponsor_id"
   add_foreign_key "identities", "users"
   add_foreign_key "print_books", "books"
   add_foreign_key "print_books", "users", column: "creator_id"

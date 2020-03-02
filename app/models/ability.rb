@@ -19,10 +19,5 @@ class Ability
     can :read, PrintBook, property: :shared
     can :manage, PrintBook, owner: user
     can :update, PrintBook, holder: user
-
-    can :read, Deal
-    can :update, Deal, sponsor: user
-    can :update, Deal, receiver: user
-    can :update, Deal, applicant: user
   end
 end

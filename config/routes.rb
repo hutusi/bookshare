@@ -56,7 +56,6 @@ Rails.application.routes.draw do
         end
       end
       
-      resources :deals
       resources :sharings, only: [:index, :show, :create] do 
         member do
           post :accept, to: 'sharings#accept'
