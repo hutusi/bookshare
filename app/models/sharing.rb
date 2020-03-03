@@ -69,7 +69,7 @@ class Sharing < ApplicationRecord
   # == Scopes ===============================================================
   scope :holder_todo, ->(user_id) { where(status: [:requesting, :accepted], holder_id: user_id) }
   scope :receiver_todo, ->(user_id) { where(status: [:rejected, :lending], receiver_id: user_id) }
-  scope :current_actives, -> { where('status < ?', Sharing.statuses[:borrowing]) }
+  scope :current_actives, -> { where('status < ?', Sharing.statuses[:finished]) }
   scope :current_applied_by, ->(user_id) { current_actives.where(receiver_id: user_id) }
   scope :current_applied_for, ->(print_book_id) { current_actives.where(print_book_id: print_book_id) }
 
