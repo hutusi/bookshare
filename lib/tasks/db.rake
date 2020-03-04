@@ -1,61 +1,40 @@
 # frozen_string_literal: true
 
 namespace :db do
-  desc "Fetch books info from douban. "
-  task fetch_books_info: :environment do
-    save_path = Rails.root.join 'db', 'raw', 'douban', 'books'
+  desc "Dump postgresql database."
+  task dump: :environment do
+    dump_file = Rails.root.join 'db', 'dump', "bookshare-db-#{Time.now.utc.to_formatted_s(:number)}.dump"
+    puts "Dump database to #{dump_file} ..."
 
-    Book.where(data_source: :douban).each do |book|
-      isbn = book.isbn
-      next if File.exist? File.join(save_path, isbn)
+    env = ENV["RAILS_ENV"].presence || 'development'
+    yml = YAML.load_file('config/database.yml')[env]
 
-      puts "Fetch book #{isbn} ......"
-      FetchDoubanBookService.new(isbn).execute
-      sleep 1
-    end
+    # This dumps the database in Postgres' custom format (-F c) which is compressed by default
+    # and allows for reordering of its contents.
+    cmd = "pg_dump -F c -U #{yml['username']} -h localhost #{yml['database']} -f #{dump_file}"
+    system(cmd)
 
-    puts "Fetch books info done."
+    puts "Dump database done."
   end
 
-  desc "Renew books info: pubdate. "
-  task renew_books_pubdate: :environment do
-    save_path = Rails.root.join 'db', 'raw', 'douban', 'books'
-
-    Book.where(data_source: :douban, pubdate: nil).each do |book|
-      isbn = book.isbn
-      book_path = File.join(save_path, isbn)
-      next unless File.exist? book_path
-
-      puts "Update book #{isbn} ..."
-      content = File.read book_path
-      json = JSON.parse content
-      puts "Update book #{isbn} pubdate #{json['pubdate']}......"
-      book.update pubdate: json['pubdate']&.try_to_datetime
+  desc "Restore postgresql database."
+  task restore: :environment do
+    env = ENV["RAILS_ENV"].presence || 'development'
+    if env != 'development'
+      puts "Only can restore development database, return..."
+      return
     end
 
-    puts "Renew books info done."
-  end
+    dump_file = Rails.root.join 'db', 'dump', "bookshare-db.dump"
+    puts "Restore database from #{dump_file} ..."
 
-  desc "Tagging books. "
-  task tagging_books: :environment do
-    save_path = Rails.root.join 'db', 'raw', 'douban', 'books'
+    yml = YAML.load_file('config/database.yml')[env]
 
-    Book.where(data_source: :douban).each do |book|
-      isbn = book.isbn
-      book_path = File.join(save_path, isbn)
-      next unless File.exist? book_path
+    # -C -c will drop the database if it exists already and then recreate it, helpful in your case.
+    # -->deleted: And -v specifies verbose so you can see exactly what's happening when this goes on.
+    cmd = "pg_restore -c -C -F c -U #{yml['username']} -h localhost #{dump_file}"
+    system(cmd)
 
-      puts "tagging book #{isbn} ..."
-      content = File.read book_path
-      json = JSON.parse content
-      douban_tags = json['tags']
-      puts "Tagging book #{isbn} tags: #{douban_tags}......"
-      douban_tags&.each do |tag|
-        book.tag_list.add(tag['name']) if tag['name'].present?
-        book.save
-      end
-    end
-
-    puts "Tagging books done."
+    puts "Restore database done."
   end
 end

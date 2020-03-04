@@ -13,6 +13,10 @@
 /db/raw/
 !/db/raw/.keep
 !db/raw/douban/books/.keep
+/db/dump/
+!/db/dump/.keep
+/db/backups/
+!/db/backups/.keep
 
 # Ignore all logfiles and tempfiles.
 /log/*
