@@ -115,3 +115,7 @@ Style/IfUnlessModifier:
 # URISchemes: http, https
 Layout/LineLength:
   Max: 139
+
+Rails/RakeEnvironment:
+  Exclude:
+    - 'lib/capistrano/tasks/**/*.rake'
