@@ -20,6 +20,10 @@ class Api::BaseController < ActionController::API
   rescue_from Exception, with: :unknown_error_handle
   rescue_from ApiException, with: :api_error_handle
 
+  rescue_from CanCan::AccessDenied do |exception|
+    render json: { message: exception.message }, status: :forbidden
+  end
+
   def authenticate_api!
     warden.authenticate!(:api)
   end

@@ -12,6 +12,9 @@ class PrintBook < ApplicationRecord
   # == Attributes ===========================================================
 
   # == Relationships ========================================================
+  has_many :sharings, dependent: :restrict_with_exception
+  has_many :borrowings, dependent: :restrict_with_exception
+
   belongs_to :book
   belongs_to :owner, class_name: 'User'
   belongs_to :holder, class_name: 'User'

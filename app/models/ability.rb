@@ -19,5 +19,9 @@ class Ability
     can :read, PrintBook, property: :shared
     can :manage, PrintBook, owner: user
     can :update, PrintBook, holder: user
+
+    cannot :update, PrintBook do |print_book|
+      print_book.shared? && !print_book.sharings.current_actives.empty?
+    end
   end
 end

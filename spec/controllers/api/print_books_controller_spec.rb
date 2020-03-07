@@ -59,15 +59,29 @@ RSpec.describe Api::PrintBooksController, type: :controller do
   end
 
   describe 'PUT #update' do
-    let(:print_book) { create :print_book, owner: user }
     let(:valid_attributes) { { description: "New discription." } }
 
     context 'use correct conditions' do
+      let(:print_book) { create :print_book, owner: user }
+
       it 'returns the print_book json' do
         put :update, params: valid_attributes.merge(id: print_book.id)
         expect(response.status).to eq 200
         print_book.reload
         expect(print_book.description).to eq valid_attributes[:description]
+      end
+    end
+
+    context 'update shared print book' do
+      let(:print_book) { create :print_book, owner: user, property: :shared }
+
+      context 'has been applied' do
+        before { create :sharing, print_book_id: print_book.id }
+
+        it 'returns forbidden' do
+          put :update, params: valid_attributes.merge(id: print_book.id)
+          expect(response.status).to eq 403
+        end
       end
     end
   end
