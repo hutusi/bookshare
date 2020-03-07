@@ -38,9 +38,9 @@ namespace :deploy do
 end
 
 # Default value for linked_dirs is []
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", 
-  "public/system", 'public/uploads', 'node_modules',
-  "db/raw/douban/books", "db/raw/redis"
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 
+  'public/system', 'public/uploads', 'node_modules',
+  'db/raw/douban/books', 'db/raw/redis', 'db/dump', 'db/backups'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

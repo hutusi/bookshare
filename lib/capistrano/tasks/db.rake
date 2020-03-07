@@ -4,8 +4,7 @@ namespace :db do
   desc "Dump postgresql database"
   task :dump do
     on roles(:db) do
-      run "cd #{deploy_to}/current"
-      run "bundle exec rake db:dump RAILS_ENV=#{rails_env}"
+      execute "source $HOME/.bash_profile && cd #{deploy_to}/current && bundle exec rake db:dump RAILS_ENV=production"
     end
   end
 end

@@ -37,5 +37,5 @@ test:
 production:
   <<: *pg
   database: pg_bookshare_production
-  username: <%= ENV['PG_BOOKSHARE_USERNAME'] %>
+  username: <%= ENV.fetch("PG_BOOKSHARE_USERNAME") { 'deploy' } %>
   password: <%= ENV['PG_BOOKSHARE_PASSWORD'] %>
