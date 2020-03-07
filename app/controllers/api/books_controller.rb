@@ -12,7 +12,7 @@ class Api::BooksController < Api::BaseController
 
   def show
     if stale?(last_modified: @book.updated_at)
-      render json: @book, status: :ok, serializer: BookPreviewSerializer
+      render json: @book, status: :ok, serializer: BookPreviewSerializer, scope: current_user
     end
   end
 
@@ -51,7 +51,7 @@ class Api::BooksController < Api::BaseController
 
     book ||= Book.create_by_isbn(isbn, current_user)
     if book.present?
-      render json: book, status: :ok, serializer: BookSerializer
+      render json: book, status: :ok, serializer: BookPreviewSerializer, scope: current_user
     else
       render json: {}, status: :not_found
     end
