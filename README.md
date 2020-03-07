@@ -81,7 +81,9 @@ guard
 - [ ] Refine sidekiq
 - [ ] Caching queries
 - [ ] API: search
-- [ ] Remove unused code
+- [X] Remove unused code
 - [ ] Rspec test cover
 - [ ] CI enabled
-- [ ] Backup database
+- [X] Backup database
+- [ ] Use Pundit instead of cancancan
+- [ ] Limits creating sharing

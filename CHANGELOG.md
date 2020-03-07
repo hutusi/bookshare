@@ -1,3 +1,13 @@
+## 1.4.0
+- API: Search print books by keyword
+- API: Delete personal print books by self
+- Not allowed to delete books via API
+- Remove unused tables and columns
+- Show sharings/borrowings not finished
+- Dump/restore db via rake task
+- Add backup tasks
+- Cannot update applied shared print books
+
 ## 1.3.0
 - Tagging books (using gem acts-as-taggable-on): via douban info.
 - Add region_code to print_books, users, sharings & borrowings.
