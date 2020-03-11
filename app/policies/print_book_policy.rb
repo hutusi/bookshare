@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PrintBookPolicy < ApplicationPolicy
   attr_reader :user, :print_book
 
@@ -7,6 +9,10 @@ class PrintBookPolicy < ApplicationPolicy
   end
 
   def update?
-    !(print_book.shared? && !print_book.sharings.current_actives.empty?)
+    if print_book.shared? && !print_book.sharings.current_actives.empty?
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_allow_update_circulated_shared'
+    end
+
+    true
   end
 end

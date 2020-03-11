@@ -23,3 +23,7 @@ zh-CN:
       request_duplicates: '不能重复申请该书'
       print_book_not_for_borrow: '藏书非借阅图书'
       print_book_not_personal: '藏书非私有图书'
+  pundit:
+    errors:
+      print_book:
+        not_allow_update_circulated_shared: '不允许更新已流通的共享书'

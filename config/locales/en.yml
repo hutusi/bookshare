@@ -55,3 +55,8 @@ en:
       request_duplicates: 'You have request yet.'
       print_book_not_for_borrow: 'Print book is not for borrow.'
       print_book_not_personal: 'Print book is not personal.'
+  pundit:
+    errors:
+      print_book:
+        not_allow_update_circulated_shared: 'Not allowed to update circulated shared book.'
+
