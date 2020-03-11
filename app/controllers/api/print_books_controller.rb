@@ -71,10 +71,9 @@ class Api::PrintBooksController < Api::BaseController
   end
 
   def update
-    valid_params = params.permit(:description, :property, :region_code)
-    forbidden! I18n.t('api.forbidden.not_the_owner') unless @print_book.owner == current_user
     authorize @print_book, :update?
 
+    valid_params = params.permit(:description, :property, :region_code)
     SaveRegionJob.perform_later params[:region] if params[:region].present?
     @print_book.update! valid_params
 
@@ -83,24 +82,24 @@ class Api::PrintBooksController < Api::BaseController
   end
 
   def update_property
-    valid_params = params.permit(:property)
-    forbidden! I18n.t('api.forbidden.not_the_owner') unless @print_book.owner == current_user
-    authorize @print_book, :update?
+    authorize @print_book, :update_property?
 
+    valid_params = params.permit(:property)
     @print_book.update! valid_params
     render json: {}, status: :ok
   end
 
   def update_status
+    authorize @print_book, :update_status?
+
     valid_params = params.permit(:status)
-    forbidden! I18n.t('api.forbidden.not_the_holder') unless @print_book.holder == current_user
     @print_book.update! valid_params
     render json: {}, status: :ok
   end
 
   def destroy
-    forbidden! I18n.t('api.forbidden.not_the_owner') unless @print_book.owner == current_user
-    forbidden! I18n.t('api.forbidden.print_book_not_personal') unless @print_book.personal?
+    authorize @print_book, :destroy?
+
     @print_book.destroy!
     render json: {}, status: :ok
   end

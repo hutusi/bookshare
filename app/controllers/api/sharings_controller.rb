@@ -21,6 +21,7 @@ class Api::SharingsController < Api::BaseController
     valid_params = params.permit(:print_book_id, :application_reason)
     print_book = PrintBook.find_by id: params[:print_book_id]
     not_found! if print_book.nil?
+
     forbidden! I18n.t('api.forbidden.print_book_not_for_share') unless print_book.shared?
     forbidden! I18n.t('api.forbidden.request_self_book') if print_book.holder_id == current_user.id
     forbidden! I18n.t('api.forbidden.request_duplicates') unless Sharing.current_applied_by(current_user.id)

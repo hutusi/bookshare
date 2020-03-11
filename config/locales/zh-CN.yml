@@ -26,4 +26,7 @@ zh-CN:
   pundit:
     errors:
       print_book:
+        not_the_owner: '非该书的所有者'
+        not_the_holder: '非该书的持有者'
         not_allow_update_circulated_shared: '不允许更新已流通的共享书'
+        not_personal: '藏书非私有'

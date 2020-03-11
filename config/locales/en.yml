@@ -58,5 +58,7 @@ en:
   pundit:
     errors:
       print_book:
+        not_the_owner: 'Not the owener of the book.'
+        not_the_holder: 'Not the holder of the book.'
         not_allow_update_circulated_shared: 'Not allowed to update circulated shared book.'
-
+        not_personal: 'Print book is not personal.'
