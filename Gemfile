@@ -31,7 +31,7 @@ gem 'devise'
 gem 'omniauth-wechat-oauth2'
 
 # Authorization
-gem 'cancancan'
+gem 'pundit'
 
 # state machines
 gem 'aasm'

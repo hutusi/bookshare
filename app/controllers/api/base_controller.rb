@@ -14,13 +14,14 @@ class ApiException < Exception
 end
 
 class Api::BaseController < ActionController::API
+  include Pundit
   respond_to :json
   before_action :authenticate_api!, except: [:test]
 
   rescue_from Exception, with: :unknown_error_handle
   rescue_from ApiException, with: :api_error_handle
 
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from Pundit::NotAuthorizedError do |exception|
     render json: { message: exception.message }, status: :forbidden
   end
 

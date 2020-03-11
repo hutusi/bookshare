@@ -77,7 +77,6 @@ GEM
     brakeman (4.7.2)
     builder (3.2.4)
     byebug (11.1.1)
-    cancancan (3.0.2)
     capistrano (3.12.0)
       airbrussh (>= 1.0.0)
       i18n
@@ -238,6 +237,8 @@ GEM
       method_source (~> 0.9.0)
     public_suffix (4.0.3)
     puma (3.12.2)
+    pundit (2.1.0)
+      activesupport (>= 3.0.0)
     rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
@@ -401,7 +402,6 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   brakeman
   byebug
-  cancancan
   capistrano
   capistrano-bundler
   capistrano-rails
@@ -423,6 +423,7 @@ DEPENDENCIES
   omniauth-wechat-oauth2
   pg
   puma (~> 3.11)
+  pundit
   rails (~> 6.0.0)
   redis (~> 4.0)
   rspec-rails
