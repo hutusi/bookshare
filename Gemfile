@@ -104,6 +104,9 @@ group :test do
 
   # Stub http requests
   gem 'webmock'
+
+  # Code coverage 
+  gem 'simplecov', require: false
 end
 
 group :production do

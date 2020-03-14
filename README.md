@@ -85,5 +85,5 @@ guard
 - [ ] Rspec test cover
 - [ ] CI enabled
 - [X] Backup database
-- [ ] Use Pundit instead of cancancan
+- [X] Use Pundit instead of cancancan
 - [ ] Limits creating sharing
