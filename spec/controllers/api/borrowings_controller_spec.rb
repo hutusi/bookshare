@@ -45,16 +45,53 @@ RSpec.describe Api::BorrowingsController, type: :controller do
 
   describe 'POST #create' do
     let(:print_book) { create :print_book, property: :borrowable }
-    # let(:valid_attributes) { attributes_for :borrowing, print_book_id: print_book.id, book_id: print_book.book_id }
-    let(:valid_attributes) { { print_book_id: print_book.id } }
+    let(:post_params) { { print_book_id: print_book.id } }
 
     context 'with correct conditions' do
       it 'returns the borrowing json' do
-        post :create, params: valid_attributes
+        post :create, params: post_params
         expect(response.status).to eq 201
         borrowing = Borrowing.last
-        expect(valid_attributes[:print_book_id]).to eq borrowing.print_book_id
+        expect(post_params[:print_book_id]).to eq borrowing.print_book_id
         expect(borrowing.requesting?).to be true
+      end
+    end
+
+    context 'when not borrowable print book' do
+      let(:personal_book) { create :print_book, property: :personal }
+      let(:post_params) { { print_book_id: personal_book.id } }
+
+      it 'returns forbidden' do
+        post :create, params: post_params
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when hold the book' do
+      let(:print_book) { create :print_book, property: :borrowable, holder: user }
+      let(:post_params) { { print_book_id: print_book.id } }
+
+      it 'returns forbidden' do
+        post :create, params: post_params
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when request a borrowing before' do
+      before { create :borrowing, print_book: print_book, receiver: user }
+
+      it 'returns forbidden' do
+        post :create, params: post_params
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when request a borrowing before and finished' do
+      before { create :borrowing, print_book: print_book, receiver: user, status: :finished }
+
+      it 'returns created' do
+        post :create, params: post_params
+        expect(response.status).to eq 201
       end
     end
   end
@@ -64,7 +101,8 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     let(:holder) { user }
     let(:print_book) { create :print_book, holder: holder }
     let(:borrowing) do
-      create :borrowing, print_book: print_book, receiver: receiver, holder: holder, status: :requesting
+      create :borrowing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :requesting
     end
 
     context 'with correct status' do
@@ -75,6 +113,27 @@ RSpec.describe Api::BorrowingsController, type: :controller do
         expect(borrowing.accepted?).to be true
       end
     end
+
+    context 'when not the holder' do
+      let(:holder) { create :user }
+
+      it 'returns forbidden' do
+        post :accept, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when not requesting status' do
+      let(:borrowing) do
+        create :borrowing, print_book: print_book, receiver: receiver,
+                           holder: holder, status: :lending
+      end
+
+      it 'returns forbidden' do
+        post :accept, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #reject' do
@@ -82,7 +141,8 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     let(:holder) { user }
     let(:print_book) { create :print_book, holder: holder }
     let(:borrowing) do
-      create :borrowing, print_book: print_book, receiver: receiver, holder: holder, status: :requesting
+      create :borrowing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :requesting
     end
 
     context 'with correct status' do
@@ -93,6 +153,27 @@ RSpec.describe Api::BorrowingsController, type: :controller do
         expect(borrowing.rejected?).to be true
       end
     end
+
+    context 'when not the holder' do
+      let(:holder) { create :user }
+
+      it 'returns forbidden' do
+        post :reject, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when not requesting status' do
+      let(:borrowing) do
+        create :borrowing, print_book: print_book, receiver: receiver,
+                           holder: holder, status: :lending
+      end
+
+      it 'returns forbidden' do
+        post :reject, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #lend' do
@@ -100,7 +181,8 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     let(:holder) { user }
     let(:print_book) { create :print_book, holder: holder }
     let(:borrowing) do
-      create :borrowing, print_book: print_book, receiver: receiver, holder: holder, status: :accepted
+      create :borrowing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :accepted
     end
 
     context 'with correct status' do
@@ -111,6 +193,27 @@ RSpec.describe Api::BorrowingsController, type: :controller do
         expect(borrowing.lending?).to be true
       end
     end
+
+    context 'when not the holder' do
+      let(:holder) { create :user }
+
+      it 'returns forbidden' do
+        post :lend, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when not accepted status' do
+      let(:borrowing) do
+        create :borrowing, print_book: print_book, receiver: receiver,
+                           holder: holder, status: :lending
+      end
+
+      it 'returns forbidden' do
+        post :lend, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #borrow' do
@@ -118,7 +221,8 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     let(:holder) { create :user }
     let(:print_book) { create :print_book, holder: holder }
     let(:borrowing) do
-      create :borrowing, print_book: print_book, receiver: receiver, holder: holder, status: :lending
+      create :borrowing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :lending
     end
 
     context 'with correct status' do
@@ -129,6 +233,27 @@ RSpec.describe Api::BorrowingsController, type: :controller do
         expect(borrowing.borrowing?).to be true
       end
     end
+
+    context 'when not the receiver' do
+      let(:receiver) { create :user }
+
+      it 'returns forbidden' do
+        post :borrow, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when not lending status' do
+      let(:borrowing) do
+        create :borrowing, print_book: print_book, receiver: receiver,
+                           holder: holder, status: :accepted
+      end
+
+      it 'returns forbidden' do
+        post :borrow, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #return' do
@@ -136,7 +261,8 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     let(:holder) { create :user }
     let(:print_book) { create :print_book, holder: holder }
     let(:borrowing) do
-      create :borrowing, print_book: print_book, receiver: receiver, holder: holder, status: :borrowing
+      create :borrowing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :borrowing
     end
 
     context 'with correct status' do
@@ -147,6 +273,27 @@ RSpec.describe Api::BorrowingsController, type: :controller do
         expect(borrowing.returning?).to be true
       end
     end
+
+    context 'when not the receiver' do
+      let(:receiver) { create :user }
+
+      it 'returns forbidden' do
+        post :borrow, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when not borrowing status' do
+      let(:borrowing) do
+        create :borrowing, print_book: print_book, receiver: receiver,
+                           holder: holder, status: :accepted
+      end
+
+      it 'returns forbidden' do
+        post :borrow, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #finish' do
@@ -154,7 +301,8 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     let(:holder) { user }
     let(:print_book) { create :print_book, holder: holder }
     let(:borrowing) do
-      create :borrowing, print_book: print_book, receiver: receiver, holder: holder, status: :returning
+      create :borrowing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :returning
     end
 
     context 'with correct status' do
@@ -163,6 +311,27 @@ RSpec.describe Api::BorrowingsController, type: :controller do
         expect(response.status).to eq 201
         borrowing.reload
         expect(borrowing.finished?).to be true
+      end
+    end
+
+    context 'when not the holder' do
+      let(:holder) { create :user }
+
+      it 'returns forbidden' do
+        post :lend, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'when not returning status' do
+      let(:borrowing) do
+        create :borrowing, print_book: print_book, receiver: receiver,
+                           holder: holder, status: :lending
+      end
+
+      it 'returns forbidden' do
+        post :lend, params: { id: borrowing.id }
+        expect(response.status).to eq 403
       end
     end
   end

@@ -44,10 +44,10 @@ RSpec.describe Api::SharingsController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'use correct conditions' do
-      let(:print_book) { create :print_book, property: :shared }
-      let(:post_params) { { print_book_id: print_book.id } }
+    let(:print_book) { create :print_book, property: :shared }
+    let(:post_params) { { print_book_id: print_book.id } }
 
+    context 'use correct conditions' do
       it 'returns the sharing json' do
         post :create, params: post_params
         expect(response.status).to eq 201
@@ -78,9 +78,6 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'request a sharing before' do
-      let(:print_book) { create :print_book, property: :shared }
-      let(:post_params) { { print_book_id: print_book.id } }
-
       before { create :sharing, print_book: print_book, receiver: user }
 
       it 'returns forbidden' do
@@ -90,9 +87,6 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'request a sharing before and finished' do
-      let(:print_book) { create :print_book, property: :shared }
-      let(:post_params) { { print_book_id: print_book.id } }
-
       before { create :sharing, print_book: print_book, receiver: user, status: :finished }
 
       it 'returns created' do

@@ -64,5 +64,6 @@ en:
         not_allow_update_circulated_shared: 'Not allowed to update circulated shared book.'
         not_personal: 'Print book is not personal.'
         not_for_share: 'Print book is not for share.'
+        not_for_borrow: 'Print book is not for borrow.'
         hold_the_book: 'Alreay hold the book.'
         request_duplicates: 'You have request yet.'

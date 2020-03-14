@@ -32,5 +32,6 @@ zh-CN:
         not_allow_update_circulated_shared: '不允许更新已流通的共享书'
         not_personal: '藏书非私有'
         not_for_share: '藏书非共享'
+        not_for_borrow: '藏书非借阅'
         hold_the_book: '已持有该书'
         request_duplicates: '重复申请该书'
