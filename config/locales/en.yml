@@ -57,6 +57,8 @@ en:
       print_book_not_personal: 'Print book is not personal.'
   pundit:
     errors:
+      book:
+        not_the_creator: 'Not the creator of the book.'
       print_book:
         not_the_owner: 'Not the owener of the book.'
         not_the_holder: 'Not the holder of the book.'
