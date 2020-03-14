@@ -44,17 +44,60 @@ RSpec.describe Api::SharingsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:print_book) { create :print_book, property: :shared }
-    # let(:valid_attributes) { attributes_for :sharing, print_book_id: print_book.id, book_id: print_book.book_id }
-    let(:valid_attributes) { { print_book_id: print_book.id } }
-
     context 'use correct conditions' do
+      let(:print_book) { create :print_book, property: :shared }
+      let(:post_params) { { print_book_id: print_book.id } }
+
       it 'returns the sharing json' do
-        post :create, params: valid_attributes
+        post :create, params: post_params
         expect(response.status).to eq 201
         sharing = Sharing.last
-        expect(valid_attributes[:print_book_id]).to eq sharing.print_book_id
+        expect(post_params[:print_book_id]).to eq sharing.print_book_id
         expect(sharing.requesting?).to be true
+      end
+    end
+
+    context 'not shared print book' do
+      let(:personal_book) { create :print_book, property: :personal }
+      let(:post_params) { { print_book_id: personal_book.id } }
+
+      it 'returns forbidden' do
+        post :create, params: post_params
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'hold the book' do
+      let(:print_book) { create :print_book, property: :shared, holder: user }
+      let(:post_params) { { print_book_id: print_book.id } }
+
+      it 'returns forbidden' do
+        post :create, params: post_params
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'request a sharing before' do
+      let(:print_book) { create :print_book, property: :shared }
+      let(:post_params) { { print_book_id: print_book.id } }
+
+      before { create :sharing, print_book: print_book, receiver: user }
+
+      it 'returns forbidden' do
+        post :create, params: post_params
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'request a sharing before and finished' do
+      let(:print_book) { create :print_book, property: :shared }
+      let(:post_params) { { print_book_id: print_book.id } }
+
+      before { create :sharing, print_book: print_book, receiver: user, status: :finished }
+
+      it 'returns created' do
+        post :create, params: post_params
+        expect(response.status).to eq 201
       end
     end
   end
@@ -64,7 +107,8 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:holder) { user }
     let(:print_book) { create :print_book, holder: holder }
     let(:sharing) do
-      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :requesting
+      create :sharing, print_book: print_book, receiver: receiver,
+                       holder: holder, status: :requesting
     end
 
     context 'with correct status' do
@@ -75,6 +119,27 @@ RSpec.describe Api::SharingsController, type: :controller do
         expect(sharing.accepted?).to be true
       end
     end
+
+    context 'not the holder' do
+      let(:holder) { create :user }
+
+      it 'returns forbidden' do
+        post :accept, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'not requesting status' do
+      let(:sharing) do
+        create :sharing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :lending
+      end
+
+      it 'returns forbidden' do
+        post :accept, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #reject' do
@@ -82,7 +147,8 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:holder) { user }
     let(:print_book) { create :print_book, holder: holder }
     let(:sharing) do
-      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :requesting
+      create :sharing, print_book: print_book, receiver: receiver,
+                       holder: holder, status: :requesting
     end
 
     context 'with correct status' do
@@ -93,6 +159,27 @@ RSpec.describe Api::SharingsController, type: :controller do
         expect(sharing.rejected?).to be true
       end
     end
+
+    context 'not the holder' do
+      let(:holder) { create :user }
+
+      it 'returns forbidden' do
+        post :reject, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'not requesting status' do
+      let(:sharing) do
+        create :sharing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :lending
+      end
+
+      it 'returns forbidden' do
+        post :reject, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #lend' do
@@ -100,7 +187,8 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:holder) { user }
     let(:print_book) { create :print_book, holder: holder }
     let(:sharing) do
-      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :accepted
+      create :sharing, print_book: print_book, receiver: receiver,
+                       holder: holder, status: :accepted
     end
 
     context 'with correct status' do
@@ -111,6 +199,27 @@ RSpec.describe Api::SharingsController, type: :controller do
         expect(sharing.lending?).to be true
       end
     end
+
+    context 'not the holder' do
+      let(:holder) { create :user }
+
+      it 'returns forbidden' do
+        post :lend, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'not accepted status' do
+      let(:sharing) do
+        create :sharing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :lending
+      end
+
+      it 'returns forbidden' do
+        post :lend, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'POST #borrow' do
@@ -118,7 +227,8 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:holder) { create :user }
     let(:print_book) { create :print_book, holder: holder }
     let(:sharing) do
-      create :sharing, print_book: print_book, receiver: receiver, holder: holder, status: :lending
+      create :sharing, print_book: print_book, receiver: receiver,
+                       holder: holder, status: :lending
     end
 
     context 'with correct status' do
@@ -131,6 +241,27 @@ RSpec.describe Api::SharingsController, type: :controller do
     end
 
     context 'second sharing' do
+    end
+
+    context 'not the receiver' do
+      let(:receiver) { create :user }
+
+      it 'returns forbidden' do
+        post :borrow, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
+    context 'not lending status' do
+      let(:sharing) do
+        create :sharing, print_book: print_book, receiver: receiver,
+                         holder: holder, status: :accepted
+      end
+
+      it 'returns forbidden' do
+        post :borrow, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
     end
   end
 

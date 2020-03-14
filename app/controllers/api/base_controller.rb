@@ -25,6 +25,10 @@ class Api::BaseController < ActionController::API
     render json: { message: exception.message }, status: :forbidden
   end
 
+  rescue_from AASM::InvalidTransition do |exception|
+    render json: { message: exception.message }, status: :forbidden
+  end
+
   def authenticate_api!
     warden.authenticate!(:api)
   end
