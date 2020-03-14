@@ -4,15 +4,19 @@ class Api::UsersController < Api::BaseController
   before_action :find_user, only: [:show, :update]
 
   def show
-    if stale?(last_modified: @user.updated_at)
-      render json: @user, status: :ok, serializer: UserSerializer
-    end
+    return unless stale?(last_modified: @user.updated_at)
+
+    render json: @user, status: :ok, serializer: UserSerializer
   end
 
   def update
-    forbidden! I18n.t('api.forbidden.not_self_user') unless @user == current_user
-    valid_params = params.permit(:username, :email, :phone, :company, :bio, :contact,
-                                 :nickname, :avatar, :gender, :country, :province, :city, :language)
+    unless @user == current_user
+      forbidden! I18n.t('api.forbidden.not_self_user')
+    end
+    valid_params = params.permit(:username, :email, :phone, :company,
+                                 :bio, :contact,
+                                 :nickname, :avatar, :gender, :country,
+                                 :province, :city, :language)
     @user.update! valid_params
     render json: @user, status: :ok, serializer: UserSerializer
   end

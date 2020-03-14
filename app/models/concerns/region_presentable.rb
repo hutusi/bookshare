@@ -10,9 +10,12 @@ module RegionPresentable
       district_code = region_code
 
       {
-        province: { code: province_code, name: REGION_REDIS_STORE.get(province_code.to_s) },
-        city: { code: city_code, name: REGION_REDIS_STORE.get(city_code.to_s) },
-        district: { code: district_code, name: REGION_REDIS_STORE.get(district_code.to_s) }
+        province: { code: province_code,
+                    name: REGION_REDIS_STORE.get(province_code.to_s) },
+        city: { code: city_code,
+                name: REGION_REDIS_STORE.get(city_code.to_s) },
+        district: { code: district_code,
+                    name: REGION_REDIS_STORE.get(district_code.to_s) }
       }
     else
       {}

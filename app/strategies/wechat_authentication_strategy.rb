@@ -12,8 +12,12 @@ class WechatAuthenticationStrategy < Warden::Strategies::Base
     wechat_login
 
     unless @wechat_params[:errcode].blank? || @wechat_params[:errcode] == 0
-      Rails.logger.warn("Wechat login failed, #{@wechat_params}, errcode: #{@wechat_params[:errcode]}, errmsg: #{@wechat_params[:errmsg]}")
-      fail!(I18n.t('auth.wechat.login_failed', errcode: @wechat_params[:errcode], errmsg: @wechat_params[:errmsg]))
+      Rails.logger.warn("Wechat login failed, #{@wechat_params},
+        errcode: #{@wechat_params[:errcode]},
+        errmsg: #{@wechat_params[:errmsg]}")
+      fail!(I18n.t('auth.wechat.login_failed',
+                   errcode: @wechat_params[:errcode],
+                   errmsg: @wechat_params[:errmsg]))
       return
     end
 

@@ -58,10 +58,5 @@ Metrics/BlockLength:
 Rails/FilePath:
   EnforcedStyle: arguments
 
-Metrics/CyclomaticComplexity:
-  Exclude:
-    - 'lib/core_ext/string_ext.rb'
-
-Metrics/PerceivedComplexity:
-  Exclude:
-    - 'lib/core_ext/string_ext.rb'
+Style/Documentation:
+  Enabled: false

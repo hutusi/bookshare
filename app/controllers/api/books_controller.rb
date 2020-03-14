@@ -5,15 +5,16 @@ class Api::BooksController < Api::BaseController
 
   def index
     books = Book.all.order(updated_at: :desc)
-    if stale?(last_modified: books.maximum(:updated_at))
-      render json: books, status: :ok, each_serializer: BookSerializer
-    end
+    return unless stale?(last_modified: books.maximum(:updated_at))
+
+    render json: books, status: :ok, each_serializer: BookSerializer
   end
 
   def show
-    if stale?(last_modified: @book.updated_at)
-      render json: @book, status: :ok, serializer: BookPreviewSerializer, scope: current_user
-    end
+    return unless stale?(last_modified: @book.updated_at)
+
+    render json: @book, status: :ok, serializer: BookPreviewSerializer,
+           scope: current_user
   end
 
   def create
@@ -26,7 +27,8 @@ class Api::BooksController < Api::BaseController
 
   def update
     forbidden! I18n.t('api.forbidden.method_not_allowed')
-    # forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
+    # forbidden! I18n.t('api.forbidden.not_the_creator')
+    #     unless @book.creator == current_user
     # valid_params = permitted_params
     # @book.update! valid_params
     # render json: {}, status: :ok
@@ -34,7 +36,8 @@ class Api::BooksController < Api::BaseController
 
   def destroy
     forbidden! I18n.t('api.forbidden.method_not_allowed')
-    # forbidden! I18n.t('api.forbidden.not_the_creator') unless @book.creator == current_user
+    # forbidden! I18n.t('api.forbidden.not_the_creator')
+    #    unless @book.creator == current_user
     # @book.destroy!
     # render json: {}, status: :ok
   end
@@ -51,7 +54,8 @@ class Api::BooksController < Api::BaseController
 
     book ||= Book.create_by_isbn(isbn, current_user)
     if book.present?
-      render json: book, status: :ok, serializer: BookPreviewSerializer, scope: current_user
+      render json: book, status: :ok, serializer: BookPreviewSerializer,
+             scope: current_user
     else
       render json: {}, status: :not_found
     end

@@ -11,8 +11,12 @@ class SharingPolicy
   def create?
     print_book = sharing
 
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_for_share' unless print_book.shared?
-    raise Pundit::NotAuthorizedError, reason: 'print_book.hold_the_book' if print_book.holder == user
+    unless print_book.shared?
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_for_share'
+    end
+    if print_book.holder == user
+      raise Pundit::NotAuthorizedError, reason: 'print_book.hold_the_book'
+    end
 
     unless Sharing.current_applied_by(user.id)
                   .where(print_book_id: print_book.id).empty?
@@ -23,8 +27,12 @@ class SharingPolicy
   end
 
   def accept?
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_holder' unless sharing.holder == user
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_holder' unless sharing.print_book.holder == user
+    unless sharing.holder == user
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_holder'
+    end
+    unless sharing.print_book.holder == user
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_holder'
+    end
 
     true
   end
@@ -38,7 +46,9 @@ class SharingPolicy
   end
 
   def borrow?
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_receiver' unless sharing.receiver == user
+    unless sharing.receiver == user
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_receiver'
+    end
 
     true
   end

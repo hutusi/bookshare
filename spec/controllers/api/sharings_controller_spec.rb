@@ -8,7 +8,7 @@ RSpec.describe Api::SharingsController, type: :controller do
   before { sign_in user }
 
   describe 'GET #index' do
-    context 'no records' do
+    context 'with no records' do
       it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
@@ -32,7 +32,7 @@ RSpec.describe Api::SharingsController, type: :controller do
   describe 'GET #show' do
     let(:sharings) { create_list(:sharing, 5) }
 
-    context 'use correct conditions' do
+    context 'with correct conditions' do
       before { sharings }
 
       it 'returns the sharing json' do
@@ -47,7 +47,7 @@ RSpec.describe Api::SharingsController, type: :controller do
     let(:print_book) { create :print_book, property: :shared }
     let(:post_params) { { print_book_id: print_book.id } }
 
-    context 'use correct conditions' do
+    context 'with correct conditions' do
       it 'returns the sharing json' do
         post :create, params: post_params
         expect(response.status).to eq 201
@@ -57,7 +57,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not shared print book' do
+    context 'when not shared print book' do
       let(:personal_book) { create :print_book, property: :personal }
       let(:post_params) { { print_book_id: personal_book.id } }
 
@@ -67,7 +67,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'hold the book' do
+    context 'when hold the book' do
       let(:print_book) { create :print_book, property: :shared, holder: user }
       let(:post_params) { { print_book_id: print_book.id } }
 
@@ -77,7 +77,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'request a sharing before' do
+    context 'when request a sharing before' do
       before { create :sharing, print_book: print_book, receiver: user }
 
       it 'returns forbidden' do
@@ -86,8 +86,11 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'request a sharing before and finished' do
-      before { create :sharing, print_book: print_book, receiver: user, status: :finished }
+    context 'when request a sharing before and finished' do
+      before do
+        create :sharing, print_book: print_book, receiver: user,
+                         status: :finished
+      end
 
       it 'returns created' do
         post :create, params: post_params
@@ -114,7 +117,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not the holder' do
+    context 'when not the holder' do
       let(:holder) { create :user }
 
       it 'returns forbidden' do
@@ -123,7 +126,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not requesting status' do
+    context 'when not requesting status' do
       let(:sharing) do
         create :sharing, print_book: print_book, receiver: receiver,
                          holder: holder, status: :lending
@@ -154,7 +157,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not the holder' do
+    context 'when not the holder' do
       let(:holder) { create :user }
 
       it 'returns forbidden' do
@@ -163,7 +166,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not requesting status' do
+    context 'when not requesting status' do
       let(:sharing) do
         create :sharing, print_book: print_book, receiver: receiver,
                          holder: holder, status: :lending
@@ -194,7 +197,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not the holder' do
+    context 'when not the holder' do
       let(:holder) { create :user }
 
       it 'returns forbidden' do
@@ -203,7 +206,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not accepted status' do
+    context 'when not accepted status' do
       let(:sharing) do
         create :sharing, print_book: print_book, receiver: receiver,
                          holder: holder, status: :lending
@@ -234,10 +237,10 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'second sharing' do
-    end
+    # context 'with second sharing' do
+    # end
 
-    context 'not the receiver' do
+    context 'when not the receiver' do
       let(:receiver) { create :user }
 
       it 'returns forbidden' do
@@ -246,7 +249,7 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
-    context 'not lending status' do
+    context 'when not lending status' do
       let(:sharing) do
         create :sharing, print_book: print_book, receiver: receiver,
                          holder: holder, status: :accepted

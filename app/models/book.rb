@@ -7,9 +7,13 @@ class Book < ApplicationRecord
 
   has_many :print_books, dependent: :restrict_with_exception
 
-  belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
-  belongs_to :author, class_name: 'Author', foreign_key: 'author_id', optional: true
-  belongs_to :translator, class_name: 'Translator', foreign_key: 'translator_id', optional: true
+  belongs_to :creator, class_name: 'User', foreign_key: 'creator_id',
+                       inverse_of: :created_books
+  belongs_to :author, class_name: 'Author', foreign_key: 'author_id',
+                      inverse_of: :books, optional: true
+  belongs_to :translator, class_name: 'Translator',
+                          foreign_key: 'translator_id',
+                          inverse_of: :books, optional: true
   belongs_to :publisher, optional: true
   belongs_to :series, optional: true
 
@@ -22,7 +26,9 @@ class Book < ApplicationRecord
 
       author_name = json['author']&.first
       author = Author.find_by(name: author_name)
-      author = Author.create(name: author_name, intro: json['author_intro']) if author.blank?
+      if author.blank?
+        author = Author.create(name: author_name, intro: json['author_intro'])
+      end
 
       translator_name = json['translator']&.first
       translator = Translator.find_or_create_by(name: translator_name)
@@ -38,18 +44,24 @@ class Book < ApplicationRecord
       isbn = json['isbn13'] || json['isbn10'] || isbn
       book = Book.create title: json['title'], subtitle: json['subtitle'],
                          isbn10: json['isbn10'], isbn13: json['isbn13'],
-                         origin_title: json['origin_title'], alt_title: json['alt_title'],
-                         image: json['image'], images: json['images'], # JSON.parse(json['images']),
+                         origin_title: json['origin_title'],
+                         alt_title: json['alt_title'],
+                         image: json['image'], images: json['images'],
+                         # JSON.parse(json['images']),
                          author_name: author&.name, author_id: author&.id,
-                         translator_name: translator&.name, translator_id: translator&.id,
-                         publisher_name: publisher&.name, publisher_id: publisher&.id,
+                         translator_name: translator&.name,
+                         translator_id: translator&.id,
+                         publisher_name: publisher&.name,
+                         publisher_id: publisher&.id,
                          pubdate: json['pubdate']&.try_to_datetime,
                          rating: json['rating'], # JSON.parse(json['rating']),
-                         binding: json['binding'], price: json['price'], pages: json['pages'],
+                         binding: json['binding'], price: json['price'],
+                         pages: json['pages'],
                          series_id: series&.id, series_name: series&.name,
                          summary: json['summary'], catalog: json['catalog'],
                          cover: json['image'], douban_id: json['id'],
-                         isbn: isbn, data_source: :douban, creator_id: creator&.id
+                         isbn: isbn, data_source: :douban,
+                         creator_id: creator&.id
 
       douban_tags = json['tags']
       douban_tags&.each do |tag|

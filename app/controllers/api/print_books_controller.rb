@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Api::PrintBooksController < Api::BaseController
-  before_action :find_print_book, only: [:show, :update, :destroy, :update_property, :update_status]
+  before_action :find_print_book, only: [:show, :update, :destroy,
+                                         :update_property, :update_status]
 
   # TODO: paginate
   def index
@@ -17,55 +18,56 @@ class Api::PrintBooksController < Api::BaseController
 
     @print_books = PrintBook.where(index_params).order(updated_at: :desc)
                             .page(page).per(per_page)
-    if stale?(last_modified: @print_books.maximum(:updated_at))
-      render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
-    end
+    return unless stale?(last_modified: @print_books.maximum(:updated_at))
+
+    render json: @print_books, each_serializer: PrintBookSerializer,
+           meta: pagination_dict(@print_books)
   end
 
   def for_share
     @print_books = PrintBook.all_shared.order(updated_at: :desc)
                             .page(page).per(per_page)
 
-    if stale?(last_modified: @print_books.maximum(:updated_at))
-      render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
-    end
+    return unless stale?(last_modified: @print_books.maximum(:updated_at))
+
+    render json: @print_books, each_serializer: PrintBookSerializer,
+           meta: pagination_dict(@print_books)
   end
 
   def for_borrow
     @print_books = PrintBook.all_borrowable.order(updated_at: :desc)
                             .page(page).per(per_page)
 
-    if stale?(last_modified: @print_books.maximum(:updated_at))
-      render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
-    end
+    return unless stale?(last_modified: @print_books.maximum(:updated_at))
+
+    render json: @print_books, each_serializer: PrintBookSerializer,
+           meta: pagination_dict(@print_books)
   end
 
   def search
     property = params[:property]
     index_params = { property: property }
-    if property == 'personal'
-      index_params[:owner_id] = current_user.id
-    end
+    index_params[:owner_id] = current_user.id if property == 'personal'
 
     keyword = params[:keyword]
-    @print_books = PrintBook.where(index_params).by_keyword(keyword).page(page).per(per_page)
+    @print_books = PrintBook.where(index_params).by_keyword(keyword)
+                            .page(page).per(per_page)
 
-    render json: @print_books, each_serializer: PrintBookSerializer, meta: pagination_dict(@print_books)
+    render json: @print_books, each_serializer: PrintBookSerializer,
+           meta: pagination_dict(@print_books)
   end
 
   def show
-    if stale?(last_modified: @print_book.updated_at)
-      render json: @print_book, serializer: PrintBookPreviewSerializer
-    end
+    return unless stale?(last_modified: @print_book.updated_at)
+
+    render json: @print_book, serializer: PrintBookPreviewSerializer
   end
 
   def create
     valid_params = params.permit(:book_id, :description)
-    valid_params.merge!(owner_id: current_user.id, holder_id: current_user.id,
+    valid_params.merge!(owner_id: current_user.id,
+                        holder_id: current_user.id,
                         creator_id: current_user.id)
-    forbidden! I18n.t('api.forbidden.print_book_duplicates') if PrintBook.exists? owner_id: current_user.id,
-                                                                                  book_id: valid_params[:book_id],
-                                                                                  description: valid_params[:description]
     print_book = PrintBook.create! valid_params
     render json: print_book, status: :created
   end
@@ -77,7 +79,9 @@ class Api::PrintBooksController < Api::BaseController
     SaveRegionJob.perform_later params[:region] if params[:region].present?
     @print_book.update! valid_params
 
-    current_user.update!(region_code: params[:region_code]) if params[:region_code].present?
+    if params[:region_code].present?
+      current_user.update!(region_code: params[:region_code])
+    end
     render json: {}, status: :ok
   end
 

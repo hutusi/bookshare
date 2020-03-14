@@ -8,17 +8,20 @@ class String
       data = str.match(/(\d+)\-(\d+)\-*(\d*)/)
       raise ArgumentError unless data
 
-      DateTime.new(data[1].to_i, data[2].to_i, data[3].to_i == 0 ? 1 : data[3].to_i)
+      DateTime.new(data[1].to_i, data[2].to_i,
+                   data[3].to_i == 0 ? 1 : data[3].to_i)
     when '.'
       data = str.match(/(\d+)\.(\d+)\.*(\d*)/)
       raise ArgumentError unless data
 
-      DateTime.new(data[1].to_i, data[2].to_i, data[3].to_i == 0 ? 1 : data[3].to_i)
+      DateTime.new(data[1].to_i, data[2].to_i,
+                   data[3].to_i == 0 ? 1 : data[3].to_i)
     when '年'
       data = str.match(/(\d+)年(\d*)月*(\d*)/)
       raise ArgumentError unless data
 
-      DateTime.new(data[1].to_i, data[2].to_i == 0 ? 1 : data[2].to_i, data[3].to_i == 0 ? 1 : data[3].to_i)
+      DateTime.new(data[1].to_i, data[2].to_i == 0 ? 1 : data[2].to_i,
+                   data[3].to_i == 0 ? 1 : data[3].to_i)
     when nil # such as 2000
       DateTime.new(str.to_i, 1, 1)
     else

@@ -11,14 +11,23 @@ class User < ApplicationRecord
   enum gender: { unknown: 0, male: 1, female: 2 }
   enum language: { en: 0, zh_CN: 1, zh_TW: 2 }
 
-  has_many :identities
-  has_many :owning_books, class_name: 'PrintBook', foreign_key: 'owner_id'
-  has_many :holding_books, class_name: 'PrintBook', foreign_key: 'holder_id'
-  has_many :created_books, class_name: 'PrintBook', foreign_key: 'creator_id'
+  has_many :identities, dependent: :restrict_with_exception
+  has_many :created_books, class_name: 'Book', foreign_key: 'creator_id',
+                           dependent: :restrict_with_exception,
+                           inverse_of: :creator
 
-  # has_many :sponsored_deals, class_name: 'Deal', foreign_key: 'sponsor_id'
-  # has_many :received_deals, class_name: 'Deal', foreign_key: 'receiver_id'
-  # has_many :applied_deals, class_name: 'Deal', foreign_key: 'appicant_id'
+  has_many :owning_print_books, class_name: 'PrintBook',
+                                foreign_key: 'owner_id',
+                                dependent: :restrict_with_exception,
+                                inverse_of: :owner
+  has_many :holding_print_books, class_name: 'PrintBook',
+                                 foreign_key: 'holder_id',
+                                 dependent: :restrict_with_exception,
+                                 inverse_of: :holder
+  has_many :created_print_books, class_name: 'PrintBook',
+                                 foreign_key: 'creator_id',
+                                 dependent: :restrict_with_exception,
+                                 inverse_of: :creator
 
   validates :username, presence: true
   validates :username, uniqueness: true

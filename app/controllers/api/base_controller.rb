@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ApiException < Exception
+class ApiException < RuntimeError
   attr_accessor :status, :message
 
   def initialize(status, message)
@@ -42,12 +42,12 @@ class Api::BaseController < ActionController::API
   end
 
   def api_error_handle(exception)
-    p exception
+    Rails.logger.warn exception
     render status: exception.status, json: { message: exception.message }
   end
 
   def unknown_error_handle(exception)
-    p exception
+    Rails.logger.warn exception
     render status: 500, json: { message: "Server intrnal error!" }
   end
 
@@ -71,12 +71,12 @@ class Api::BaseController < ActionController::API
   end
 
   def test
-    p params
+    Rails.logger.debug params
     # http://douban.uieee.com/v2/book/isbn/9787505715660
     url = "http://douban.uieee.com/v2/book/isbn/#{params[:isbn]}"
     response = Faraday.get url
     json = JSON.parse(response.body)
-    p json
+    Rails.logger.debug json
     render status: 200, json: json
   end
 end

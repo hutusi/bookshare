@@ -9,10 +9,13 @@ class PrintBookPolicy
   end
 
   def update?
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_owner' if print_book.owner != user
+    if print_book.owner != user
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_owner'
+    end
 
     if print_book.shared? && !print_book.sharings.current_actives.empty?
-      raise Pundit::NotAuthorizedError, reason: 'print_book.not_allow_update_circulated_shared'
+      raise Pundit::NotAuthorizedError,
+            reason: 'print_book.not_allow_update_circulated_shared'
     end
 
     true
@@ -23,15 +26,21 @@ class PrintBookPolicy
   end
 
   def update_status?
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_holder' if print_book.holder != user
+    if print_book.holder != user
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_holder'
+    end
 
     true
   end
 
   def destroy?
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_owner' if print_book.owner != user
+    if print_book.owner != user
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_owner'
+    end
 
-    raise Pundit::NotAuthorizedError, reason: 'print_book.not_personal' if print_book.personal?
+    if print_book.personal?
+      raise Pundit::NotAuthorizedError, reason: 'print_book.not_personal'
+    end
 
     true
   end

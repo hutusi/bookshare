@@ -9,7 +9,7 @@ RSpec.describe Api::BooksController, type: :controller do
   before { sign_in user }
 
   describe 'GET #index' do
-    context 'no records' do
+    context 'with no records' do
       it 'returns empty list' do
         get :index
         expect(response.status).to eq 200
@@ -33,7 +33,7 @@ RSpec.describe Api::BooksController, type: :controller do
   describe 'GET #show' do
     let(:books) { create_list(:book, 5) }
 
-    context 'use correct conditions' do
+    context 'with correct conditions' do
       before { books }
 
       it 'returns the book json' do
@@ -48,7 +48,7 @@ RSpec.describe Api::BooksController, type: :controller do
   #   let(:book) { create :book }
   #   let(:valid_attributes) { attributes_for :book }
 
-  #   context 'use correct conditions' do
+  #   context 'with correct conditions' do
   #     it 'returns the book json' do
   #       post :create, params: valid_attributes
   #       expect(response.status).to eq 201
@@ -62,7 +62,7 @@ RSpec.describe Api::BooksController, type: :controller do
   #   let(:book) { create :book, creator: user }
   #   let(:valid_attributes) { { title: 'new titile' } }
 
-  #   context 'use correct conditions' do
+  #   context 'with correct conditions' do
   #     it 'returns the book json' do
   #       put :update, params: valid_attributes.merge(id: book.id)
   #       expect(response.status).to eq 200
@@ -75,7 +75,7 @@ RSpec.describe Api::BooksController, type: :controller do
   # describe 'DELETE #destroy' do
   #   let(:book) { create :book, creator: user }
 
-  #   context 'use correct conditions' do
+  #   context 'with correct conditions' do
   #     it 'returns the book json' do
   #       delete :destroy, params: { id: book.id }
   #       expect(response.status).to eq 200
@@ -87,7 +87,7 @@ RSpec.describe Api::BooksController, type: :controller do
   describe 'GET #isbn' do
     let(:isbn) { '9787505715660' }
 
-    context 'book exists' do
+    context 'when book exists' do
       let(:book) { create :book, isbn: isbn, isbn13: isbn }
 
       it 'returns the book json' do
@@ -99,7 +99,7 @@ RSpec.describe Api::BooksController, type: :controller do
       end
     end
 
-    context 'book not exists' do
+    context 'when book not exists' do
       before do
         book_json = file_fixture("little_prince.json").read
         stub_request(:get, /douban.uieee.com/)
@@ -113,7 +113,7 @@ RSpec.describe Api::BooksController, type: :controller do
       end
     end
 
-    context 'book not exists & only book title info' do
+    context 'when book not exists & only book title info' do
       before do
         book_json = file_fixture("book_title.json").read
         stub_request(:get, /douban.uieee.com/)

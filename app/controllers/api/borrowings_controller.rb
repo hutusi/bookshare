@@ -6,11 +6,15 @@ class Api::BorrowingsController < Api::BaseController
 
   def index
     @borrowings = Borrowing.all.order(updated_at: :desc)
-    render json: @borrowings, status: :ok, each_serializer: BorrowingSerializer if stale?(last_modified: @borrowings.maximum(:updated_at))
+    return unless stale?(last_modified: @borrowings.maximum(:updated_at))
+
+    render json: @borrowings, status: :ok, each_serializer: BorrowingSerializer
   end
 
   def show
-    render json: @borrowing, serializer: BorrowingPreviewSerializer if stale?(last_modified: @borrowing.updated_at)
+    return unless stale?(last_modified: @borrowing.updated_at)
+
+    render json: @borrowing, serializer: BorrowingPreviewSerializer
   end
 
   def create

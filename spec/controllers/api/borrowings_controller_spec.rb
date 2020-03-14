@@ -68,7 +68,10 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     end
 
     context 'when hold the book' do
-      let(:print_book) { create :print_book, property: :borrowable, holder: user }
+      let(:print_book) do
+        create :print_book, property: :borrowable,
+                            holder: user
+      end
       let(:post_params) { { print_book_id: print_book.id } }
 
       it 'returns forbidden' do
@@ -87,7 +90,10 @@ RSpec.describe Api::BorrowingsController, type: :controller do
     end
 
     context 'when request a borrowing before and finished' do
-      before { create :borrowing, print_book: print_book, receiver: user, status: :finished }
+      before do
+        create :borrowing, print_book: print_book, receiver: user,
+                           status: :finished
+      end
 
       it 'returns created' do
         post :create, params: post_params

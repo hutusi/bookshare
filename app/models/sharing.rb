@@ -12,8 +12,8 @@ class Sharing < ApplicationRecord
   # 1. (request)  (reject request)
   # requesting ->   rejected
 
-  # 2. (request) (accept request) (lending book) (confirm get book)   (next sharing' borrow)
-  # requesting ->  accepted  ->    lending ->     borrowing         -> finish
+  # 2. (request)(accept request)(lending book)(confirm get book)(next sharing)
+  # requesting ->  accepted  ->    lending ->     borrowing       -> finish
 
   aasm column: :status, enum: true do
     # state :initial, initial: true
@@ -51,7 +51,8 @@ class Sharing < ApplicationRecord
     end
 
     event :cancel do
-      transitions from: [:requesting, :accepted, :rejected, :lending], to: :canceled
+      transitions from: [:requesting, :accepted, :rejected, :lending],
+                  to: :canceled
     end
   end
 
@@ -67,11 +68,24 @@ class Sharing < ApplicationRecord
   # == Validations ==========================================================
 
   # == Scopes ===============================================================
-  scope :holder_todo, ->(user_id) { where(status: [:requesting, :accepted], holder_id: user_id) }
-  scope :receiver_todo, ->(user_id) { where(status: [:rejected, :lending], receiver_id: user_id) }
-  scope :current_actives, -> { where('status < ?', Sharing.statuses[:finished]) }
-  scope :current_applied_by, ->(user_id) { current_actives.where(receiver_id: user_id) }
-  scope :current_applied_for, ->(print_book_id) { current_actives.where(print_book_id: print_book_id) }
+  scope :holder_todo, lambda { |user_id|
+                        where(status: [:requesting, :accepted],
+                              holder_id: user_id)
+                      }
+  scope :receiver_todo, lambda { |user_id|
+                          where(status: [:rejected, :lending],
+                                receiver_id: user_id)
+                        }
+  scope :current_actives, lambda {
+                            where('status < ?', Sharing.statuses[:finished])
+                          }
+  scope :current_applied_by, lambda { |user_id|
+                               current_actives.where(receiver_id: user_id)
+                             }
+  scope :current_applied_for,
+        lambda { |print_book_id|
+          current_actives.where(print_book_id: print_book_id)
+        }
 
   # == Callbacks ============================================================
   before_create do
@@ -85,7 +99,8 @@ class Sharing < ApplicationRecord
   def borrow_to(user)
     ActiveRecord::Base.transaction do
       borrow
-      rivals = Sharing.current_applied_for(print_book_id).where(receiver_id: user.id)
+      rivals = Sharing.current_applied_for(print_book_id)
+                      .where(receiver_id: user.id)
       rivals.each(&:cancel)
 
       last_sharing = Sharing.find_by id: print_book.last_deal_id
