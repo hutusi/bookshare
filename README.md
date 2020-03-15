@@ -87,3 +87,4 @@ guard
 - [X] Backup database
 - [X] Use Pundit instead of cancancan
 - [ ] Limits creating sharing
+- [ ] Validates models

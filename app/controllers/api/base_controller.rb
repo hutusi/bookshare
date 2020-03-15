@@ -16,13 +16,16 @@ end
 class Api::BaseController < ActionController::API
   include Pundit
   respond_to :json
-  before_action :authenticate_api!, except: [:test]
+  before_action :authenticate_api!
 
   rescue_from Exception, with: :unknown_error_handle
   rescue_from ApiException, with: :api_error_handle
 
-  rescue_from Pundit::NotAuthorizedError do |exception|
-    render json: { message: exception.message }, status: :forbidden
+  rescue_from Pundit::NotAuthorizedError do |e|
+    # TODO: FIXME
+    # message = e.reason ? I18n.t("pundit.errors.#{e.reason}") : e.message
+    message = e.message
+    render json: { message: message }, status: :forbidden
   end
 
   rescue_from AASM::InvalidTransition do |exception|
@@ -70,13 +73,13 @@ class Api::BaseController < ActionController::API
     }
   end
 
-  def test
-    Rails.logger.debug params
-    # http://douban.uieee.com/v2/book/isbn/9787505715660
-    url = "http://douban.uieee.com/v2/book/isbn/#{params[:isbn]}"
-    response = Faraday.get url
-    json = JSON.parse(response.body)
-    Rails.logger.debug json
-    render status: 200, json: json
-  end
+  # def test
+  #   Rails.logger.debug params
+  #   # http://douban.uieee.com/v2/book/isbn/9787505715660
+  #   url = "http://douban.uieee.com/v2/book/isbn/#{params[:isbn]}"
+  #   response = Faraday.get url
+  #   json = JSON.parse(response.body)
+  #   Rails.logger.debug json
+  #   render status: 200, json: json
+  # end
 end

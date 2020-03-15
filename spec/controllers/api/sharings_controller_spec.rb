@@ -126,6 +126,15 @@ RSpec.describe Api::SharingsController, type: :controller do
       end
     end
 
+    context 'when not the print books holder' do
+      let(:print_book) { create :print_book }
+
+      it 'returns forbidden' do
+        post :accept, params: { id: sharing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
     context 'when not requesting status' do
       let(:sharing) do
         create :sharing, print_book: print_book, receiver: receiver,

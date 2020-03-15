@@ -129,6 +129,15 @@ RSpec.describe Api::BorrowingsController, type: :controller do
       end
     end
 
+    context 'when not the print books holder' do
+      let(:print_book) { create :print_book }
+
+      it 'returns forbidden' do
+        post :accept, params: { id: borrowing.id }
+        expect(response.status).to eq 403
+      end
+    end
+
     context 'when not requesting status' do
       let(:borrowing) do
         create :borrowing, print_book: print_book, receiver: receiver,

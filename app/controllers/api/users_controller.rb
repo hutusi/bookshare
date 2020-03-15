@@ -10,9 +10,8 @@ class Api::UsersController < Api::BaseController
   end
 
   def update
-    unless @user == current_user
-      forbidden! I18n.t('api.forbidden.not_self_user')
-    end
+    authorize @user, :update?
+
     valid_params = params.permit(:username, :email, :phone, :company,
                                  :bio, :contact,
                                  :nickname, :avatar, :gender, :country,

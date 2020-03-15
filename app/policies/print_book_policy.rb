@@ -38,7 +38,7 @@ class PrintBookPolicy
       raise Pundit::NotAuthorizedError, reason: 'print_book.not_the_owner'
     end
 
-    if print_book.personal?
+    unless print_book.personal?
       raise Pundit::NotAuthorizedError, reason: 'print_book.not_personal'
     end
 

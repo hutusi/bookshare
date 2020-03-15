@@ -48,6 +48,10 @@ class Api::PrintBooksController < Api::BaseController
     property = params[:property]
     index_params = { property: property }
     index_params[:owner_id] = current_user.id if property == 'personal'
+    unless ['personal', 'shared', 'borrowable'].include? property
+      forbidden! I18n.t('api.params.value_invalid',
+                        param: 'property', value: property)
+    end
 
     keyword = params[:keyword]
     @print_books = PrintBook.where(index_params).by_keyword(keyword)

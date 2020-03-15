@@ -25,6 +25,8 @@ zh-CN:
       print_book_not_personal: '藏书非私有图书'
   pundit:
     errors:
+      user:
+        not_self: '非用户自己'
       book:
         not_the_creator: '非该书创建者'
       print_book:

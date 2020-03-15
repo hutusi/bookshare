@@ -78,6 +78,15 @@ RSpec.describe Api::BooksController, type: :controller do
         expect(response.status).to eq 403
       end
     end
+
+    context 'when not the creator' do
+      let(:book) { create :book }
+
+      it 'returns forbidden' do
+        put :update, params: valid_attributes.merge(id: book.id)
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
