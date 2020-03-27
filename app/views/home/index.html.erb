@@ -1,9 +1,38 @@
-<h1>只买书</h1>
-<p>我的世界图书馆</p>
+<div class="h-screen pb-14 bg-right bg-cover" style="background-image:url('assets/bg.svg');">
+	<!--Nav-->
+	<div class="w-full container mx-auto p-6">
+			
+		<div class="w-full flex items-center justify-between">
+			<a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"  href="#"> 
+				 <svg class="h-8 fill-current text-indigo-600 pr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-5.6-4.29a9.95 9.95 0 0 1 11.2 0 8 8 0 1 0-11.2 0zm6.12-7.64l3.02-3.02 1.41 1.41-3.02 3.02a2 2 0 1 1-1.41-1.41z"/></svg> 只买书
+			</a>
+			
+		</div>
 
-<%= image_tag "mini_code_15cm.jpg" %>
+	</div>
 
-<%= render "shared/icp" %>
-<p>
-  zhimaishu.com <%= Bookshare::VERSION %> : <%= Bookshare::REVISION %>
-</p>
+	<!--Main-->
+	<div class="container pt-24 md:pt-24 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+		
+		<!--Left Col-->
+		<div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
+			<h1 class="my-4 text-3xl md:text-5xl text-purple-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">你的世界图书馆</h1>
+			<p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle">分享闲置图书，让书籍更有价值！</p>
+		
+			<p class="text-blue-400 font-bold pb-8 lg:pb-6 text-center md:text-left fade-in">扫描微信小程序码:</p>
+			<div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
+				<img src="assets/mini_code_15cm.jpg" class="h-64 pr-4 bounce-top-icons">
+			</div>
+
+		</div>
+		
+		<!--Footer-->
+		<div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+			<a class="text-gray-500 no-underline hover:no-underline" href="#">&copy; zhimaishu.com 2020 (<%= Bookshare::VERSION %> <%= Bookshare::REVISION %>)</a>
+      <div class="text-gray-500 no-underline hover:no-underline"><%= render "shared/icp" %></div>
+		</div>
+		
+	</div>
+	
+
+</div>

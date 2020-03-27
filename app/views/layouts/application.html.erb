@@ -10,9 +10,13 @@
 
     <%= stylesheet_pack_tag 'stylesheets', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <%= favicon_link_tag asset_path('favicon_16x16.ico') %>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container mx-auto">
+      <%= yield %>
+    </div>
   </body>
 </html>
